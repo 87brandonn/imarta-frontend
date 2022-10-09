@@ -2,8 +2,6 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import FloatingFooter from '../../components/FloatingFooter';
 import Navbar from '../../components/Navbar';
-import { Menu } from 'react-feather';
-import Image from 'next/image';
 import OrganizationStructurePeriodDescription from '../../components/OrganizationStructure/PeriodDescription';
 
 const missions = [

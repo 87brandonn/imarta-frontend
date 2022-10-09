@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 function HomeWelcome() {
   return (
-    <div className="flex flex-col px-2 lg:px-0 max-w-4xl mx-auto justify-center items-center mb-[2em]">
+    <div className="flex flex-col px-2 lg:px-0 max-w-4xl mx-auto justify-center items-center my-[2em]">
       <Image
         src="/logo-imarta.jpg"
         width={300}

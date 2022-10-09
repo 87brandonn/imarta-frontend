@@ -16,13 +16,21 @@ function Navbar() {
               Repository
             </div>
           </Link>
-          <Image
-            src="/logo-imarta-transparent.png"
-            width={50}
-            height={50}
-            className="text-white"
-            alt="logo-navbar"
-          />
+          <div className="flex">
+            <Link href="/">
+              <img
+                src="/logo-imarta-transparent.png"
+                className="text-white cursor-pointer w-24 object-contain"
+                alt="logo-navbar"
+              />
+            </Link>
+            <img
+              src="/sketsa-white.png"
+              className="text-white cursor-pointer w-20 object-contain"
+              alt="logo-navbar"
+            />
+          </div>
+
           <div className="text-white font-light cursor-pointer">
             Galeri Lawang
           </div>
