@@ -4,7 +4,7 @@ import { Instagram, Linkedin, Mail, Phone } from 'react-feather';
 
 function FloatingFooter() {
   return (
-    <div className="flex select-none justify-between items-center fixed bottom-0 left-0 right-0">
+    <div className="flex select-none justify-between items-center fixed bottom-0 z-20 left-0 right-0">
       <Image
         src="/logo-imarta-2.png"
         width={75}

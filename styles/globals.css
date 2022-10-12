@@ -2,8 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+.swiper-slide {
+  transition: all 200ms linear !important;
+  transform: scale(1) !important;
+}
+
+.swiper-slide.swiper-slide-active {
+  transform: scale(1.2) !important;
+  z-index: 10;
+}
+
 @layer base {
   html {
     font-family: 'Lato', sans-serif;
+    height: 100%;
+  }
+
+  body {
+    height: 100%;
+  }
+
+  #__next {
+    height: 100%;
   }
 }
