@@ -1,3 +1,4 @@
+import Image from 'next/future/image';
 import React from 'react';
 
 type OrganizationStructurePeriodDescriptionProps = {
@@ -45,7 +46,14 @@ function OrganizationStructurePeriodDescription({
           Struktur Organisasi
         </div>
       </div>
-      <img src={imgHierarchyUrl} alt={`org-structure-${period}`} />
+      <Image
+        width="0"
+        height="0"
+        className="w-full h-auto"
+        sizes="100vw"
+        src={imgHierarchyUrl}
+        alt={`org-structure-${period}`}
+      />
     </>
   );
 }

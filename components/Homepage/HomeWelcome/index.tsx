@@ -1,14 +1,15 @@
 import React from 'react';
-import Image from 'next/image';
+import Image from 'next/future/image';
 
 function HomeWelcome() {
   return (
     <div className="flex flex-col px-2 lg:px-0 max-w-4xl mx-auto justify-center items-center my-[2em]">
       <Image
         src="/logo-imarta.jpg"
-        width={300}
-        height="100%"
-        objectFit="contain"
+        width="0"
+        height="0"
+        className="w-36 h-24 object-contain"
+        sizes="100vw"
         alt="logo-home"
       />
       <div className="text-xl text-center font-medium mt-4 mb-1">

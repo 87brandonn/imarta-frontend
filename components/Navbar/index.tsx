@@ -18,16 +18,24 @@ function Navbar() {
           </Link>
           <Link href="/">
             <div className="flex">
-              <img
-                src="/logo-imarta-transparent.png"
-                className="text-white cursor-pointer w-24 object-contain"
-                alt="logo-navbar"
-              />
-              <img
-                src="/sketsa-white.png"
-                className="text-white cursor-pointer w-20 object-contain"
-                alt="logo-navbar"
-              />
+              <div className="w-24 h-12 relative">
+                <Image
+                  layout="fill"
+                  src="/logo-imarta-transparent.png"
+                  objectFit="contain"
+                  alt="logo-navbar"
+                  priority
+                />
+              </div>
+              <div className="w-24 h-12 relative">
+                <Image
+                  layout="fill"
+                  src="/sketsa-white.png"
+                  objectFit="contain"
+                  alt="logo-navbar"
+                  priority
+                />
+              </div>
             </div>
           </Link>
           <Link href="/galeri-lawang">

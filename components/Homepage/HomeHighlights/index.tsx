@@ -1,4 +1,5 @@
 import React from 'react';
+import HighlightItem from './HighlightItem';
 
 function HomeHighlights() {
   return (
@@ -8,25 +9,11 @@ function HomeHighlights() {
         <div className="grow border-b border-black"></div>
       </div>
       <div className="grid lg:grid-cols-3 gap-4">
-        <div className="flex flex-col items-center">
-          <div className="text-lg font-medium text-center mb-3">
-            Departemen Pelayanan & Galeri Lawang
-          </div>
-          <div className="bg-[#282828] rounded-full h-[400px] w-[100px] lg:w-[200px]"></div>
-        </div>
-        <div className="flex flex-col items-center">
-          <div className="text-lg font-medium text-center mb-3">
-            Departemen Riset & Pengembangan
-          </div>
-          <div className="bg-[#282828] rounded-full h-[400px] w-[100px] lg:w-[200px]"></div>
-        </div>
-
-        <div className="flex flex-col items-center">
-          <div className="text-lg font-medium text-center mb-3">
-            Departemen Hubungan Mahasiswa
-          </div>
-          <div className="bg-[#282828] rounded-full h-[400px] w-[100px] lg:w-[200px]"></div>
-        </div>
+        {Array.from({ length: 3 }).map(() => (
+          <>
+            <HighlightItem />
+          </>
+        ))}
       </div>
     </div>
   );

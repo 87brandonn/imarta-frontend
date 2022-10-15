@@ -4,6 +4,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Pagination, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import Image from 'next/future/image';
 
 function SwiperHero() {
   const [domLoaded, setDomLoaded] = useState(false);
@@ -32,30 +33,42 @@ function SwiperHero() {
       className="!overflow-visible"
     >
       <SwiperSlide>
-        <img
+        <Image
+          sizes="100vw"
+          width="0"
+          height="0"
           src="/repository-banner.jpg"
-          className="object-cover "
+          className="object-cover w-full h-auto"
           alt="test-image-1-banner"
         />
       </SwiperSlide>
       <SwiperSlide>
-        <img
+        <Image
+          sizes="100vw"
+          width="0"
+          height="0"
           src="/repository-banner.jpg"
-          className="object-cover "
+          className="object-cover w-full h-auto"
           alt="test-image-1-banner"
         />
       </SwiperSlide>
       <SwiperSlide>
-        <img
+        <Image
+          sizes="100vw"
+          width="0"
+          height="0"
           src="/repository-banner.jpg"
-          className="object-cover "
+          className="object-cover w-full h-auto"
           alt="test-image-1-banner"
         />
       </SwiperSlide>
       <SwiperSlide>
-        <img
+        <Image
+          sizes="100vw"
+          width="0"
+          height="0"
           src="/repository-banner.jpg"
-          className="object-cover "
+          className="object-cover w-full h-auto"
           alt="test-image-1-banner"
         />
       </SwiperSlide>

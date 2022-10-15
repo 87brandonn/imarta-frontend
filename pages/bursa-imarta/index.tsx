@@ -1,27 +1,26 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
-import { ChevronLeft, ChevronRight } from 'react-feather';
-import Slider from 'react-slick';
-import FloatingFooter from '../../components/FloatingFooter';
-import Navbar from '../../components/Navbar';
-import 'slick-carousel/slick/slick.css';
+import Image from 'next/future/image';
 import 'slick-carousel/slick/slick-theme.css';
-import AppLayout from '../../layouts';
+import 'slick-carousel/slick/slick.css';
+import AnimatedHero from '../../components/AnimatedHero';
 import GaleriSwiper from '../../components/BursaImarta/GaleriSwiper';
-
-const sliderSettings = {
-  dots: true,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 1,
-  slidesToScroll: 1
-};
+import AppLayout from '../../layouts';
 
 const BursaImarta: NextPage = () => {
   return (
     <>
       <AppLayout title="Bursa Imarta">
-        <img src="/org-structure-banner.jpg" alt="org-banner" />
+        <AnimatedHero>
+          <Image
+            width="0"
+            height="0"
+            sizes="100vw"
+            className="w-full h-auto"
+            src="/org-structure-banner.jpg"
+            alt="org-banner"
+            priority
+          />
+        </AnimatedHero>
         <div className="p-5 mb-8 flex lg:flex-row flex-col gap-4">
           <div className="flex-none lg:w-1/3">
             <div className="text-xl mb-3 font-bold">About</div>
@@ -44,11 +43,31 @@ const BursaImarta: NextPage = () => {
         <div className="p-5 mb-8 flex lg:flex-row flex-col gap-4">
           <div className="flex-[3_3_0%]">
             <div className="text-xl font-bold mb-3">Catalog Bursa IMARTA</div>
+            <AnimatedHero>
+              <Image
+                sizes="100vw"
+                width="0"
+                height="0"
+                src="/apresiasi-galeri-lawang-2.jpg"
+                alt="catalog-imarta"
+                className="object-contain w-full h-auto"
+              />
+            </AnimatedHero>
           </div>
           <div className="flex-[2_2_0%]">
             <div className="text-xl font-bold mb-3">
               Official Merchandise IMARTA
             </div>
+            <AnimatedHero>
+              <Image
+                sizes="100vw"
+                width="0"
+                height="0"
+                src="/apresiasi-galeri-lawang-2.jpg"
+                alt="catalog-imarta"
+                className="object-contain w-full h-auto"
+              />
+            </AnimatedHero>
           </div>
         </div>
         <div className="p-5 mb-8">

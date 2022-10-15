@@ -2,7 +2,8 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import FloatingFooter from '../../components/FloatingFooter';
 import Navbar from '../../components/Navbar';
-import Image from 'next/image';
+import Image from 'next/future/image';
+import AnimatedHero from '../../components/AnimatedHero';
 
 const About: NextPage = () => {
   return (
@@ -43,19 +44,23 @@ const About: NextPage = () => {
               </div>
             </div>
             <div className="mb-3 flex">
-              <div className="relative flex-1 h-48">
+              <div className="flex-1">
                 <Image
                   src="/logo-imarta.jpg"
-                  layout="fill"
-                  objectFit="contain"
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  className="w-full h-24 object-contain"
                   alt="logo-imarta-about"
                 />
               </div>
-              <div className="relative flex-1 h-48">
+              <div className="flex-1">
                 <Image
                   src="/logo-sketsa.png"
-                  layout="fill"
-                  objectFit="contain"
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  className="w-full h-24 object-contain"
                   alt="logo-sketsa-about"
                 />
               </div>
@@ -163,14 +168,16 @@ const About: NextPage = () => {
           </div>
         </div>
       </div>
-      <div className="relative w-full h-[500px] lg:h-[800px]">
+      <AnimatedHero>
         <Image
           src="/logo-imarta-meaning.jpg"
           alt="logo-imarta-meaning"
-          objectFit="contain"
-          layout="fill"
+          sizes="100vw"
+          width="0"
+          height="0"
+          className="w-full h-auto"
         />
-      </div>
+      </AnimatedHero>
       <FloatingFooter />
     </>
   );
