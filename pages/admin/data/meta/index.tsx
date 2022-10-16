@@ -1,11 +1,30 @@
 import Link from 'next/link';
+import { confirmAlert } from 'react-confirm-alert';
 import { Edit, Trash } from 'react-feather';
 import Button from '../../../../components/Admin/Button';
+import useDeleteMeta from '../../../../hooks/useDeleteMeta';
 import useMetas from '../../../../hooks/useMetas';
 import AdminLayout from '../../../../layouts/Admin';
 
 function AdminMeta() {
   const { data, isLoading } = useMetas();
+
+  const { mutate: deleteMeta } = useDeleteMeta();
+
+  const handleDelete = (id: number) =>
+    confirmAlert({
+      title: 'Confirm deletion',
+      message: 'Are you sure want to delete? This action cannot be undone',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => deleteMeta(id)
+        },
+        {
+          label: 'No'
+        }
+      ]
+    });
 
   if (isLoading) return 'Loading..';
 
@@ -40,7 +59,10 @@ function AdminMeta() {
                   <Link href={`/admin/data/meta/${meta.id}`}>
                     <Edit />
                   </Link>
-                  <Trash className="text-red-400" />
+                  <Trash
+                    className="text-red-400"
+                    onClick={() => handleDelete(meta.id)}
+                  />
                 </td>
               </tr>
             ))}
