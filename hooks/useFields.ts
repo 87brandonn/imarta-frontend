@@ -1,11 +1,10 @@
 import { useQuery } from 'react-query';
 import axios from '../config/axios';
+import getFields from '../services/api/getFields';
 import { Field } from '../types';
+import { PaginatedApiResponseType } from '../types/api';
 
-const useFields = () =>
-  useQuery(['fields'], async () => {
-    const { data } = await axios.get<Field[]>(`/data/field`);
-    return data;
-  });
+const useFields = (params?: { limit: number; page: number }) =>
+  useQuery(['fields', params], () => getFields(params));
 
 export default useFields;

@@ -96,6 +96,7 @@ const BBBTextInput = <T extends FieldValues>(
     description,
     containerClassname,
     labelClassname,
+    placeholder,
     descriptionClassname,
     inputClassName,
     hasMaxCharLabel = false,
@@ -161,8 +162,9 @@ const BBBTextInput = <T extends FieldValues>(
       >
         {isFixed && renderFixedLabel}
         <input
-          className={`form-control grow ${getInputFixedClassName}`}
+          className={`px-3 py-1 rounded-lg border grow ${getInputFixedClassName}`}
           maxLength={maxChar || undefined}
+          placeholder={placeholder || 'Enter something'}
           {...inputPropsExcluded}
           onChange={onChange}
           onBlur={prop => {
@@ -211,6 +213,7 @@ const BBBTextInput = <T extends FieldValues>(
       maxChar,
       onBlur,
       onChange,
+      placeholder,
       ref,
       renderFixedLabel,
       renderFixedSuffixLabel
@@ -233,6 +236,7 @@ const BBBTextInput = <T extends FieldValues>(
         <input
           className={`px-3 py-1 rounded-lg border grow ${getInputFixedClassName}`}
           maxLength={maxChar || undefined}
+          placeholder={placeholder || 'Enter something'}
           {...inputPropsExcluded}
           onChange={({ target: { value: targetValue } }) => {
             onChange(targetValue);
@@ -265,6 +269,7 @@ const BBBTextInput = <T extends FieldValues>(
       isFixedSuffix,
       isUrl,
       maxChar,
+      placeholder,
       ref,
       renderFixedLabel,
       renderFixedSuffixLabel

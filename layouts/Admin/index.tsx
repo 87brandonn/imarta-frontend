@@ -3,10 +3,11 @@ import React from 'react';
 import AdminSidebar from './Sidebar';
 
 type AdminLayoutProp = {
+  isDashboardData?: boolean;
   children: React.ReactNode;
 };
 
-function AdminLayout({ children }: AdminLayoutProp) {
+function AdminLayout({ children, isDashboardData }: AdminLayoutProp) {
   return (
     <>
       <Head>
@@ -16,7 +17,7 @@ function AdminLayout({ children }: AdminLayoutProp) {
       </Head>
       <div className="w-full h-full flex">
         <div className="flex-none h-full w-36">
-          <AdminSidebar />
+          <AdminSidebar isDashboardData={isDashboardData} />
         </div>
         <div className="grow overflow-auto">{children}</div>
       </div>

@@ -72,8 +72,8 @@ export type WorkProgram = {
   periodId: number | null;
   name: string;
   description: string | null;
-  startDate: Date | null;
-  endDate: Date | null;
+  startDate: string | null;
+  endDate: string | null;
   participationCount: number | null;
   collaborators: string | null;
   staffs: string | null;

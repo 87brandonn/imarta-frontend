@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 const pages = [
   {
@@ -34,10 +34,42 @@ const pages = [
   }
 ];
 
-function AdminSidebar() {
+const dataPages = [
+  {
+    name: 'Work Program',
+    key: 'work-program',
+    path: '/data/work-program'
+  },
+  {
+    name: 'Department',
+    key: 'department',
+    path: '/data/department'
+  },
+  {
+    name: 'Field',
+    key: 'field',
+    path: '/data/field'
+  },
+  {
+    name: 'Meta',
+    key: 'meta',
+    path: '/data/meta'
+  }
+];
+
+type AdminSidebarProps = {
+  isDashboardData?: boolean;
+};
+
+function AdminSidebar({ isDashboardData }: AdminSidebarProps) {
+  const renderedData = useMemo(
+    () => (isDashboardData ? dataPages : pages),
+    [isDashboardData]
+  );
+
   return (
     <div className="h-full bg-gray-100 flex flex-col gap-3 p-3">
-      {pages.map((page, i) => (
+      {renderedData.map((page, i) => (
         <Link href={`/admin${page.path}`} key={i}>
           <div className="cursor-pointer">{page.name}</div>
         </Link>

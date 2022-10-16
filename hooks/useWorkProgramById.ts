@@ -6,6 +6,7 @@ import {
   Period,
   WorkProgram,
   WorkProgramDepartment,
+  WorkProgramDocumentation,
   WorkProgramField
 } from '../types';
 
@@ -31,6 +32,7 @@ const useWorkProgramById = (id: string) =>
           workProgramFields: (WorkProgramField & {
             field: Field;
           })[];
+          workProgramDocumentations: WorkProgramDocumentation[];
           period: Period;
         }
       >(`/data/work-program/${id}`);

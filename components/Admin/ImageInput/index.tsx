@@ -3,15 +3,14 @@ import React, { useRef, useState } from 'react';
 import { X } from 'react-feather';
 import uploadImage from '../../../utils/uploadFile';
 import Button from '../Button';
-import { ImageGridType } from '../ImageGridInput';
-import TextAreaInput from '../TextareaInput';
 
 type ImageInputProps = {
   data?: string;
   onChange?: (val?: string) => void;
+  onDelete?: () => void;
 };
 
-function ImageInput({ data, onChange }: ImageInputProps) {
+function ImageInput({ data, onChange, onDelete }: ImageInputProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [loadingUpload, setLoadingUpload] = useState(false);
@@ -34,19 +33,6 @@ function ImageInput({ data, onChange }: ImageInputProps) {
 
   return (
     <div>
-      {/* {hasText && (
-        <TextAreaInput
-          value={data?.title}
-          onValueChange={val =>
-            onChange?.({
-              ...data,
-              title: val as string
-            })
-          }
-          containerClassName="mb-3"
-          className="!h-20"
-        />
-      )} */}
       {loadingUpload ? (
         'Uploading file...'
       ) : !data ? (
@@ -56,7 +42,10 @@ function ImageInput({ data, onChange }: ImageInputProps) {
       ) : (
         <div className="my-2 group inline-block cursor-pointer relative">
           <div
-            onClick={() => onChange?.(undefined)}
+            onClick={() => {
+              onChange?.(undefined);
+              onDelete?.();
+            }}
             className="bg-white z-10 rounded-full text-red-400 absolute right-0 top-[-8px] transform"
           >
             <X />
