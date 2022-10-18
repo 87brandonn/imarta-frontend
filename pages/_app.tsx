@@ -1,6 +1,6 @@
 import '../styles/globals.css';
 import toast, { Toaster } from 'react-hot-toast';
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
 
 const queryClient = new QueryClient({

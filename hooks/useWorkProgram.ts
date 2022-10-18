@@ -1,14 +1,5 @@
 import { useQuery } from 'react-query';
-import axios from '../config/axios';
-import {
-  Department,
-  Field,
-  Period,
-  WorkProgram,
-  WorkProgramDepartment,
-  WorkProgramField
-} from '../types';
-import { PaginatedApiResponseType } from '../types/api';
+import getWorkPrograms from '../services/api/getWorkPrograms';
 
 export type WorkProgramFilterField = {
   name?: string;
@@ -22,26 +13,12 @@ export type WorkProgramFilterField = {
   endDate?: string | null;
 };
 
-const useWorkProgram = (
-  params?: { limit: number; page: number } & WorkProgramFilterField
-) =>
-  useQuery(['work-program', params], async () => {
-    const { data } = await axios.get<
-      PaginatedApiResponseType<
-        (WorkProgram & {
-          workProgramDepartments: (WorkProgramDepartment & {
-            department: Department;
-          })[];
-          workProgramFields: (WorkProgramField & {
-            field: Field;
-          })[];
-          period: Period;
-        })[]
-      >
-    >(`/data/work-program`, {
-      params
-    });
-    return data;
-  });
+export type WorkProgramParams = {
+  limit: number;
+  page: number;
+} & WorkProgramFilterField;
+
+const useWorkProgram = (params?: WorkProgramParams) =>
+  useQuery(['work-program', params], () => getWorkPrograms(params));
 
 export default useWorkProgram;

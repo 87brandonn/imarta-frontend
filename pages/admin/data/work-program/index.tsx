@@ -81,9 +81,9 @@ function Admin() {
 
       return {
         options: data.data,
-        hasMore: data.meta.page + 1 < data.meta.totalPage,
+        hasMore: data.meta.page < data.meta.totalPage,
         additional: {
-          page: data.meta.page + 1
+          page: data.meta.page
         }
       };
     },
@@ -100,9 +100,9 @@ function Admin() {
 
       return {
         options: data.data,
-        hasMore: data.meta.page + 1 < data.meta.totalPage,
+        hasMore: data.meta.page < data.meta.totalPage,
         additional: {
-          page: data.meta.page + 1
+          page: data.meta.page
         }
       };
     },

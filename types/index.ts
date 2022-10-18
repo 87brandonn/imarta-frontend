@@ -1,5 +1,13 @@
 //@ts-nocheck
 
+export type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonObject
+  | JsonArray;
+
 /**
  * Model Module
  *
@@ -30,7 +38,7 @@ export type Attribute = {
   name: string;
   label: string;
   type: AttributeType;
-  data: Prisma.JsonValue | null;
+  data: JsonValue | null;
   sectionId: number;
 };
 

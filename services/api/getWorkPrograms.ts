@@ -1,0 +1,37 @@
+import axios from '../../config/axios';
+import {
+  WorkProgramFilterField,
+  WorkProgramParams
+} from '../../hooks/useWorkProgram';
+import {
+  Department,
+  Field,
+  Period,
+  WorkProgram,
+  WorkProgramDepartment,
+  WorkProgramDocumentation,
+  WorkProgramField
+} from '../../types';
+import { PaginatedApiResponseType } from '../../types/api';
+
+export type WorkProgramWithAssociation = WorkProgram & {
+  workProgramDepartments: (WorkProgramDepartment & {
+    department: Department;
+  })[];
+  workProgramFields: (WorkProgramField & {
+    field: Field;
+  })[];
+  workProgramDocumentations: WorkProgramDocumentation[];
+  period: Period;
+};
+
+const getWorkPrograms = async (params?: WorkProgramParams) => {
+  const { data } = await axios.get<
+    PaginatedApiResponseType<WorkProgramWithAssociation[]>
+  >(`/data/work-program`, {
+    params
+  });
+  return data;
+};
+
+export default getWorkPrograms;

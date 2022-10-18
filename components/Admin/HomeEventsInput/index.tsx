@@ -1,87 +1,212 @@
-import { X } from 'react-feather';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect } from 'react';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { AsyncPaginate } from 'react-select-async-paginate';
+import * as yup from 'yup';
+import getWorkPrograms, {
+  WorkProgramWithAssociation
+} from '../../../services/api/getWorkPrograms';
+import { WorkProgramDocumentation } from '../../../types';
+import { DeepPartial } from '../../../types/utils/deepPartial';
 import Button from '../Button';
-import ImageInput from '../ImageInput';
-import TextInput from '../TextInput';
+
+export type HomeEventForm = {
+  homeEvents: HomeEventType[];
+};
 
 export type HomeEventType = {
-  imgUrl?: string;
-  text1?: string;
-  text2?: string;
-  text3?: string;
+  workProgram?: WorkProgramWithAssociation;
+  documentation?: WorkProgramDocumentation;
 };
 
 type HomeEventsInputProps = {
   data: HomeEventType[];
-  onChange: (val: HomeEventType[]) => void;
+  onChange: (val: DeepPartial<HomeEventType>[]) => void;
 };
 
+const schema = yup
+  .object({
+    homeEvents: yup
+      .array(
+        yup.object({
+          workProgram: yup
+            .mixed<WorkProgramWithAssociation>()
+            .required()
+            .label('Work program'),
+          documentation: yup.mixed<WorkProgramDocumentation>()
+        })
+      )
+      .min(1)
+      .label('Name')
+      .required()
+  })
+  .required();
+
 function HomeEventsInput({ data, onChange }: HomeEventsInputProps) {
-  const handleChangeHomeEvent = <T extends keyof HomeEventType>(
-    type: T,
-    val: HomeEventType[T],
-    i: number
-  ) => {
-    const prevData = [...data];
-    prevData.splice(i, 1, {
-      ...data[i],
-      [type]: val
+  const {
+    control,
+    watch,
+    formState: { errors },
+    reset,
+    handleSubmit,
+    setValue
+  } = useForm<HomeEventForm>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      homeEvents: []
+    }
+  });
+
+  useEffect(() => {
+    reset({
+      homeEvents:
+        data?.map(hE => ({
+          workProgram: hE.workProgram,
+          documentation: hE.documentation
+        })) || []
     });
-    onChange(prevData);
+  }, [data, reset, setValue]);
+
+  const {
+    fields: homeEventFields,
+    append,
+    remove
+  } = useFieldArray({
+    control,
+    name: 'homeEvents'
+  });
+
+  const loadWorkPrograms = async (
+    search: string,
+    _: any,
+    { page: additionalPage }: any
+  ) => {
+    const data = await getWorkPrograms({
+      name: search || undefined,
+      page: additionalPage,
+      limit: 10
+    });
+
+    return {
+      options: data.data,
+      hasMore: data.meta.page < data.meta.totalPage,
+      additional: {
+        page: data.meta.page
+      }
+    };
+  };
+
+  const onSubmit = ({ homeEvents }: HomeEventForm) => {
+    onChange(
+      homeEvents.map(homeEvent => ({
+        ...homeEvent,
+        workProgram: {
+          ...(homeEvent.workProgram || {}),
+          workProgramDepartments: undefined,
+          workProgramDocumentations: undefined,
+          workProgramFields: undefined
+        }
+      }))
+    );
   };
 
   return (
     <>
-      <div className="grid gap-4">
-        {data?.map((imageGrid, i) => (
-          <div key={i} className={'bg-white shadow rounded-xl p-3 relative'}>
-            <div
-              className="absolute cursor-pointer bg-gray-200 rounded-full right-[-8px] top-[-8px] text-red-400"
-              onClick={() => {
-                onChange(data.filter((imgGrid, i2) => i2 !== i));
-              }}
-            >
-              <X />
+      <div className="grid grid-cols-3 gap-4">
+        {homeEventFields.map((homeEvent, i) => (
+          <div key={homeEvent.id}>
+            <Controller
+              control={control}
+              name={`homeEvents.${i}.workProgram`}
+              render={({ field }) => (
+                <AsyncPaginate
+                  loadOptions={loadWorkPrograms}
+                  additional={{
+                    page: 0
+                  }}
+                  className="w-48"
+                  getOptionLabel={opt => opt.name}
+                  getOptionValue={opt => opt.id.toString()}
+                  {...field}
+                />
+              )}
+            />
+            <div className="grid grid-cols-2 gap-2 mt-3">
+              {watch(`homeEvents`) &&
+                (!watch(`homeEvents.${i}.workProgram`)
+                  ?.workProgramDocumentations?.length ? (
+                  <div className="text-sm text-gray-400">
+                    No documentation found. Thumbnail will not be shown on
+                    website
+                  </div>
+                ) : (
+                  watch(
+                    `homeEvents.${i}.workProgram`
+                  )?.workProgramDocumentations.map(documentation => (
+                    <div key={documentation.id}>
+                      <div className="flex">
+                        <input
+                          checked={
+                            watch(`homeEvents.${i}.documentation`)?.id ===
+                            documentation.id
+                          }
+                          onChange={({ target: { checked } }) =>
+                            setValue(
+                              `homeEvents.${i}.documentation`,
+                              documentation
+                            )
+                          }
+                          type="radio"
+                          className="mr-2"
+                        />
+                        <div className="text-sm text-gray-400">
+                          Mark as thumbnail
+                        </div>
+                      </div>
+                      <img
+                        src={documentation.imgUrl}
+                        alt="documentation"
+                        className=" w-24 h-24 object-contain rounded-xl"
+                      />
+                    </div>
+                  ))
+                ))}
             </div>
-            <TextInput
-              value={imageGrid.text1}
-              onValueChange={val =>
-                handleChangeHomeEvent('text1', val as string, i)
-              }
-              placeholder="Enter text1"
-              containerClassName="mb-3"
-            />
-            <TextInput
-              value={imageGrid.text2}
-              onValueChange={val =>
-                handleChangeHomeEvent('text2', val as string, i)
-              }
-              placeholder="Enter text2"
-              containerClassName="mb-3"
-            />
-            <TextInput
-              value={imageGrid.text3}
-              onValueChange={val =>
-                handleChangeHomeEvent('text3', val as string, i)
-              }
-              placeholder="Enter text3"
-              containerClassName="mb-3"
-            />
-            <ImageInput
-              data={imageGrid.imgUrl}
-              onChange={val =>
-                handleChangeHomeEvent('imgUrl', val as string, i)
-              }
-            />
+            <p className="text-red-500">
+              {errors.homeEvents?.[i]?.workProgram?.message}
+            </p>
+            <Button
+              onClick={() => {
+                remove(i);
+              }}
+              className="mt-3"
+            >
+              Remove
+            </Button>
           </div>
         ))}
       </div>
+
+      <div className="my-3">
+        <Button
+          onClick={() => {
+            append({
+              workProgram: undefined,
+              documentation: undefined
+            });
+          }}
+        >
+          Add Event
+        </Button>
+      </div>
+
       <Button
         onClick={() => {
-          onChange([...(data || []), { text1: '', text2: '', text3: '' }]);
+          handleSubmit(onSubmit)();
         }}
         className="mt-3"
       >
-        Add Image
+        Save
       </Button>
     </>
   );

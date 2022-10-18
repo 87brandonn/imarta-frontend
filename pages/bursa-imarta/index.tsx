@@ -1,7 +1,5 @@
 import type { NextPage } from 'next';
 import Image from 'next/future/image';
-import 'slick-carousel/slick/slick-theme.css';
-import 'slick-carousel/slick/slick.css';
 import AnimatedHero from '../../components/AnimatedHero';
 import GaleriSwiper from '../../components/BursaImarta/GaleriSwiper';
 import AppLayout from '../../layouts';

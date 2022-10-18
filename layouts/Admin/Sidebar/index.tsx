@@ -38,22 +38,22 @@ const dataPages = [
   {
     name: 'Work Program',
     key: 'work-program',
-    path: '/data/work-program'
+    path: '/work-program'
   },
   {
     name: 'Department',
     key: 'department',
-    path: '/data/department'
+    path: '/department'
   },
   {
     name: 'Field',
     key: 'field',
-    path: '/data/field'
+    path: '/field'
   },
   {
     name: 'Meta',
     key: 'meta',
-    path: '/data/meta'
+    path: '/meta'
   }
 ];
 
@@ -70,7 +70,10 @@ function AdminSidebar({ isDashboardData }: AdminSidebarProps) {
   return (
     <div className="h-full bg-gray-100 flex flex-col gap-3 p-3">
       {renderedData.map((page, i) => (
-        <Link href={`/admin${page.path}`} key={i}>
+        <Link
+          href={`/admin${isDashboardData ? '/data' : '/cms'}${page.path}`}
+          key={i}
+        >
           <div className="cursor-pointer">{page.name}</div>
         </Link>
       ))}

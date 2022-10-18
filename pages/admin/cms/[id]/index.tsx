@@ -10,6 +10,7 @@ import TextAreaInput from '../../../../components/Admin/TextareaInput';
 import useModule from '../../../../hooks/useModule';
 import useUpdateAttributes from '../../../../hooks/useUpdateAttributes';
 import AdminLayout from '../../../../layouts/Admin';
+import { DeepPartial } from '../../../../types/utils/deepPartial';
 
 function Admin() {
   const { query } = useRouter();
@@ -18,37 +19,13 @@ function Admin() {
 
   const { mutate: update } = useUpdateAttributes();
 
-  const onChangeImage = (val: string | undefined, attributeId: number) => {
-    update({
-      id: attributeId,
-      data: { imgUrl: val },
-      slug: query.id as string
-    });
-  };
-
-  const onChangeImageGrid = (val: ImageGridType[], attributeId: number) => {
-    update({
-      id: attributeId,
-      data: val,
-      slug: query.id as string
-    });
-  };
-
-  const onChangeHomeEvents = (val: HomeEventType[], attributeId: number) => {
-    update({
-      id: attributeId,
-      data: val,
-      slug: query.id as string
-    });
-  };
-
-  const onInputChange = (
-    val: JSX.IntrinsicElements['input']['value'],
+  const onChange = (
+    val: ImageGridType[] | DeepPartial<HomeEventType>[] | string | undefined,
     attributeId: number
   ) => {
     update({
       id: attributeId,
-      data: { value: val },
+      data: val,
       slug: query.id as string
     });
   };
@@ -70,26 +47,26 @@ function Admin() {
                 attribute.type === 'IMAGE_SMALL' ? (
                   <ImageInput
                     data={attribute.data?.imgUrl}
-                    onChange={val => onChangeImage(val, attribute.id)}
+                    onChange={val => onChange(val, attribute.id)}
                   />
                 ) : attribute.type === 'IMAGE_GRID' ||
                   attribute.type === 'SWIPER_CENTERED' ||
                   attribute.type === 'SWIPER_NORMAL' ? (
                   <ImageGridInput
                     data={attribute.data}
-                    onChange={val => onChangeImageGrid(val, attribute.id)}
+                    onChange={val => onChange(val, attribute.id)}
                     isOriginal={attribute.type === 'IMAGE_GRID'}
                   />
                 ) : attribute.type === 'TITLE' ||
                   attribute.type === 'SUBTITLE' ? (
                   <TextAreaInput
-                    value={attribute.data?.value}
-                    onValueChange={val => onInputChange(val, attribute.id)}
+                    value={attribute.data}
+                    onValueChange={val => onChange(val, attribute.id)}
                   />
                 ) : attribute.type === 'HOME_EVENTS' ? (
                   <HomeEventsInput
                     data={attribute.data}
-                    onChange={val => onChangeHomeEvents(val, attribute.id)}
+                    onChange={val => onChange(val, attribute.id)}
                   />
                 ) : (
                   <div>input</div>

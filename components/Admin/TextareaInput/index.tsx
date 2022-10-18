@@ -9,14 +9,13 @@ function TextAreaInput({
   onChange,
   ...props
 }: JSX.IntrinsicElements['textarea'] & {
-  onValueChange: (val: JSX.IntrinsicElements['textarea']['value']) => void;
+  onValueChange: (val: string) => void;
   containerClassName?: string;
 }) {
-  const [localValue, setLocalValue] =
-    useState<JSX.IntrinsicElements['textarea']['value']>('');
+  const [localValue, setLocalValue] = useState<string>('');
 
   useEffect(() => {
-    setLocalValue(value || '');
+    setLocalValue((value as string) || '');
   }, [value]);
 
   return (
