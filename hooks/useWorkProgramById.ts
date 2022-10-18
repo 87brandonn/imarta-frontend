@@ -1,43 +1,10 @@
 import { useQuery } from 'react-query';
-import axios from '../config/axios';
-import {
-  Department,
-  Field,
-  Period,
-  WorkProgram,
-  WorkProgramDepartment,
-  WorkProgramDocumentation,
-  WorkProgramField
-} from '../types';
-
-export type WorkProgramJoined = WorkProgram & {
-  workProgramDepartments: (WorkProgramDepartment & {
-    department: Department;
-  })[];
-  workProgramFields: (WorkProgramField & {
-    field: Field;
-  })[];
-  period: Period;
-};
+import getWorkProgramById from '../services/api/getWorkProgramById';
 
 const useWorkProgramById = (id: string) =>
   useQuery(
     ['work-program', id],
-    async () => {
-      const { data } = await axios.get<
-        WorkProgram & {
-          workProgramDepartments: (WorkProgramDepartment & {
-            department: Department;
-          })[];
-          workProgramFields: (WorkProgramField & {
-            field: Field;
-          })[];
-          workProgramDocumentations: WorkProgramDocumentation[];
-          period: Period;
-        }
-      >(`/data/work-program/${id}`);
-      return data;
-    },
+    async () => getWorkProgramById(parseInt(id, 10)),
     {
       enabled: !!id && id !== 'new'
     }

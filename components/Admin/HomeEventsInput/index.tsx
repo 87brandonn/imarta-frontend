@@ -1,27 +1,34 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { X } from 'react-feather';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { AsyncPaginate } from 'react-select-async-paginate';
 import * as yup from 'yup';
-import getWorkPrograms, {
-  WorkProgramWithAssociation
-} from '../../../services/api/getWorkPrograms';
-import { WorkProgramDocumentation } from '../../../types';
+import useLoadWorkPrograms from '../../../hooks/options/useLoadWorkPrograms';
+import getWorkProgramById from '../../../services/api/getWorkProgramById';
+import { WorkProgramWithAssociation } from '../../../services/api/getWorkPrograms';
+import { WorkProgram } from '../../../types';
 import { DeepPartial } from '../../../types/utils/deepPartial';
 import Button from '../Button';
+import ModalWorkProgamDocumentation from './ModalWorkProgramDocumentation';
 
 export type HomeEventForm = {
-  homeEvents: HomeEventType[];
+  homeEvents: HomeEventFormType[];
 };
 
-export type HomeEventType = {
-  workProgram?: WorkProgramWithAssociation;
-  documentation?: WorkProgramDocumentation;
+export type HomeEventFormType = {
+  workProgram?: WorkProgram;
+  documentationId?: number;
+};
+
+export type HomeEventTypeFromApi = {
+  workProgramId: number;
+  documentationId?: number;
 };
 
 type HomeEventsInputProps = {
-  data: HomeEventType[];
-  onChange: (val: DeepPartial<HomeEventType>[]) => void;
+  data: HomeEventTypeFromApi[];
+  onChange: (val: DeepPartial<HomeEventTypeFromApi>[]) => void;
 };
 
 const schema = yup
@@ -33,7 +40,7 @@ const schema = yup
             .mixed<WorkProgramWithAssociation>()
             .required()
             .label('Work program'),
-          documentation: yup.mixed<WorkProgramDocumentation>()
+          documentationId: yup.number()
         })
       )
       .min(1)
@@ -43,6 +50,12 @@ const schema = yup
   .required();
 
 function HomeEventsInput({ data, onChange }: HomeEventsInputProps) {
+  const [showModal, setShowModal] = useState(false);
+  const [workProgramId, setWorkProgramId] = useState<number>();
+  const [workProgramIndex, setWorkProgramIndex] = useState<number>();
+  const [selectedDocumentationId, setSelectedDocumentationId] =
+    useState<number>();
+
   const {
     control,
     watch,
@@ -53,151 +66,126 @@ function HomeEventsInput({ data, onChange }: HomeEventsInputProps) {
   } = useForm<HomeEventForm>({
     resolver: yupResolver(schema),
     defaultValues: {
-      homeEvents: []
+      homeEvents: [
+        {
+          workProgram: undefined,
+          documentationId: undefined
+        }
+      ]
     }
   });
 
   useEffect(() => {
-    reset({
-      homeEvents:
-        data?.map(hE => ({
-          workProgram: hE.workProgram,
-          documentation: hE.documentation
-        })) || []
-    });
+    (async () => {
+      const homeEvents = await Promise.all(
+        data.map(async homeEventData => {
+          const workProgram = await getWorkProgramById(
+            homeEventData.workProgramId
+          );
+          return {
+            workProgram,
+            documentationId: homeEventData.documentationId
+          };
+        })
+      );
+      reset({
+        homeEvents
+      });
+    })();
   }, [data, reset, setValue]);
 
   const {
-    fields: homeEventFields,
     append,
-    remove
+    remove,
+    fields: homeEventFields
   } = useFieldArray({
     control,
     name: 'homeEvents'
   });
 
-  const loadWorkPrograms = async (
-    search: string,
-    _: any,
-    { page: additionalPage }: any
-  ) => {
-    const data = await getWorkPrograms({
-      name: search || undefined,
-      page: additionalPage,
-      limit: 10
-    });
-
-    return {
-      options: data.data,
-      hasMore: data.meta.page < data.meta.totalPage,
-      additional: {
-        page: data.meta.page
-      }
-    };
-  };
+  const loadWorkPrograms = useLoadWorkPrograms();
 
   const onSubmit = ({ homeEvents }: HomeEventForm) => {
     onChange(
       homeEvents.map(homeEvent => ({
-        ...homeEvent,
-        workProgram: {
-          ...(homeEvent.workProgram || {}),
-          workProgramDepartments: undefined,
-          workProgramDocumentations: undefined,
-          workProgramFields: undefined
-        }
+        workProgramId: homeEvent.workProgram?.id,
+        documentationId: homeEvent.documentationId
       }))
     );
   };
 
   return (
     <>
+      {showModal && workProgramIndex !== undefined && (
+        <ModalWorkProgamDocumentation
+          onChangeShow={setShowModal}
+          showModal={showModal}
+          id={workProgramId}
+          selectedId={selectedDocumentationId}
+          onSave={val => {
+            setValue(`homeEvents.${workProgramIndex}.documentationId`, val);
+            setShowModal(false);
+          }}
+        />
+      )}
       <div className="grid grid-cols-3 gap-4">
-        {homeEventFields.map((homeEvent, i) => (
-          <div key={homeEvent.id}>
-            <Controller
-              control={control}
-              name={`homeEvents.${i}.workProgram`}
-              render={({ field }) => (
-                <AsyncPaginate
-                  loadOptions={loadWorkPrograms}
-                  additional={{
-                    page: 0
-                  }}
-                  className="w-48"
-                  getOptionLabel={opt => opt.name}
-                  getOptionValue={opt => opt.id.toString()}
-                  {...field}
+        {watch('homeEvents').map((homeEvent, i) => (
+          <div key={i}>
+            <div className="flex gap-3">
+              <div>
+                <Controller
+                  control={control}
+                  name={`homeEvents.${i}.workProgram`}
+                  render={({ field }) => (
+                    <AsyncPaginate
+                      loadOptions={loadWorkPrograms}
+                      additional={{
+                        page: 0
+                      }}
+                      className="w-48"
+                      getOptionLabel={opt => opt.name}
+                      getOptionValue={opt => opt.id.toString()}
+                      {...field}
+                    />
+                  )}
                 />
-              )}
-            />
-            <div className="grid grid-cols-2 gap-2 mt-3">
-              {watch(`homeEvents`) &&
-                (!watch(`homeEvents.${i}.workProgram`)
-                  ?.workProgramDocumentations?.length ? (
-                  <div className="text-sm text-gray-400">
-                    No documentation found. Thumbnail will not be shown on
-                    website
-                  </div>
-                ) : (
-                  watch(
-                    `homeEvents.${i}.workProgram`
-                  )?.workProgramDocumentations.map(documentation => (
-                    <div key={documentation.id}>
-                      <div className="flex">
-                        <input
-                          checked={
-                            watch(`homeEvents.${i}.documentation`)?.id ===
-                            documentation.id
-                          }
-                          onChange={({ target: { checked } }) =>
-                            setValue(
-                              `homeEvents.${i}.documentation`,
-                              documentation
-                            )
-                          }
-                          type="radio"
-                          className="mr-2"
-                        />
-                        <div className="text-sm text-gray-400">
-                          Mark as thumbnail
-                        </div>
-                      </div>
-                      <img
-                        src={documentation.imgUrl}
-                        alt="documentation"
-                        className=" w-24 h-24 object-contain rounded-xl"
-                      />
-                    </div>
-                  ))
-                ))}
+                <div
+                  className="text-violet-400 text-sm cursor-pointer underline"
+                  onClick={() => {
+                    setWorkProgramId(homeEvent.workProgram?.id);
+                    setWorkProgramIndex(i);
+                    setSelectedDocumentationId(homeEvent.documentationId);
+                    setShowModal(true);
+                  }}
+                >
+                  Choose thumbnail
+                </div>
+              </div>
+              <X
+                onClick={() => {
+                  remove(i);
+                }}
+                className="text-red-400 cursor-pointer"
+              />
             </div>
-            <p className="text-red-500">
+
+            <p className="text-red-500 text-sm">
               {errors.homeEvents?.[i]?.workProgram?.message}
             </p>
-            <Button
-              onClick={() => {
-                remove(i);
-              }}
-              className="mt-3"
-            >
-              Remove
-            </Button>
           </div>
         ))}
-      </div>
-
-      <div className="my-3">
-        <Button
-          onClick={() => {
-            append({
-              workProgram: undefined,
-              documentation: undefined
-            });
-          }}
-        >
-          Add Event
-        </Button>
+        <div className="my-3">
+          <Button
+            onClick={() => {
+              append({
+                workProgram: undefined,
+                documentationId: undefined
+              });
+            }}
+          >
+            Add Event
+          </Button>
+        </div>
       </div>
 
       <Button

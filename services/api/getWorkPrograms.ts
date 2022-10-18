@@ -1,8 +1,5 @@
 import axios from '../../config/axios';
-import {
-  WorkProgramFilterField,
-  WorkProgramParams
-} from '../../hooks/useWorkProgram';
+import { WorkProgramParams } from '../../hooks/useWorkProgram';
 import {
   Department,
   Field,

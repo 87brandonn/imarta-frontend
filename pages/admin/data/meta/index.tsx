@@ -39,6 +39,7 @@ function AdminMeta() {
         <table className="bg-white max-h-[85vh] overflow-y-auto rounded-xl shadow-lg overflow-x-auto block">
           <thead className="border-b">
             <th>ID</th>
+            <th>Title</th>
             <th>Vision</th>
             <th>Mission</th>
             <th>Period</th>
@@ -48,6 +49,7 @@ function AdminMeta() {
             {data?.map((meta, i) => (
               <tr key={meta.id}>
                 <td>{meta.id}</td>
+                <td>{meta.title}</td>
                 <td>{meta.vision}</td>
                 <td>
                   {meta.organizationMetaMissions

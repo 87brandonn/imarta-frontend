@@ -1,32 +1,31 @@
-import Link from 'next/link';
-import { useCallback, useState } from 'react';
-import { Controller, Field, useFieldArray, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import Link from 'next/link';
+import { useState } from 'react';
 import { confirmAlert } from 'react-confirm-alert';
 import { ChevronLeft, ChevronRight, Edit, Trash } from 'react-feather';
+import { Controller, useForm } from 'react-hook-form';
 import ReactPaginate from 'react-paginate';
 import { AsyncPaginate } from 'react-select-async-paginate';
+import * as yup from 'yup';
 import Button from '../../../../components/Admin/Button';
 import TextInput from '../../../../components/TextInput';
+import useLoadDepartments from '../../../../hooks/options/useLoadDepartments';
+import useLoadFields from '../../../../hooks/options/useLoadFields';
 import useDeleteWorkProgram from '../../../../hooks/useDeleteWorkProgram';
 import useWorkProgram, {
-  WorkProgramFilterField
+  WorkProgramFilter
 } from '../../../../hooks/useWorkProgram';
 import AdminLayout from '../../../../layouts/Admin';
-import getDepartments from '../../../../services/api/getDepartments';
-import getFields from '../../../../services/api/getFields';
-import { Department, Period } from '../../../../types';
-import { WorkProgramPayload } from './[id]';
+import { Department, Field, Period, WorkProgram } from '../../../../types';
 
 const schema = yup
   .object({
-    name: yup.string().label('Name').required(),
+    name: yup.string().label('Name'),
     description: yup.string().label('Description'),
-    participationCount: yup.number().required().label('Participation count'),
+    participationCount: yup.string().label('Participation count'),
     collaborators: yup.string().label('Collaborators'),
-    startDate: yup.string().required().label('Start date'),
-    endDate: yup.string().required().label('End date'),
+    startDate: yup.string().label('Start date'),
+    endDate: yup.string().label('End date'),
     staffs: yup.string().label('Staff'),
     departments: yup.mixed<Department[]>().label('Departments'),
     fields: yup.mixed<Field[]>().label('Fields'),
@@ -48,6 +47,12 @@ const defaultValues = {
   documentations: []
 };
 
+type WorkProgramForm = Omit<WorkProgram, 'participationCount'> & {
+  departments: Department[];
+  fields: Field[];
+  participationCount: string;
+};
+
 function Admin() {
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(10);
@@ -55,15 +60,15 @@ function Admin() {
   const {
     control,
     register,
-    watch,
     reset,
+    handleSubmit,
     formState: { errors }
-  } = useForm<WorkProgramPayload>({
+  } = useForm<WorkProgramForm>({
     resolver: yupResolver(schema),
     defaultValues
   });
 
-  const [filterFields, setFilterFields] = useState<WorkProgramFilterField>();
+  const [filterFields, setFilterFields] = useState<WorkProgramFilter>();
 
   const { data, isLoading } = useWorkProgram({
     page,
@@ -71,43 +76,8 @@ function Admin() {
     ...filterFields
   });
 
-  const loadDepartments = useCallback(
-    async (search: string, _: any, { page: additionalPage }: any) => {
-      const data = await getDepartments({
-        search: search || undefined,
-        page: additionalPage,
-        limit
-      });
-
-      return {
-        options: data.data,
-        hasMore: data.meta.page < data.meta.totalPage,
-        additional: {
-          page: data.meta.page
-        }
-      };
-    },
-    [limit]
-  );
-
-  const loadFields = useCallback(
-    async (search: string, _: any, { page: additionalPage }: any) => {
-      const data = await getFields({
-        search: search || undefined,
-        page: additionalPage,
-        limit
-      });
-
-      return {
-        options: data.data,
-        hasMore: data.meta.page < data.meta.totalPage,
-        additional: {
-          page: data.meta.page
-        }
-      };
-    },
-    [limit]
-  );
+  const loadDepartments = useLoadDepartments(limit);
+  const loadFields = useLoadFields(limit);
 
   const { mutate: deleteWorkProgram } = useDeleteWorkProgram();
 
@@ -125,6 +95,24 @@ function Admin() {
         }
       ]
     });
+
+  const onSearch = (data: WorkProgramForm) => {
+    setFilterFields({
+      name: data.name?.length ? data.name : undefined,
+      description: data.description?.length ? data.description : undefined,
+      participationCount: data.participationCount
+        ? parseInt(data.participationCount, 10)
+        : undefined,
+      collaborators: data.collaborators?.length
+        ? data.collaborators
+        : undefined,
+      staffs: data.staffs?.length ? data.staffs : undefined,
+      departments: data.departments?.map(dep => dep.id),
+      fields: data.fields.map(field => field.id),
+      startDate: data.startDate,
+      endDate: data.endDate
+    });
+  };
 
   if (isLoading) return 'Loading..';
 
@@ -241,31 +229,7 @@ function Admin() {
           </div>
         </div>
 
-        <Button
-          onClick={() =>
-            setFilterFields({
-              name: watch('name')?.length ? watch('name') : undefined,
-              description: watch('description')?.length
-                ? watch('description')
-                : undefined,
-              participationCount: watch('participationCount'),
-              collaborators: watch('collaborators')?.length
-                ? watch('collaborators')
-                : undefined,
-              staffs: watch('staffs')?.length ? watch('staffs') : undefined,
-              departments: watch('departments')
-                .map(dep => dep.id)
-                .join(','),
-              fields: watch('fields')
-                .map(field => field.id)
-                .join(','),
-              startDate: watch('startDate'),
-              endDate: watch('endDate')
-            })
-          }
-        >
-          Search
-        </Button>
+        <Button onClick={() => handleSubmit(onSearch)()}>Search</Button>
 
         <Button
           className="ml-3"

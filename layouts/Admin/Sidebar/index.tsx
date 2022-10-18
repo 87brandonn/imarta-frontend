@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
 
 const pages = [
@@ -62,6 +63,8 @@ type AdminSidebarProps = {
 };
 
 function AdminSidebar({ isDashboardData }: AdminSidebarProps) {
+  const { query } = useRouter();
+
   const renderedData = useMemo(
     () => (isDashboardData ? dataPages : pages),
     [isDashboardData]
@@ -69,12 +72,21 @@ function AdminSidebar({ isDashboardData }: AdminSidebarProps) {
 
   return (
     <div className="h-full bg-gray-100 flex flex-col gap-3 p-3">
+      <Link href="/admin">
+        <div className="text-2xl font-bold cursor-pointer">Admin</div>
+      </Link>
       {renderedData.map((page, i) => (
         <Link
           href={`/admin${isDashboardData ? '/data' : '/cms'}${page.path}`}
           key={i}
         >
-          <div className="cursor-pointer">{page.name}</div>
+          <div
+            className={`cursor-pointer border-b ${
+              query.id === page.key ? 'border-black' : 'border-transparent'
+            }`}
+          >
+            {page.name}
+          </div>
         </Link>
       ))}
     </div>

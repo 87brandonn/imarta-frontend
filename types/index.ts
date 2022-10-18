@@ -122,6 +122,7 @@ export type WorkProgramDocumentation = {
 export type OrganizationMeta = {
   id: number;
   periodId: number;
+  title: string | null;
   vision: string;
   hierarchyImgUrl: string;
 };
@@ -155,6 +156,9 @@ export const AttributeType: {
   IMAGE_GRID: 'IMAGE_GRID';
   HERO: 'HERO';
   HOME_EVENTS: 'HOME_EVENTS';
+  HOME_HIGHLIGHTS: 'HOME_HIGHLIGHTS';
+  ORGANIZATION_STRUCTURE_1: 'ORGANIZATION_STRUCTURE_1';
+  REPOSITORY_1: 'REPOSITORY_1';
 };
 
 export type AttributeType = typeof AttributeType[keyof typeof AttributeType];

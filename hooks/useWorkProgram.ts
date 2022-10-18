@@ -1,22 +1,20 @@
 import { useQuery } from 'react-query';
+import { WorkProgramPayload } from '../pages/admin/data/work-program/[id]';
 import getWorkPrograms from '../services/api/getWorkPrograms';
+import { WorkProgram } from '../types';
+import { Nullable } from '../types/utils/nullable';
 
-export type WorkProgramFilterField = {
-  name?: string;
-  description?: string | null;
-  participationCount?: string | null;
-  collaborators?: string | null;
-  staffs?: string | null;
-  departments?: string;
-  fields?: string;
-  startDate?: string | null;
-  endDate?: string | null;
-};
+export type WorkProgramFilter = Nullable<
+  WorkProgram & {
+    departments: number[];
+    fields: number[];
+  }
+>;
 
 export type WorkProgramParams = {
-  limit: number;
+  limit?: number;
   page: number;
-} & WorkProgramFilterField;
+} & WorkProgramFilter;
 
 const useWorkProgram = (params?: WorkProgramParams) =>
   useQuery(['work-program', params], () => getWorkPrograms(params));

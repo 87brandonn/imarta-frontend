@@ -18,6 +18,7 @@ import { Period } from '../../../../../types';
 const schema = yup
   .object({
     id: yup.number(),
+    title: yup.string().required().label('Title'),
     vision: yup.string().required().label('Vision'),
     period: yup.mixed<Period>().required().label('Period'),
     missions: yup
@@ -46,6 +47,7 @@ function AdminMetaDetail() {
     resolver: yupResolver(schema),
     defaultValues: {
       vision: '',
+      title: '',
       period: undefined,
       missions: []
     }
@@ -71,6 +73,7 @@ function AdminMetaDetail() {
 
   useEffect(() => {
     reset({
+      title: data?.title || '',
       vision: data?.vision || '',
       period: data?.period || undefined,
       missions: data?.organizationMetaMissions || [],
@@ -84,6 +87,15 @@ function AdminMetaDetail() {
   return (
     <div className="max-w-4xl mx-auto mt-12">
       <form onSubmit={handleSubmit(onSubmit)}>
+        <TextInput
+          isHookForm
+          control={control}
+          controlName="title"
+          label="Title"
+          placeholder="Enter title"
+          error={errors.title?.message}
+        />
+
         <TextInput
           isHookForm
           control={control}

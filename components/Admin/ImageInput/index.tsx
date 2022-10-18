@@ -1,16 +1,19 @@
 import Image from 'next/future/image';
 import React, { useRef, useState } from 'react';
-import { X } from 'react-feather';
 import uploadImage from '../../../utils/uploadFile';
-import Button from '../Button';
+import ImageRecommendationsModal from './ImageRecommendationsModal';
 
 type ImageInputProps = {
   data?: string;
   onChange?: (val?: string) => void;
-  onDelete?: () => void;
+  label?: string;
 };
 
-function ImageInput({ data, onChange, onDelete }: ImageInputProps) {
+function ImageInput({
+  data,
+  onChange,
+  label = 'Upload Image'
+}: ImageInputProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [loadingUpload, setLoadingUpload] = useState(false);
@@ -31,25 +34,39 @@ function ImageInput({ data, onChange, onDelete }: ImageInputProps) {
     }
   };
 
+  const [show, setShow] = useState(false);
+
   return (
     <div>
+      {show && (
+        <ImageRecommendationsModal
+          onSave={val => {
+            setShow(false);
+            onChange?.(val);
+          }}
+          show={show}
+          onChangeShow={setShow}
+        />
+      )}
       {loadingUpload ? (
         'Uploading file...'
       ) : !data ? (
-        <Button onClick={() => fileInputRef.current?.click()}>
-          Upload Image
-        </Button>
+        <div className="flex justify-center gap-2">
+          <div
+            className="text-violet-400 mb-3 cursor-pointer underline text-sm"
+            onClick={() => setShow(true)}
+          >
+            Choose from gallery
+          </div>
+          <div
+            className="flex-1 text-violet-400 cursor-pointer underline text-sm"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            {label}
+          </div>
+        </div>
       ) : (
         <div className="my-2 group inline-block cursor-pointer relative">
-          <div
-            onClick={() => {
-              onChange?.(undefined);
-              onDelete?.();
-            }}
-            className="bg-white z-10 rounded-full text-red-400 absolute right-0 top-[-8px] transform"
-          >
-            <X />
-          </div>
           <Image
             src={data}
             width="0"

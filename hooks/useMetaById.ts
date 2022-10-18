@@ -1,27 +1,9 @@
 import { useQuery } from 'react-query';
-import axios from '../config/axios';
-import {
-  Department,
-  OrganizationMeta,
-  OrganizationMetaMission,
-  Period
-} from '../types';
+import getMetaById from '../services/api/getMetaById';
 
 const useMetaById = (id: string) =>
-  useQuery(
-    ['meta', id],
-    async () => {
-      const { data } = await axios.get<
-        OrganizationMeta & {
-          organizationMetaMissions: OrganizationMetaMission[];
-          period: Period;
-        }
-      >(`/data/meta/${id}`);
-      return data;
-    },
-    {
-      enabled: !!id && id !== 'new'
-    }
-  );
+  useQuery(['meta', id], () => getMetaById(parseInt(id, 10)), {
+    enabled: !!id && id !== 'new'
+  });
 
 export default useMetaById;

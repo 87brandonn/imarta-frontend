@@ -53,7 +53,7 @@ const defaultValues = {
   documentations: []
 };
 
-export type WorkProgramPayload = Omit<WorkProgram, 'participationCount'> & {
+type WorkProgramPayload = Omit<WorkProgram, 'participationCount'> & {
   departments: Department[];
   fields: Field[];
   period: Period;
@@ -243,11 +243,7 @@ function Admin() {
                 control={control}
                 name={`documentations.${i}.imgUrl`}
                 render={({ field: { value, onChange } }) => (
-                  <ImageInput
-                    data={value}
-                    onChange={onChange}
-                    onDelete={() => remove(i)}
-                  />
+                  <ImageInput data={value} onChange={onChange} />
                 )}
               />
             </div>

@@ -1,16 +1,23 @@
 import { useRouter } from 'next/router';
 import HomeEventsInput, {
-  HomeEventType
+  HomeEventTypeFromApi
 } from '../../../../components/Admin/HomeEventsInput';
+import HomeHighlightsInput, {
+  HomeHighlightTypeFromApi
+} from '../../../../components/Admin/HomeHighlightsInput';
 import ImageGridInput, {
   ImageGridType
 } from '../../../../components/Admin/ImageGridInput';
 import ImageInput from '../../../../components/Admin/ImageInput';
+import OrganizationStructureInput, {
+  OrganizationStructure
+} from '../../../../components/Admin/OrganizationStructureInput';
+import RepositoryInput from '../../../../components/Admin/RepositoryInput';
 import TextAreaInput from '../../../../components/Admin/TextareaInput';
+import TextInput from '../../../../components/TextInput';
 import useModule from '../../../../hooks/useModule';
 import useUpdateAttributes from '../../../../hooks/useUpdateAttributes';
 import AdminLayout from '../../../../layouts/Admin';
-import { DeepPartial } from '../../../../types/utils/deepPartial';
 
 function Admin() {
   const { query } = useRouter();
@@ -20,7 +27,13 @@ function Admin() {
   const { mutate: update } = useUpdateAttributes();
 
   const onChange = (
-    val: ImageGridType[] | DeepPartial<HomeEventType>[] | string | undefined,
+    val:
+      | ImageGridType[]
+      | HomeEventTypeFromApi
+      | HomeHighlightTypeFromApi
+      | OrganizationStructure[]
+      | string
+      | undefined,
     attributeId: number
   ) => {
     update({
@@ -46,7 +59,7 @@ function Admin() {
                 attribute.type === 'IMAGE_BIG' ||
                 attribute.type === 'IMAGE_SMALL' ? (
                   <ImageInput
-                    data={attribute.data?.imgUrl}
+                    data={attribute.data}
                     onChange={val => onChange(val, attribute.id)}
                   />
                 ) : attribute.type === 'IMAGE_GRID' ||
@@ -59,17 +72,43 @@ function Admin() {
                   />
                 ) : attribute.type === 'TITLE' ||
                   attribute.type === 'SUBTITLE' ? (
-                  <TextAreaInput
+                  <TextInput
                     value={attribute.data}
-                    onValueChange={val => onChange(val, attribute.id)}
+                    onChange={({ target: { value } }) =>
+                      onChange(value, attribute.id)
+                    }
                   />
                 ) : attribute.type === 'HOME_EVENTS' ? (
                   <HomeEventsInput
                     data={attribute.data}
+                    // @ts-ignore
+                    onChange={val => onChange(val, attribute.id)}
+                  />
+                ) : attribute.type === 'HOME_HIGHLIGHTS' ? (
+                  <HomeHighlightsInput
+                    data={attribute.data}
+                    // @ts-ignore
+                    onChange={val => onChange(val, attribute.id)}
+                  />
+                ) : attribute.type === 'ORGANIZATION_STRUCTURE_1' ? (
+                  <OrganizationStructureInput
+                    data={attribute.data}
+                    // @ts-ignore
+                    onChange={val => onChange(val, attribute.id)}
+                  />
+                ) : attribute.type === 'REPOSITORY_1' ? (
+                  <RepositoryInput
+                    data={attribute.data}
+                    // @ts-ignore
                     onChange={val => onChange(val, attribute.id)}
                   />
                 ) : (
-                  <div>input</div>
+                  <TextAreaInput
+                    value={attribute.data}
+                    onChange={({ target: { value } }) =>
+                      onChange(value, attribute.id)
+                    }
+                  />
                 )}
               </div>
             ))}
