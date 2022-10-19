@@ -1,4 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import { Control, Controller } from 'react-hook-form';
+import { HomeEventForm } from '..';
 import useAddWorkProgramDocumentation from '../../../../hooks/useAddWorkProgramDocumentation';
 import useWorkProgamDocumentationByWorkProgramId from '../../../../hooks/useWorkProgamDocumentationByWorkProgramId';
 import ImageInput from '../../ImageInput';
@@ -6,26 +8,20 @@ import Modal from '../../Modal';
 
 type ModalWorkProgamDocumentationProps = {
   showModal: boolean;
+  control: Control<HomeEventForm, any>;
+  index: number;
   onChangeShow: (val: boolean) => void;
-  onSave: (val?: number) => void;
   id: number | undefined;
-  selectedId: number | undefined;
 };
 
 function ModalWorkProgamDocumentation({
   showModal,
   onChangeShow,
-  onSave,
-  id,
-  selectedId
+  control,
+  index,
+  id
 }: ModalWorkProgamDocumentationProps) {
-  const [localSelectedId, setLocalSelectedId] = useState<number>();
-
-  useEffect(() => {
-    setLocalSelectedId(selectedId);
-  }, [selectedId]);
-
-  const { data, isLoading } = useWorkProgamDocumentationByWorkProgramId(id);
+  const { data } = useWorkProgamDocumentationByWorkProgramId(id);
   const { mutate: addDocumentation, isLoading: isLoadingAddDocumentation } =
     useAddWorkProgramDocumentation();
 
@@ -34,8 +30,6 @@ function ModalWorkProgamDocumentation({
       title="Work Program Documentation"
       isOpen={showModal}
       onChangeOpen={onChangeShow}
-      isActionable
-      onSave={() => onSave(localSelectedId)}
     >
       <div className="mb-3 flex justify-end">
         <ImageInput
@@ -54,13 +48,17 @@ function ModalWorkProgamDocumentation({
           {data?.map(documentation => (
             <div key={documentation.id}>
               <div className="flex mb-2">
-                <input
-                  checked={localSelectedId === documentation.id}
-                  onChange={({ target: { checked } }) =>
-                    setLocalSelectedId(documentation.id)
-                  }
-                  type="radio"
-                  className="mr-2"
+                <Controller
+                  control={control}
+                  name={`homeEvents.${index}.documentationId`}
+                  render={({ field }) => (
+                    <input
+                      type="radio"
+                      className="mr-2"
+                      checked={field.value === documentation.id}
+                      onChange={() => field.onChange(documentation.id)}
+                    />
+                  )}
                 />
                 <div className="text-sm text-gray-400">Mark as thumbnail</div>
               </div>

@@ -92,8 +92,6 @@ function OrganizationStructureInput({
     );
   };
 
-  console.log(errors);
-
   return (
     <>
       <div className="mb-3">

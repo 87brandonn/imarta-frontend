@@ -7,11 +7,12 @@ import * as yup from 'yup';
 import usePeriod from '../../../hooks/usePeriod';
 import getDepartmentById from '../../../services/api/getDepartmentById';
 import getPeriodById from '../../../services/api/getPeriodById';
+import getWorkProgramById from '../../../services/api/getWorkProgramById';
 import { Department, Period, WorkProgram } from '../../../types';
 import Button from '../Button';
 import PeriodDepartmentOptions from './PeriodDepartmentOptions';
 
-export type Repository = {
+export type RepositoryFromApi = {
   periodId: number;
   departments: {
     id: number;
@@ -19,7 +20,8 @@ export type Repository = {
   }[];
 };
 
-export type RepositoryDepartment = Department & {
+export type RepositoryDepartment = {
+  department?: Department;
   workPrograms?: WorkProgram[];
 };
 
@@ -31,8 +33,8 @@ export type RepositoryForm = {
 };
 
 type RepositoryInputProps = {
-  data?: Repository[];
-  onChange?: (val?: Repository[]) => void;
+  data?: RepositoryFromApi[];
+  onChange?: (val?: RepositoryFromApi[]) => void;
 };
 
 const schema = yup
@@ -55,11 +57,10 @@ const schema = yup
 function RepositoryInput({ data, onChange }: RepositoryInputProps) {
   const {
     control,
-    register,
     handleSubmit,
     reset,
-    watch,
-    formState: { errors }
+    formState: { errors },
+    setValue
   } = useForm<RepositoryForm>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -73,9 +74,16 @@ function RepositoryInput({ data, onChange }: RepositoryInputProps) {
         data?.map(async repositoryData => {
           const [period, ...departments] = await Promise.all([
             getPeriodById(repositoryData.periodId),
-            ...(repositoryData.departments || [])?.map(dep =>
-              getDepartmentById(dep.id)
-            )
+            ...(repositoryData.departments || [])?.map(async dep => {
+              const [department, ...workPrograms] = await Promise.all([
+                getDepartmentById(dep.id),
+                ...dep.workProgramIds.map(getWorkProgramById)
+              ]);
+              return {
+                department,
+                workPrograms
+              };
+            })
           ]);
           return {
             period,
@@ -89,7 +97,11 @@ function RepositoryInput({ data, onChange }: RepositoryInputProps) {
     })();
   }, [data, reset]);
 
-  const { append, remove } = useFieldArray({
+  const {
+    append,
+    remove,
+    fields: repositoryFields
+  } = useFieldArray({
     control,
     name: 'repository'
   });
@@ -103,10 +115,12 @@ function RepositoryInput({ data, onChange }: RepositoryInputProps) {
         .map(repository => ({
           periodId: repository.period!.id,
           departments:
-            repository.departments?.map(dep => ({
-              id: dep.id,
-              workProgramIds: dep.workPrograms?.map(wp => wp.id) || []
-            })) || []
+            repository.departments
+              ?.filter(deps => !!deps.department)
+              .map(dep => ({
+                id: dep.department!.id,
+                workProgramIds: dep.workPrograms?.map(wp => wp.id) || []
+              })) || []
         }))
     );
   };
@@ -114,10 +128,10 @@ function RepositoryInput({ data, onChange }: RepositoryInputProps) {
   return (
     <>
       <div className="mb-3">
-        {watch('repository')?.map((repository, i) => (
+        {repositoryFields?.map((repository, i) => (
           <div
             className="mb-2 border-b border-amber-500 last:border-none"
-            key={i}
+            key={repository.id}
           >
             <div className="flex items-center gap-3">
               <div className="grow">
@@ -125,7 +139,7 @@ function RepositoryInput({ data, onChange }: RepositoryInputProps) {
                 <Controller
                   control={control}
                   name={`repository.${i}.period`}
-                  render={({ field }) => (
+                  render={({ field: periodField }) => (
                     <>
                       <div className="mb-5">
                         <Select
@@ -134,28 +148,22 @@ function RepositoryInput({ data, onChange }: RepositoryInputProps) {
                           getOptionLabel={opt => opt.label}
                           getOptionValue={opt => opt.id.toString()}
                           placeholder="Select period"
-                          {...field}
+                          {...periodField}
+                          onChange={val => {
+                            periodField.onChange(val);
+                            setValue(`repository.${i}.departments`, []);
+                          }}
                         />
                         <p className="text-red-500">
                           {errors.repository?.[i]?.period?.message}
                         </p>
                       </div>
-                      <Controller
+                      <PeriodDepartmentOptions
                         control={control}
-                        name={`repository.${i}.departments`}
-                        render={({ field: departmentFields }) => (
-                          <>
-                            <PeriodDepartmentOptions
-                              id={field.value?.id}
-                              value={departmentFields.value}
-                              onChange={departmentFields.onChange}
-                            />
-                          </>
-                        )}
+                        index={i}
+                        id={periodField.value?.id}
+                        setValue={setValue}
                       />
-                      <p className="text-red-400">
-                        {errors.repository?.[i]?.departments?.message}
-                      </p>
                     </>
                   )}
                 />

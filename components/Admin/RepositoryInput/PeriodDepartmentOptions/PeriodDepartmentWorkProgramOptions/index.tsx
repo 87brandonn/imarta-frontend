@@ -1,29 +1,37 @@
+import { Control, Controller } from 'react-hook-form';
 import Select from 'react-select';
+import { RepositoryForm } from '../..';
 import useWorkProgramByDepartmentId from '../../../../../hooks/useWorkProgramByDepartmentId';
-import { WorkProgram } from '../../../../../types';
 
 type PeriodDepartmentWorkProgramOptionsProps = {
   id?: number;
-  value?: WorkProgram[];
-  onChange?: (val: readonly WorkProgram[]) => void;
+  control: Control<RepositoryForm, any>;
+  index: number;
+  periodIndex: number;
 };
 
 function PeriodDepartmentWorkProgramOptions({
   id,
-  value,
-  onChange
+  control,
+  index,
+  periodIndex
 }: PeriodDepartmentWorkProgramOptionsProps) {
   const { data } = useWorkProgramByDepartmentId(id);
   return (
     <>
       <div className="text-sm text-gray-400">Pinned work program</div>
-      <Select
-        options={data}
-        value={value}
-        isMulti
-        onChange={onChange}
-        getOptionLabel={opt => opt.name}
-        getOptionValue={opt => opt.id.toString()}
+      <Controller
+        control={control}
+        name={`repository.${periodIndex}.departments.${index}.workPrograms`}
+        render={({ field }) => (
+          <Select
+            options={data}
+            isMulti
+            getOptionLabel={opt => opt.name}
+            getOptionValue={opt => opt.id.toString()}
+            {...field}
+          />
+        )}
       />
     </>
   );

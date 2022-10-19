@@ -1,62 +1,94 @@
+import { X } from 'react-feather';
+import {
+  Control,
+  Controller,
+  useFieldArray,
+  UseFormSetValue
+} from 'react-hook-form';
 import Select from 'react-select';
-import { RepositoryDepartment } from '..';
+import { RepositoryForm } from '..';
 import useDepartmentsByPeriod from '../../../../hooks/useDepartmentsByPeriod';
-import { WorkProgram } from '../../../../types';
-import Button from '../../Button';
 import PeriodDepartmentWorkProgramOptions from './PeriodDepartmentWorkProgramOptions';
 
 type PeriodDepartmentOptionsProps = {
   id?: number;
-  value?: RepositoryDepartment[];
-  onChange: (val: readonly RepositoryDepartment[] | null) => void;
+  control: Control<RepositoryForm, any>;
+  index: number;
+  setValue: UseFormSetValue<RepositoryForm>;
 };
 
 function PeriodDepartmentOptions({
-  value,
-  onChange,
-  id
+  control,
+  index,
+  id,
+  setValue
 }: PeriodDepartmentOptionsProps) {
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: `repository.${index}.departments`
+  });
+
   const { data: periodDepartmentData, isLoading: isLoadingPeriodDepartment } =
     useDepartmentsByPeriod(id);
 
   return (
-    <>
-      {value?.map((departmentValue, i) => (
-        <div className="mb-3" key={departmentValue.id}>
-          <div>Department {i + 1}</div>
-          <Select
-            isDisabled={!id}
-            isLoading={isLoadingPeriodDepartment}
-            options={periodDepartmentData}
-            getOptionLabel={opt => opt.name}
-            getOptionValue={opt => opt.id.toString()}
-            value={departmentValue}
-            className="mb-2"
-            placeholder="Select departments"
-            onChange={val => {
-              const clonedValue = [...value];
-              clonedValue.splice(i, 1, val!);
-              onChange(clonedValue);
-            }}
-          />
-          <PeriodDepartmentWorkProgramOptions
-            value={departmentValue.workPrograms}
-            id={departmentValue.id}
-            onChange={val => {
-              const clonedValue = [...value];
-              clonedValue.splice(i, 1, {
-                ...departmentValue,
-                workPrograms: val as WorkProgram[]
-              });
-              onChange(clonedValue);
-            }}
+    <div className="mb-3 mx-3">
+      {fields?.map((department, i) => (
+        <div className="mb-3 flex items-center gap-2" key={department.id}>
+          <div className="grow">
+            <div>Department {i + 1}</div>
+            <Controller
+              control={control}
+              name={`repository.${index}.departments.${i}.department`}
+              render={({ field }) => (
+                <>
+                  <Select
+                    isDisabled={!id}
+                    isLoading={isLoadingPeriodDepartment}
+                    options={periodDepartmentData}
+                    getOptionLabel={opt => opt.name}
+                    getOptionValue={opt => opt.id.toString()}
+                    className="mb-2"
+                    placeholder="Select departments"
+                    {...field}
+                    onChange={val => {
+                      field.onChange(val);
+                      setValue(
+                        `repository.${index}.departments.${i}.workPrograms`,
+                        []
+                      );
+                    }}
+                  />
+                  <PeriodDepartmentWorkProgramOptions
+                    control={control}
+                    index={i}
+                    periodIndex={index}
+                    id={field.value?.id}
+                  />
+                </>
+              )}
+            />
+          </div>
+          <X
+            className="text-red-500 cursor-pointer"
+            onClick={() => remove(i)}
           />
         </div>
       ))}
-      <Button className="mb-3" onClick={() => onChange([...(value || [])])}>
-        Add pinned departments
-      </Button>
-    </>
+      <div className="mb-3">
+        <div
+          className="text-violet-400 text-sm cursor-pointer"
+          onClick={() =>
+            append({
+              department: undefined,
+              workPrograms: undefined
+            })
+          }
+        >
+          Add pinned departments
+        </div>
+      </div>
+    </div>
   );
 }
 

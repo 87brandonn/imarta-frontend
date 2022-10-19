@@ -10,7 +10,7 @@ import { WorkProgramWithAssociation } from '../../../services/api/getWorkProgram
 import { WorkProgram } from '../../../types';
 import { DeepPartial } from '../../../types/utils/deepPartial';
 import Button from '../Button';
-import ModalWorkProgamDocumentation from './ModalWorkProgramDocumentation';
+import ModalWorkProgramDocumentation from './ModalWorkProgramDocumentation';
 
 export type HomeEventForm = {
   homeEvents: HomeEventFormType[];
@@ -58,7 +58,6 @@ function HomeEventsInput({ data, onChange }: HomeEventsInputProps) {
 
   const {
     control,
-    watch,
     formState: { errors },
     reset,
     handleSubmit,
@@ -73,6 +72,15 @@ function HomeEventsInput({ data, onChange }: HomeEventsInputProps) {
         }
       ]
     }
+  });
+
+  const {
+    append,
+    remove,
+    fields: homeEventFields
+  } = useFieldArray({
+    control,
+    name: 'homeEvents'
   });
 
   useEffect(() => {
@@ -94,15 +102,6 @@ function HomeEventsInput({ data, onChange }: HomeEventsInputProps) {
     })();
   }, [data, reset, setValue]);
 
-  const {
-    append,
-    remove,
-    fields: homeEventFields
-  } = useFieldArray({
-    control,
-    name: 'homeEvents'
-  });
-
   const loadWorkPrograms = useLoadWorkPrograms();
 
   const onSubmit = ({ homeEvents }: HomeEventForm) => {
@@ -117,49 +116,50 @@ function HomeEventsInput({ data, onChange }: HomeEventsInputProps) {
   return (
     <>
       {showModal && workProgramIndex !== undefined && (
-        <ModalWorkProgamDocumentation
+        <ModalWorkProgramDocumentation
           onChangeShow={setShowModal}
+          control={control}
+          index={workProgramIndex}
           showModal={showModal}
           id={workProgramId}
-          selectedId={selectedDocumentationId}
-          onSave={val => {
-            setValue(`homeEvents.${workProgramIndex}.documentationId`, val);
-            setShowModal(false);
-          }}
         />
       )}
       <div className="grid grid-cols-3 gap-4">
-        {watch('homeEvents').map((homeEvent, i) => (
-          <div key={i}>
+        {homeEventFields.map((homeEvent, i) => (
+          <div key={homeEvent.id}>
             <div className="flex gap-3">
               <div>
                 <Controller
                   control={control}
                   name={`homeEvents.${i}.workProgram`}
+                  defaultValue={homeEvent.workProgram}
                   render={({ field }) => (
-                    <AsyncPaginate
-                      loadOptions={loadWorkPrograms}
-                      additional={{
-                        page: 0
-                      }}
-                      className="w-48"
-                      getOptionLabel={opt => opt.name}
-                      getOptionValue={opt => opt.id.toString()}
-                      {...field}
-                    />
+                    <>
+                      <AsyncPaginate
+                        loadOptions={loadWorkPrograms}
+                        additional={{
+                          page: 0
+                        }}
+                        className="w-48"
+                        getOptionLabel={opt => opt.name}
+                        getOptionValue={opt => opt.id.toString()}
+                        {...field}
+                      />
+                      {field.value && (
+                        <div
+                          className="text-violet-400 text-sm cursor-pointer underline"
+                          onClick={() => {
+                            setWorkProgramId(field.value?.id);
+                            setWorkProgramIndex(i);
+                            setShowModal(true);
+                          }}
+                        >
+                          Choose thumbnail
+                        </div>
+                      )}
+                    </>
                   )}
                 />
-                <div
-                  className="text-violet-400 text-sm cursor-pointer underline"
-                  onClick={() => {
-                    setWorkProgramId(homeEvent.workProgram?.id);
-                    setWorkProgramIndex(i);
-                    setSelectedDocumentationId(homeEvent.documentationId);
-                    setShowModal(true);
-                  }}
-                >
-                  Choose thumbnail
-                </div>
               </div>
               <X
                 onClick={() => {

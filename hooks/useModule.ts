@@ -1,23 +1,9 @@
 import { useQuery } from 'react-query';
-import axios from '../config/axios';
-import { Attribute, Module, Section } from '../types';
+import getModuleBySlug from '../services/api/getModuleBySlug';
 
 const useModule = (slug?: string) =>
-  useQuery(
-    ['module', slug],
-    async () => {
-      const { data } = await axios.get<
-        Module & {
-          sections: (Section & {
-            attributes: Attribute[];
-          })[];
-        }
-      >(`/module/${slug}`);
-      return data;
-    },
-    {
-      enabled: !!slug
-    }
-  );
+  useQuery(['module', slug], () => getModuleBySlug(slug), {
+    enabled: !!slug
+  });
 
 export default useModule;
