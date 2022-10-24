@@ -53,7 +53,7 @@ const defaultValues = {
   documentations: []
 };
 
-type WorkProgramPayload = Omit<WorkProgram, 'participationCount'> & {
+export type WorkProgramPayload = Omit<WorkProgram, 'participationCount'> & {
   departments: Department[];
   fields: Field[];
   period: Period;
