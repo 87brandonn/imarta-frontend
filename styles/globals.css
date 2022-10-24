@@ -23,6 +23,16 @@
     height: 100%;
   }
 
+  img {
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+  }
+
+  img:hover {
+    filter: unset;
+    -webkit-filter: unset;
+  }
+
   th,
   td {
     padding: 1em 0.5em;

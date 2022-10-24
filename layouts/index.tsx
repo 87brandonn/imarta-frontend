@@ -64,7 +64,7 @@ const AppLayout: NextPage<AppLayoutProps> = ({
           <Menu onClick={() => setIsActive(false)} className="mb-6" />
           {navbarData.map((nav, i) => (
             <div className="mb-4" key={i}>
-              <Link href={nav.href}>{nav.title}</Link>
+              {nav.href ? <Link href={nav.href}>{nav.title}</Link> : nav.title}
             </div>
           ))}
         </div>

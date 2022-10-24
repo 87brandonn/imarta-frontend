@@ -14,7 +14,7 @@ function HomeWelcome({ imgUrl, title, description }: HomeWelcomeProps) {
         src={imgUrl}
         width="0"
         height="0"
-        className="w-36 h-24 object-contain"
+        className="w-full h-32 lg:h-48 object-contain"
         sizes="100vw"
         alt="logo-home"
       />

@@ -11,9 +11,10 @@ import Link from 'next/link';
 
 type PeriodDepartmentProkerProps = {
   data: RepositoryFromApi;
+  search?: string;
 };
 
-function PeriodDepartmentProker({ data }: PeriodDepartmentProkerProps) {
+function PeriodDepartmentProker({ data, search }: PeriodDepartmentProkerProps) {
   const [repositoryData, setRepositoryData] = useState<{
     period: Period;
     departments: {
@@ -21,6 +22,7 @@ function PeriodDepartmentProker({ data }: PeriodDepartmentProkerProps) {
       workPrograms: WorkProgramWithAssociation[];
     }[];
   }>();
+
   useEffect(() => {
     (async () => {
       const [period, ...departments] = await Promise.all([
@@ -36,9 +38,19 @@ function PeriodDepartmentProker({ data }: PeriodDepartmentProkerProps) {
           };
         })
       ]);
-      setRepositoryData({ period, departments });
+      const filteredDepartments = departments.map(dep => ({
+        ...dep,
+        workPrograms: dep.workPrograms.filter(wp =>
+          !search
+            ? true
+            : wp.name.toLowerCase().includes(search.toLowerCase()) ||
+              wp.collaborators?.toLowerCase().includes(search.toLowerCase()) ||
+              wp.staffs?.toLowerCase().includes(search.toLowerCase())
+        )
+      }));
+      setRepositoryData({ period, departments: filteredDepartments });
     })();
-  }, [data.departments, data.periodId]);
+  }, [data.departments, data.periodId, search]);
 
   return (
     <div className="relative grid lg:grid-cols-4">

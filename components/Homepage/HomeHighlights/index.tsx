@@ -19,6 +19,7 @@ function HomeHighlights({ title, departments }: HomeHighlightsProps) {
           <HighlightItem
             key={department.departmentId}
             id={department.departmentId}
+            thumbnail={department.imageUrl}
           />
         ))}
       </div>

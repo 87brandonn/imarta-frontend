@@ -1,6 +1,6 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Image from 'next/future/image';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Menu } from 'react-feather';
 import { RepositoryFromApi } from '../../components/Admin/RepositoryInput';
 import AnimatedHero from '../../components/AnimatedHero';
@@ -23,6 +23,7 @@ export const getServerSideProps: GetServerSideProps<
 function Repository({
   data
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [search, setSearch] = useState('');
   const memoizedHeroData = useMemo(
     () =>
       data.sections
@@ -58,13 +59,15 @@ function Repository({
             type="text"
             className="border-2 bg-transparent focus:outline-none border-black rounded-2xl w-[300px] px-4 py-1"
             placeholder="Search on Galeri IMARTA..."
+            value={search}
+            onChange={({ target: { value } }) => setSearch(value)}
           />
         </div>
-      </div>
-      <div className="my-10 ml-1 lg:ml-4">
-        {memoizedRepositoryListData.map((repository, i) => (
-          <PeriodDepartmentProker data={repository} key={i} />
-        ))}
+        <div className="my-10 ml-1 lg:ml-4">
+          {memoizedRepositoryListData.map((repository, i) => (
+            <PeriodDepartmentProker search={search} data={repository} key={i} />
+          ))}
+        </div>
       </div>
     </AppLayout>
   );

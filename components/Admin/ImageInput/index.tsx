@@ -1,5 +1,6 @@
 import Image from 'next/future/image';
 import React, { useRef, useState } from 'react';
+import { Aperture, Camera } from 'react-feather';
 import uploadImage from '../../../utils/uploadFile';
 import ImageRecommendationsModal from './ImageRecommendationsModal';
 
@@ -66,7 +67,23 @@ function ImageInput({
           </div>
         </div>
       ) : (
-        <div className="my-2 group inline-block cursor-pointer relative">
+        <div className="my-2 group inline-block relative">
+          <div className="opacity-0 transition-opacity group-hover:opacity-100 absolute inset-0 z-10 flex gap-2 justify-center items-center">
+            <div className="p-2 bg-white rounded-full">
+              <Aperture
+                className="cursor-pointer"
+                size={16}
+                onClick={() => setShow(true)}
+              />
+            </div>
+            <div className="p-2 bg-white rounded-full">
+              <Camera
+                className="cursor-pointer"
+                size={16}
+                onClick={() => fileInputRef.current?.click()}
+              />
+            </div>
+          </div>
           <Image
             src={data}
             width="0"
@@ -74,7 +91,6 @@ function ImageInput({
             sizes="100vw"
             className="w-full h-auto group-hover:opacity-40 rounded-xl"
             alt="hero"
-            onClick={() => fileInputRef.current?.click()}
           />
         </div>
       )}

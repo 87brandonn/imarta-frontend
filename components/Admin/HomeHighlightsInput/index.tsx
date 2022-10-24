@@ -9,6 +9,7 @@ import getDepartments from '../../../services/api/getDepartments';
 import { Department } from '../../../types';
 import Button from '../Button';
 import useLoadDepartments from '../../../hooks/options/useLoadDepartments';
+import ImageInput from '../ImageInput';
 
 export type HomeHighlightForm = {
   homeHighlights: HomeHighlightFormType[];
@@ -16,10 +17,12 @@ export type HomeHighlightForm = {
 
 export type HomeHighlightFormType = {
   department?: Department;
+  imageUrl?: string;
 };
 
 export type HomeHighlightTypeFromApi = {
   departmentId: number;
+  imageUrl?: string;
 };
 
 type HomeHighlightsInputProps = {
@@ -32,7 +35,8 @@ const schema = yup
     homeHighlights: yup
       .array(
         yup.object({
-          department: yup.mixed<Department>().required().label('Department')
+          department: yup.mixed<Department>().required().label('Department'),
+          imageUrl: yup.string().label('Image')
         })
       )
       .min(1)
@@ -54,7 +58,8 @@ function HomeHighlightsInput({ data, onChange }: HomeHighlightsInputProps) {
     defaultValues: {
       homeHighlights: [
         {
-          department: undefined
+          department: undefined,
+          imageUrl: undefined
         }
       ]
     }
@@ -72,7 +77,8 @@ function HomeHighlightsInput({ data, onChange }: HomeHighlightsInputProps) {
               homeHighlightData.departmentId
             );
             return {
-              department
+              department,
+              imageUrl: homeHighlightData.imageUrl
             };
           })
       );
@@ -87,10 +93,13 @@ function HomeHighlightsInput({ data, onChange }: HomeHighlightsInputProps) {
     name: 'homeHighlights'
   });
 
+  console.log(errors);
+
   const onSubmit = ({ homeHighlights }: HomeHighlightForm) => {
     onChange(
       homeHighlights.map(homeHighlight => ({
-        departmentId: homeHighlight.department?.id
+        departmentId: homeHighlight.department?.id,
+        imageUrl: homeHighlight.imageUrl
       }))
     );
   };
@@ -126,6 +135,14 @@ function HomeHighlightsInput({ data, onChange }: HomeHighlightsInputProps) {
                 className="text-red-400 cursor-pointer"
               />
             </div>
+
+            <Controller
+              name={`homeHighlights.${i}.imageUrl`}
+              control={control}
+              render={({ field }) => (
+                <ImageInput data={field.value} onChange={field.onChange} />
+              )}
+            />
 
             <p className="text-red-500 text-sm">
               {errors.homeHighlights?.[i]?.department?.message}
