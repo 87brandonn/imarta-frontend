@@ -9,7 +9,7 @@ import getMetaById from '../../../services/api/getMetaById';
 import { OrganizationMeta } from '../../../types';
 import Button from '../Button';
 
-export type OrganizationStructure = {
+export type OrganizationStructureFromApi = {
   metaId: number;
 };
 
@@ -20,8 +20,8 @@ type OrganizationStructureForm = {
 };
 
 type OrganizationStructureInputProps = {
-  data?: OrganizationStructure[];
-  onChange?: (val?: OrganizationStructure[]) => void;
+  data?: OrganizationStructureFromApi[];
+  onChange?: (val?: OrganizationStructureFromApi[]) => void;
 };
 
 const schema = yup

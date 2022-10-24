@@ -7,8 +7,6 @@ import * as yup from 'yup';
 import Select from 'react-select';
 import Button from '../../../../../components/Admin/Button';
 import ImageInput from '../../../../../components/Admin/ImageInput';
-import TextareaInput from '../../../../../components/TextareaInput';
-import TextInput from '../../../../../components/TextInput';
 import useCreateOrEditWorkProgram from '../../../../../hooks/useCreateOrEditWorkProgram';
 import useDepartments from '../../../../../hooks/useDepartments';
 import useFields from '../../../../../hooks/useFields';
@@ -21,6 +19,8 @@ import {
   WorkProgram,
   WorkProgramDocumentation
 } from '../../../../../types';
+import TextInput from '../../../../../components/Admin/TextInput';
+import TextareaInput from '../../../../../components/Admin/TextareaInput';
 
 const schema = yup
   .object({
@@ -110,11 +110,11 @@ function Admin() {
       startDate: dayjs(data?.startDate).format('YYYY-MM-DD') || defaultDate,
       endDate: dayjs(data?.endDate).format('YYYY-MM-DD') || defaultDate,
       departments:
-        data?.workProgramDepartments.map(
+        data?.workProgramDepartments?.map(
           wpDepartment => wpDepartment.department
         ) || [],
       fields:
-        data?.workProgramFields.map(wpDepartment => wpDepartment.field) || [],
+        data?.workProgramFields?.map(wpDepartment => wpDepartment.field) || [],
       documentations: data?.workProgramDocumentations || [],
       period: data?.period || undefined
     });
@@ -126,35 +126,27 @@ function Admin() {
     <div className="max-w-4xl mx-auto my-12">
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextInput
-          isHookForm
-          control={control}
-          controlName="name"
           label="Name"
           error={errors.name?.message}
+          {...register('name')}
         />
 
         <TextInput
-          isHookForm
-          control={control}
-          controlName="participationCount"
           label="Participation Count"
           error={errors.participationCount?.message}
+          {...register('participationCount')}
         />
 
         <TextareaInput
-          isHookForm
-          control={control}
-          controlName="description"
           label="Description"
           error={errors.description?.message}
+          {...register('description')}
         />
 
         <TextInput
-          isHookForm
-          control={control}
-          controlName="collaborators"
           label="Collaborators"
           error={errors.collaborators?.message}
+          {...register('collaborators')}
         />
 
         <div className="mb-3">
@@ -178,11 +170,9 @@ function Admin() {
         </div>
 
         <TextareaInput
-          isHookForm
-          control={control}
-          controlName="staffs"
           label="Staffs"
           error={errors.staffs?.message}
+          {...register('staffs')}
         />
 
         <div>Department</div>

@@ -5,8 +5,13 @@ import 'swiper/css/navigation';
 import { Pagination, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/future/image';
+import { ImageGridType } from '../../Admin/ImageGridInput';
 
-function SwiperHero() {
+type SwiperHeroProps = {
+  data: ImageGridType[];
+};
+
+function SwiperHero({ data }: SwiperHeroProps) {
   const [domLoaded, setDomLoaded] = useState(false);
 
   useEffect(() => {
@@ -32,46 +37,18 @@ function SwiperHero() {
       }}
       className="!overflow-visible"
     >
-      <SwiperSlide>
-        <Image
-          sizes="100vw"
-          width="0"
-          height="0"
-          src="/repository-banner.jpg"
-          className="object-cover w-full h-auto"
-          alt="test-image-1-banner"
-        />
-      </SwiperSlide>
-      <SwiperSlide>
-        <Image
-          sizes="100vw"
-          width="0"
-          height="0"
-          src="/repository-banner.jpg"
-          className="object-cover w-full h-auto"
-          alt="test-image-1-banner"
-        />
-      </SwiperSlide>
-      <SwiperSlide>
-        <Image
-          sizes="100vw"
-          width="0"
-          height="0"
-          src="/repository-banner.jpg"
-          className="object-cover w-full h-auto"
-          alt="test-image-1-banner"
-        />
-      </SwiperSlide>
-      <SwiperSlide>
-        <Image
-          sizes="100vw"
-          width="0"
-          height="0"
-          src="/repository-banner.jpg"
-          className="object-cover w-full h-auto"
-          alt="test-image-1-banner"
-        />
-      </SwiperSlide>
+      {data.map((imgGrid, i) => (
+        <SwiperSlide key={i}>
+          <Image
+            sizes="100vw"
+            width="0"
+            height="0"
+            src={imgGrid.imgUrl as string}
+            className="object-cover w-full h-96"
+            alt="img-grid-swiper"
+          />
+        </SwiperSlide>
+      ))}
     </Swiper>
   );
 }

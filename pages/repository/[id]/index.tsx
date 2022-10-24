@@ -1,89 +1,124 @@
-import type { NextPage } from 'next';
-import Head from 'next/head';
-import FloatingFooter from '../../../components/FloatingFooter';
-import Navbar from '../../../components/Navbar';
-import Image from 'next/image';
-import { Menu } from 'react-feather';
+import dayjs from 'dayjs';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import Image from 'next/future/image';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import { Pagination, Navigation } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import AppLayout from '../../../layouts';
+import getWorkProgramById from '../../../services/api/getWorkProgramById';
+import { WorkProgramWithAssociation } from '../../../services/api/getWorkPrograms';
+import { AlertCircle } from 'react-feather';
 
-const repositoryData20212022 = [
-  { department: 'Departemen Pelayanan & Galeri Lawang' },
-  { department: 'Departemen Riset & Pengembangan' },
-  { department: 'Departemen Hubungan Mahasiswa' },
-  { department: 'Program Kerja Kolektif & Fungsional' }
-];
+export const getServerSideProps: GetServerSideProps<
+  { data: WorkProgramWithAssociation },
+  { id: string }
+> = async context => {
+  const data = await getWorkProgramById(
+    context.params ? parseInt(context.params.id, 10) : undefined
+  );
+  return {
+    props: { data }
+  };
+};
 
-const RepositoryDetail: NextPage = () => {
+function RepositoryDetail({
+  data
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <AppLayout title="Repository Detail">
-      <div className="w-full h-[500px] bg-[#282828]"></div>
-      <div className="my-8 ml-2">
-        <div className="text-3xl font-medium mb-2">
-          Talkshow BBI x Galeri Lawang
+      {data.workProgramDocumentations?.length ? (
+        <Swiper
+          slidesPerView={1}
+          pagination={{
+            clickable: true
+          }}
+          loop
+          navigation={true}
+          modules={[Pagination, Navigation]}
+        >
+          {data.workProgramDocumentations.map((documentation, i) => (
+            <SwiperSlide key={i}>
+              <Image
+                width="0"
+                height="0"
+                className="w-full object-contain h-96"
+                sizes="100vw"
+                src={documentation.imgUrl as string}
+                alt="work-program-banne"
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      ) : (
+        <div className="h-96 flex items-center flex-col justify-center">
+          <AlertCircle />
+          <div className="mt-2">No documentation available.</div>
         </div>
+      )}
+
+      <div className="my-8 ml-2">
+        <div className="text-3xl font-medium mb-2">{data.name}</div>
         <div className="grid lg:grid-cols-2 gap-4">
           <div>
             <div className="text-lg font-light flex">
               <div className="flex-1">Periode</div>
-              <div className="flex-1">: 2021/2022</div>
+              <div className="flex-1">: {data.period.label}</div>
             </div>
             <div className="text-lg font-light flex">
               <div className="flex-1">Tanggal</div>
-              <div className="flex-1">: 11 Februari 2022</div>
+              <div className="flex-1">
+                : {dayjs(data.startDate).format('DD MMMM YYYY')} -{' '}
+                {dayjs(data.endDate).format('DD MMMM YYYY')}
+                {}
+              </div>
             </div>
             <div className="text-lg font-light flex">
               <div className="flex-1">Peserta</div>
-              <div className="flex-1">: 40 orang</div>
+              <div className="flex-1">: {data.participationCount} orang</div>
             </div>
             <div className="text-lg font-light flex">
               <div className="flex-1">Kolaborator</div>
-              <div className="flex-1">: IMA-FTUI, HMPSARS</div>
+              <div className="flex-1">: {data.collaborators}</div>
             </div>
           </div>
           <div className="flex flex-col justify-between">
-            <div>
-              <div className="font-medium">
-                Departemen Riset dan Pengembangan
+            {data.workProgramDepartments?.map((wpDepartment, i) => (
+              <div key={i}>
+                <div className="font-medium">
+                  {wpDepartment.department.name}
+                </div>
+                <div className="font-light">
+                  Ketua Departemen: {wpDepartment.department.leader}
+                </div>
               </div>
-              <div className="font-light">Ketua Departemen: Petra Yonathan</div>
-            </div>
-            <div>
-              <div className="font-medium">
-                Bidang Pengabdian Masyarakat dan Galeri Lawang
+            ))}
+
+            {data.workProgramFields?.map((wpField, i) => (
+              <div key={i}>
+                <div className="font-medium">{wpField.field.name}</div>
+                <div className="font-light">
+                  Ketua Departemen: {wpField.field.leader}
+                </div>
               </div>
-              <div className="font-light">Ketua Bidang: Tia</div>
-            </div>
+            ))}
           </div>
           <div>
             <div className="font-medium">Deskripsi Program</div>
-            <div className="font-light">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure
-              odio iusto reiciendis tempore expedita quasi. Quae provident
-              explicabo quasi, repudiandae cumque inventore nam blanditiis porro
-              vel eveniet laudantium asperiores aspernatur deleniti recusandae
-              officia harum libero dolorem consectetur velit dolorum, ipsa sunt.
-              Odit ipsum voluptatem iure natus quisquam labore nam alias, est
-              aut porro obcaecati commodi dicta nesciunt doloribus ipsa
-              asperiores laudantium, reprehenderit inventore! Tenetur facilis
-              nisi tempora ipsum? Mollitia quod velit pariatur reprehenderit
-              cumque incidunt iste quaerat debitis recusandae iure, distinctio
-              eum sapiente inventore modi facilis voluptate nostrum dolore
-              delectus aliquam numquam culpa? Quam nam sit accusantium
-              necessitatibus alias animi.
-            </div>
+            <div className="font-light">{data.description}</div>
           </div>
           <div>
-            <div className="font-medium">Giussepe Gratiano</div>
-            <div className="font-light">Cynthia</div>
-            <div className="font-light">Dominikus Gusti</div>
-            <div className="font-light">Melissa</div>
-            <div className="font-light">Pricilla Adeline</div>
-            <div className="font-light">Vanessa Rahardja</div>
+            {data.staffs?.split(', ').map((staff, i) => (
+              <div className={i === 0 ? 'font-medium' : 'font-light'} key={i}>
+                {staff}
+              </div>
+            ))}
           </div>
         </div>
       </div>
     </AppLayout>
   );
-};
+}
 
 export default RepositoryDetail;

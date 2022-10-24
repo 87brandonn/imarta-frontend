@@ -25,8 +25,6 @@ export const getServerSideProps: GetServerSideProps<
 function Home({
   data
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log(data);
-
   const memoizedHeroData = useMemo(
     () =>
       data.sections
@@ -86,6 +84,7 @@ function Home({
           <HomeBanner
             key={event.workProgramId}
             workProgramId={event.workProgramId}
+            title={event.title}
             documentationId={event.documentationId}
             index={i}
           />

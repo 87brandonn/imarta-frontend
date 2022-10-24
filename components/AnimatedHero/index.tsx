@@ -3,9 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 type AnimatedHeroProps = {
   children: React.ReactNode;
+  className?: string;
 };
 
-function AnimatedHero({ children }: AnimatedHeroProps) {
+function AnimatedHero({ children, className }: AnimatedHeroProps) {
   return (
     <AnimatePresence>
       <motion.div
@@ -13,6 +14,7 @@ function AnimatedHero({ children }: AnimatedHeroProps) {
         whileInView={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         viewport={{ once: true }}
+        className={className}
       >
         {children}
       </motion.div>

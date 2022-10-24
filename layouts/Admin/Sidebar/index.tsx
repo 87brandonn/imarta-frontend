@@ -32,6 +32,16 @@ const pages = [
     name: 'Organization Structure',
     key: 'organization-structure',
     path: '/organization-structure'
+  },
+  {
+    name: 'Arthur',
+    key: 'arthur',
+    path: '/arthur'
+  },
+  {
+    name: 'Floating Footer',
+    key: 'floating-footer',
+    path: '/floating-footer'
   }
 ];
 
@@ -55,6 +65,11 @@ const dataPages = [
     name: 'Meta',
     key: 'meta',
     path: '/meta'
+  },
+  {
+    name: 'Period',
+    key: 'period',
+    path: '/period'
   }
 ];
 

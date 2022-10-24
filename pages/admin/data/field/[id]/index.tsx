@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import Button from '../../../../../components/Admin/Button';
-import TextInput from '../../../../../components/TextInput';
+import TextInput from '../../../../../components/Admin/TextInput';
 import useCreateOrEditField from '../../../../../hooks/useCreateOrEditField';
 import useFieldById from '../../../../../hooks/useFieldById';
 import { Department } from '../../../../../types';
@@ -24,7 +24,8 @@ function AdminFieldDetail() {
     control,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { errors },
+    register
   } = useForm<Department>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -53,22 +54,20 @@ function AdminFieldDetail() {
     <div className="max-w-4xl mx-auto mt-12">
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextInput
-          isHookForm
-          control={control}
-          controlName="name"
           label="Name"
           error={errors.name?.message}
+          {...register('name')}
         />
 
         <TextInput
-          isHookForm
-          control={control}
-          controlName="leader"
           label="Leader"
           error={errors.leader?.message}
+          {...register('leader')}
         />
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit" className="mt-4">
+          Submit
+        </Button>
       </form>
     </div>
   );

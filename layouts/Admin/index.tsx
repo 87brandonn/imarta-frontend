@@ -1,13 +1,27 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { getCookie } from 'cookies-next';
+import getAuthenticatedUser from '../../utils/getAuthenticatedUser';
 import AdminSidebar from './Sidebar';
+import Router from 'next/router';
 
 type AdminLayoutProp = {
   isDashboardData?: boolean;
   children: React.ReactNode;
+  withoutSidebar?: boolean;
 };
 
-function AdminLayout({ children, isDashboardData }: AdminLayoutProp) {
+function AdminLayout({
+  children,
+  isDashboardData,
+  withoutSidebar
+}: AdminLayoutProp) {
+  useEffect(() => {
+    if (!getAuthenticatedUser(getCookie('user') as string)) {
+      Router.push(`/admin/oauth`);
+    }
+  }, []);
+
   return (
     <>
       <Head>
@@ -16,9 +30,11 @@ function AdminLayout({ children, isDashboardData }: AdminLayoutProp) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="w-full h-full flex">
-        <div className="flex-none h-full w-36">
-          <AdminSidebar isDashboardData={isDashboardData} />
-        </div>
+        {!withoutSidebar && (
+          <div className="flex-none h-full w-36">
+            <AdminSidebar isDashboardData={isDashboardData} />
+          </div>
+        )}
         <div className="grow overflow-auto">{children}</div>
       </div>
     </>

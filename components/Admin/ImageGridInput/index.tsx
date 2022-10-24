@@ -65,12 +65,6 @@ function ImageGridInput({ data, onChange, isOriginal }: ImageGridInputProps) {
     name: 'imageGrid'
   });
 
-  const handleChangeImageGrid = (val: ImageGridType, i: number) => {
-    const prevImgGrid = [...data];
-    prevImgGrid.splice(i, 1, val);
-    onChange(prevImgGrid);
-  };
-
   const onSubmit = (data: ImageGridFormType) => {
     onChange(data.imageGrid);
   };
@@ -89,10 +83,10 @@ function ImageGridInput({ data, onChange, isOriginal }: ImageGridInputProps) {
               <X />
             </div>
             {isOriginal && (
-              <TextAreaInput
+              <TextInput
                 {...register(`imageGrid.${i}.title`)}
                 placeholder="Enter title"
-                className="!h-20 mb-3"
+                className="mb-3"
               />
             )}
             <div className="mb-3">

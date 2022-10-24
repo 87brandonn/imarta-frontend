@@ -1,44 +1,49 @@
 import Image from 'next/future/image';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import getMetaById, {
+  OrganizationMetaWithAssociation
+} from '../../../services/api/getMetaById';
+import { OrganizationStructureFromApi } from '../../Admin/OrganizationStructureInput';
 
 type OrganizationStructurePeriodDescriptionProps = {
-  period: string;
-  vision: string;
-  missions: string[];
-  imgHierarchyUrl: string;
-  isDarkenBackground?: boolean;
+  data: OrganizationStructureFromApi;
+  index: number;
 };
 
 function OrganizationStructurePeriodDescription({
-  period,
-  vision,
-  missions,
-  imgHierarchyUrl,
-  isDarkenBackground
+  data,
+  index
 }: OrganizationStructurePeriodDescriptionProps) {
+  const [metaData, setMetaData] = useState<OrganizationMetaWithAssociation>();
+
+  useEffect(() => {
+    (async () => {
+      const meta = await getMetaById(data.metaId);
+      setMetaData(meta);
+    })();
+  }, [data.metaId]);
+
   return (
     <>
       <div
-        className={`py-8 ${
-          isDarkenBackground ? 'bg-[#282828] text-white' : ''
-        }`}
+        className={`py-8 ${index % 2 === 1 ? 'bg-[#282828] text-white' : ''}`}
       >
         <div className="text-3xl lg:text-5xl mb-4 text-center">
-          BPH IMARTA SKETSA {period}
+          {metaData?.title}
         </div>
         <div className="mb-5">
           <div className="text-lg lg:text-2xl font-medium mb-1 text-center">
             Visi
           </div>
-          <div className="text-center">{vision}</div>
+          <div className="text-center">{metaData?.vision}</div>
         </div>
         <div className="mb-5 max-w-2xl mx-auto flex justify-center flex-col items-center">
           <div className="text-lg lg:text-2xl font-medium mb-1 text-center">
             Misi
           </div>
           <div className="list-decimal text-center lg:text-left px-2">
-            {missions.map((mission, idx) => (
-              <li key={idx}>{mission}</li>
+            {metaData?.organizationMetaMissions.map((mission, idx) => (
+              <li key={idx}>{mission.value}</li>
             ))}
           </div>
         </div>
@@ -51,8 +56,8 @@ function OrganizationStructurePeriodDescription({
         height="0"
         className="w-full h-auto"
         sizes="100vw"
-        src={imgHierarchyUrl}
-        alt={`org-structure-${period}`}
+        src={metaData?.hierarchyImgUrl as string}
+        alt={`org-structure-hierarchy`}
       />
     </>
   );

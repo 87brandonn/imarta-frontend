@@ -16,3 +16,11 @@ export const toBase64 = (str: string) =>
   typeof window === 'undefined'
     ? Buffer.from(str).toString('base64')
     : window.btoa(str);
+
+export function chunk<T>(arr: T[], chunkSize: number): T[][] {
+  if (chunkSize <= 0) throw 'Invalid chunk size';
+  var R = [];
+  for (var i = 0, len = arr.length; i < len; i += chunkSize)
+    R.push(arr.slice(i, i + chunkSize));
+  return R;
+}

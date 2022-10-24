@@ -12,13 +12,13 @@ import {
 import { PaginatedApiResponseType } from '../../types/api';
 
 export type WorkProgramWithAssociation = WorkProgram & {
-  workProgramDepartments: (WorkProgramDepartment & {
+  workProgramDepartments?: (WorkProgramDepartment & {
     department: Department;
   })[];
-  workProgramFields: (WorkProgramField & {
+  workProgramFields?: (WorkProgramField & {
     field: Field;
   })[];
-  workProgramDocumentations: WorkProgramDocumentation[];
+  workProgramDocumentations?: WorkProgramDocumentation[];
   period: Period;
 };
 

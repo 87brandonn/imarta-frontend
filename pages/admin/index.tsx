@@ -1,10 +1,27 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import React from 'react';
+import AdminLayout from '../../layouts/Admin';
+
+export interface GoogleAuth {
+  iss: string;
+  nbf: number;
+  aud: string;
+  sub: string;
+  email: string;
+  email_verified: boolean;
+  azp: string;
+  name: string;
+  picture: string;
+  given_name: string;
+  family_name: string;
+  iat: number;
+  exp: number;
+  jti: string;
+}
 
 function Admin() {
   return (
-    <>
+    <AdminLayout withoutSidebar>
       <Head>
         <title>Imarta - Admin</title>
       </Head>
@@ -31,7 +48,7 @@ function Admin() {
           </Link>
         </div>
       </div>
-    </>
+    </AdminLayout>
   );
 }
 

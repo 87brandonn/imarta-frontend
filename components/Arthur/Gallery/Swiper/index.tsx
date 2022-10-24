@@ -8,11 +8,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { ImageGridType } from '../../../Admin/ImageGridInput';
 import { chunk } from '../../../../utils';
 
-type SayembaraSwiperProps = {
+type GaleriSwiperProps = {
   data: ImageGridType[];
 };
 
-function SayembaraSwiper({ data }: SayembaraSwiperProps) {
+function GaleriSwiper({ data }: GaleriSwiperProps) {
   const [domLoaded, setDomLoaded] = useState(false);
 
   useEffect(() => {
@@ -31,26 +31,27 @@ function SayembaraSwiper({ data }: SayembaraSwiperProps) {
       navigation={true}
       modules={[Pagination, Navigation]}
     >
-      {chunk(data, 10).map((imgGridChunk, i) => (
-        <SwiperSlide key={i}>
-          <div className="grid grid-cols-5 gap-3">
-            {imgGridChunk.map((imgGrid, i2) => (
-              <Fragment key={i2}>
-                <Image
-                  width="0"
-                  height="0"
-                  className="w-full object-contain h-36"
-                  sizes="100vw"
-                  src={imgGrid.imgUrl as string}
-                  alt="apresi-gl-1"
-                />
-              </Fragment>
-            ))}
-          </div>
-        </SwiperSlide>
-      ))}
+      {data &&
+        chunk(data, 9).map((imgGridChunk, i) => (
+          <SwiperSlide key={i}>
+            <div className="grid grid-cols-3 gap-3">
+              {imgGridChunk.map((imgGrid, i2) => (
+                <Fragment key={i2}>
+                  <Image
+                    width="0"
+                    height="0"
+                    className="w-full object-contain h-36"
+                    sizes="100vw"
+                    src={imgGrid.imgUrl as string}
+                    alt="apresi-gl-1"
+                  />
+                </Fragment>
+              ))}
+            </div>
+          </SwiperSlide>
+        ))}
     </Swiper>
   );
 }
 
-export default SayembaraSwiper;
+export default GaleriSwiper;

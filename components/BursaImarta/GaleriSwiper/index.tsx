@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import Image from 'next/future/image';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Pagination, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { ImageGridType } from '../../Admin/ImageGridInput';
 
-function GaleriSwiper() {
+type GaleriSwiperProps = {
+  data: ImageGridType[];
+};
+
+function GaleriSwiper({ data }: GaleriSwiperProps) {
   const [domLoaded, setDomLoaded] = useState(false);
 
   useEffect(() => {
@@ -25,11 +31,16 @@ function GaleriSwiper() {
       modules={[Pagination, Navigation]}
       className="h-full"
     >
-      {Array.from({
-        length: 4
-      }).map((_, i) => (
+      {data.map((imgGrid, i) => (
         <SwiperSlide key={i}>
-          <div className="bg-violet-100 h-full"></div>
+          <Image
+            width="0"
+            height="0"
+            className="w-full object-contain h-80"
+            sizes="100vw"
+            src={imgGrid.imgUrl as string}
+            alt="komik-laawng"
+          />
         </SwiperSlide>
       ))}
     </Swiper>

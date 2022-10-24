@@ -10,6 +10,7 @@ import { WorkProgramWithAssociation } from '../../../services/api/getWorkProgram
 import { WorkProgram } from '../../../types';
 import { DeepPartial } from '../../../types/utils/deepPartial';
 import Button from '../Button';
+import TextInput from '../TextInput';
 import ModalWorkProgramDocumentation from './ModalWorkProgramDocumentation';
 
 export type HomeEventForm = {
@@ -19,9 +20,11 @@ export type HomeEventForm = {
 export type HomeEventFormType = {
   workProgram?: WorkProgram;
   documentationId?: number;
+  title: string;
 };
 
 export type HomeEventTypeFromApi = {
+  title: string;
   workProgramId: number;
   documentationId?: number;
 };
@@ -40,7 +43,8 @@ const schema = yup
             .mixed<WorkProgramWithAssociation>()
             .required()
             .label('Work program'),
-          documentationId: yup.number()
+          documentationId: yup.number(),
+          title: yup.string().label('Title')
         })
       )
       .min(1)
@@ -60,6 +64,7 @@ function HomeEventsInput({ data, onChange }: HomeEventsInputProps) {
     control,
     formState: { errors },
     reset,
+    register,
     handleSubmit,
     setValue
   } = useForm<HomeEventForm>({
@@ -92,7 +97,8 @@ function HomeEventsInput({ data, onChange }: HomeEventsInputProps) {
           );
           return {
             workProgram,
-            documentationId: homeEventData.documentationId
+            documentationId: homeEventData.documentationId,
+            title: homeEventData.title
           };
         })
       );
@@ -108,7 +114,8 @@ function HomeEventsInput({ data, onChange }: HomeEventsInputProps) {
     onChange(
       homeEvents.map(homeEvent => ({
         workProgramId: homeEvent.workProgram?.id,
-        documentationId: homeEvent.documentationId
+        documentationId: homeEvent.documentationId,
+        title: homeEvent.title
       }))
     );
   };
@@ -127,6 +134,11 @@ function HomeEventsInput({ data, onChange }: HomeEventsInputProps) {
       <div className="grid grid-cols-3 gap-4">
         {homeEventFields.map((homeEvent, i) => (
           <div key={homeEvent.id}>
+            <TextInput
+              {...register(`homeEvents.${i}.title`)}
+              placeholder="Enter title"
+              className="mb-2"
+            />
             <div className="flex gap-3">
               <div>
                 <Controller
@@ -179,7 +191,8 @@ function HomeEventsInput({ data, onChange }: HomeEventsInputProps) {
             onClick={() => {
               append({
                 workProgram: undefined,
-                documentationId: undefined
+                documentationId: undefined,
+                title: ''
               });
             }}
           >

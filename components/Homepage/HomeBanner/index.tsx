@@ -7,12 +7,14 @@ import Image from 'next/future/image';
 type HomeBannerProps = {
   workProgramId: number;
   documentationId?: number;
+  title: string;
   index: number;
 };
 
 function HomeBanner({
   workProgramId,
   documentationId,
+  title,
   index
 }: HomeBannerProps) {
   const isReversed = useMemo(() => (index % 2 !== 0 ? true : false), [index]);
@@ -38,7 +40,7 @@ function HomeBanner({
           {documentationData?.imgUrl && (
             <Image
               alt="home-event"
-              className="w-full h-full object-cover"
+              className="w-full h-24 lg:h-full object-cover"
               sizes="100vw"
               width={0}
               height={0}
@@ -51,15 +53,15 @@ function HomeBanner({
             isReversed ? 'flex items-end flex-col' : ''
           }`}
         >
-          <div className="text-2xl">Previous Event</div>
+          <div className="text-2xl">{title}</div>
           <div className="bg-[#282828] text-white inline-block px-4 py-1 rounded">
             {workProgramData?.workProgramFields
-              .map(wpField => wpField.field.name)
+              ?.map(wpField => wpField.field.name)
               .join(', ')}
           </div>
           <div>
             {workProgramData?.workProgramDepartments
-              .map(wpDep => wpDep.department.name)
+              ?.map(wpDep => wpDep.department.name)
               .join(', ')}
           </div>
         </div>

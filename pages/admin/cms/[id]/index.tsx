@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import CMSTextInput from '../../../../components/Admin/CmsTextInput';
 import HomeEventsInput, {
   HomeEventTypeFromApi
 } from '../../../../components/Admin/HomeEventsInput';
@@ -10,11 +11,10 @@ import ImageGridInput, {
 } from '../../../../components/Admin/ImageGridInput';
 import ImageInput from '../../../../components/Admin/ImageInput';
 import OrganizationStructureInput, {
-  OrganizationStructure
+  OrganizationStructureFromApi
 } from '../../../../components/Admin/OrganizationStructureInput';
 import RepositoryInput from '../../../../components/Admin/RepositoryInput';
-import TextAreaInput from '../../../../components/Admin/TextareaInput';
-import TextInput from '../../../../components/TextInput';
+import RichTextEditor from '../../../../components/Admin/RichTextEditor';
 import useModule from '../../../../hooks/useModule';
 import useUpdateAttributes from '../../../../hooks/useUpdateAttributes';
 import AdminLayout from '../../../../layouts/Admin';
@@ -31,7 +31,7 @@ function Admin() {
       | ImageGridType[]
       | HomeEventTypeFromApi
       | HomeHighlightTypeFromApi
-      | OrganizationStructure[]
+      | OrganizationStructureFromApi[]
       | string
       | undefined,
     attributeId: number
@@ -72,11 +72,9 @@ function Admin() {
                   />
                 ) : attribute.type === 'TITLE' ||
                   attribute.type === 'SUBTITLE' ? (
-                  <TextInput
+                  <CMSTextInput
                     value={attribute.data}
-                    onChange={({ target: { value } }) =>
-                      onChange(value, attribute.id)
-                    }
+                    onSave={value => onChange(value, attribute.id)}
                   />
                 ) : attribute.type === 'HOME_EVENTS' ? (
                   <HomeEventsInput
@@ -103,11 +101,9 @@ function Admin() {
                     onChange={val => onChange(val, attribute.id)}
                   />
                 ) : (
-                  <TextAreaInput
+                  <RichTextEditor
                     value={attribute.data}
-                    onChange={({ target: { value } }) =>
-                      onChange(value, attribute.id)
-                    }
+                    onChange={value => onChange(value, attribute.id)}
                   />
                 )}
               </div>

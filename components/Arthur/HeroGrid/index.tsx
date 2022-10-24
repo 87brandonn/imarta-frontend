@@ -3,14 +3,14 @@ import Image from 'next/future/image';
 import AnimatedHero from '../../AnimatedHero';
 import { ImageGridType } from '../../Admin/ImageGridInput';
 
-type Hero2Props = {
-  data: ImageGridType[];
+type HeroGridProps = {
+  data: ImageGridType[] | null;
 };
 
-function Hero2({ data }: Hero2Props) {
+function HeroGrid({ data }: HeroGridProps) {
   return (
-    <div className="flex flex-col lg:flex-row mb-8 lg:mb-16 items-center">
-      {data.map((imgGrid, i) => (
+    <div className="grid grid-cols-2 mb-8 lg:mb-16">
+      {data?.map((imgGrid, i) => (
         <div className="flex-1" key={i}>
           <AnimatedHero>
             <Image
@@ -28,4 +28,4 @@ function Hero2({ data }: Hero2Props) {
   );
 }
 
-export default Hero2;
+export default HeroGrid;

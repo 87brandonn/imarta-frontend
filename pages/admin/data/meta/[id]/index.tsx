@@ -7,7 +7,7 @@ import Select from 'react-select';
 import * as yup from 'yup';
 import Button from '../../../../../components/Admin/Button';
 import ImageInput from '../../../../../components/Admin/ImageInput';
-import TextInput from '../../../../../components/TextInput';
+import TextInput from '../../../../../components/Admin/TextInput';
 import useCreateOrEditMeta, {
   CreateOrUpdateMetaPayload
 } from '../../../../../hooks/useCreateOrUpdateMeta';
@@ -42,7 +42,8 @@ function AdminMetaDetail() {
     control,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { errors },
+    register
   } = useForm<CreateOrUpdateMetaPayload>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -88,21 +89,16 @@ function AdminMetaDetail() {
     <div className="max-w-4xl mx-auto mt-12">
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextInput
-          isHookForm
-          control={control}
-          controlName="title"
           label="Title"
           placeholder="Enter title"
           error={errors.title?.message}
         />
 
         <TextInput
-          isHookForm
-          control={control}
-          controlName="vision"
           label="Vision"
           placeholder="Enter vision"
           error={errors.vision?.message}
+          {...register('vision')}
         />
 
         <div className="mb-3">
@@ -135,7 +131,6 @@ function AdminMetaDetail() {
                       value={value}
                       onChange={onChange}
                       placeholder="Enter missions"
-                      containerClassname="!mb-0"
                     />
                   )}
                 />

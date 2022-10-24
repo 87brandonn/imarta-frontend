@@ -8,7 +8,7 @@ import ReactPaginate from 'react-paginate';
 import { AsyncPaginate } from 'react-select-async-paginate';
 import * as yup from 'yup';
 import Button from '../../../../components/Admin/Button';
-import TextInput from '../../../../components/TextInput';
+import TextInput from '../../../../components/Admin/TextInput';
 import useLoadDepartments from '../../../../hooks/options/useLoadDepartments';
 import useLoadFields from '../../../../hooks/options/useLoadFields';
 import useDeleteWorkProgram from '../../../../hooks/useDeleteWorkProgram';
@@ -124,42 +124,32 @@ function Admin() {
             <Button className="mb-3">Add New Work Program</Button>
           </Link>
         </div>
-        <div className="grid grid-cols-4 my-4">
+        <div className="grid grid-cols-4 gap-4 my-4">
           <TextInput
-            isHookForm
-            control={control}
-            controlName="name"
             placeholder="Search by name"
             label="Name"
+            {...register('name')}
           />
           <TextInput
-            isHookForm
-            control={control}
-            controlName="description"
             placeholder="Search by description"
             label="Description"
+            {...register('description')}
           />
           <TextInput
-            isHookForm
-            control={control}
-            controlName="participationCount"
             placeholder="Search by participation count"
             label="Participation Count"
+            {...register('participationCount')}
           />
           <TextInput
-            isHookForm
-            control={control}
-            controlName="collaborators"
             placeholder="Search by collaborators"
             label="Collaborators"
+            {...register('collaborators')}
           />
 
           <TextInput
-            isHookForm
-            control={control}
-            controlName="staffs"
             placeholder="Search by staffs"
             label="Staff"
+            {...register('staffs')}
           />
 
           <div>
@@ -268,12 +258,12 @@ function Admin() {
                 <td>{workProgram.staffs}</td>
                 <td>
                   {workProgram.workProgramDepartments
-                    .map(data => data.department.name)
+                    ?.map(data => data.department.name)
                     .join(',')}
                 </td>
                 <td>
                   {workProgram.workProgramFields
-                    .map(data => data.field.name)
+                    ?.map(data => data.field.name)
                     .join(',')}
                 </td>
                 <td>{workProgram.startDate}</td>

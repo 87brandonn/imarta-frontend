@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import Button from '../../../../../components/Admin/Button';
-import TextInput from '../../../../../components/TextInput';
+import TextInput from '../../../../../components/Admin/TextInput';
 import useCreateOrEditDepartment from '../../../../../hooks/useCreateOrEditDepartment';
 import useDepartmentById from '../../../../../hooks/useDepartmentById';
 import { Department } from '../../../../../types';
@@ -24,6 +24,7 @@ function AdminDepartmentDetail() {
     control,
     handleSubmit,
     reset,
+    register,
     formState: { errors }
   } = useForm<Department>({
     resolver: yupResolver(schema),
@@ -55,19 +56,15 @@ function AdminDepartmentDetail() {
     <div className="max-w-4xl mx-auto mt-12">
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextInput
-          isHookForm
-          control={control}
-          controlName="name"
           label="Name"
           error={errors.name?.message}
+          {...register('name')}
         />
 
         <TextInput
-          isHookForm
-          control={control}
-          controlName="leader"
           label="Leader"
           error={errors.leader?.message}
+          {...register('leader')}
         />
 
         <Button type="submit">Submit</Button>

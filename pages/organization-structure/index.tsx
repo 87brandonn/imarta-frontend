@@ -1,8 +1,17 @@
-import type { NextPage } from 'next';
+import type {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  NextPage
+} from 'next';
 import Image from 'next/future/image';
+import { useMemo } from 'react';
+import { OrganizationStructureFromApi } from '../../components/Admin/OrganizationStructureInput';
 import AnimatedHero from '../../components/AnimatedHero';
 import OrganizationStructurePeriodDescription from '../../components/OrganizationStructure/PeriodDescription';
 import AppLayout from '../../layouts';
+import getModuleBySlug, {
+  ModuleWithAssociation
+} from '../../services/api/getModuleBySlug';
 
 const missions = [
   `Mempertahankan dan membangun kembali hubungan yang baik antar
@@ -15,7 +24,37 @@ mengembangkan program kerja yang lebih terbuka, dinamis, dan tepat
 guna terhadap minat dan bakat mahasiswa`
 ];
 
-const OrganizationStructure: NextPage = () => {
+export const getServerSideProps: GetServerSideProps<
+  { data: ModuleWithAssociation },
+  { id: string }
+> = async () => {
+  const data = await getModuleBySlug('organization-structure');
+  return {
+    props: { data }
+  };
+};
+
+function OrganizationStructure({
+  data
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  console.log(data);
+  const memoizedHeroData = useMemo(
+    () =>
+      data.sections
+        .find(section => section.name === 'section-1')
+        ?.attributes.find(attr => attr.name === 'hero'),
+    [data.sections]
+  );
+
+  const memoizedOrgStructureData = useMemo(
+    () =>
+      data.sections
+        .find(section => section.name === 'section-2')
+        ?.attributes.find(attr => attr.name === 'org-structure')
+        ?.data as OrganizationStructureFromApi[],
+    [data.sections]
+  );
+
   return (
     <AppLayout title="Organization Structure">
       <AnimatedHero>
@@ -24,34 +63,21 @@ const OrganizationStructure: NextPage = () => {
           height="0"
           width="0"
           className="w-full h-auto"
-          src="/org-structure-banner.jpg"
+          src={memoizedHeroData?.data}
           alt="org-banner"
           priority
         />
       </AnimatedHero>
 
-      <OrganizationStructurePeriodDescription
-        period="2021/2022"
-        vision="Menjadikan IMARTA yang inklusif, integratif dan apresiatif"
-        missions={missions}
-        imgHierarchyUrl="/org-structure-2122.jpg"
-      />
-      <OrganizationStructurePeriodDescription
-        period="2020/2021"
-        vision="Menjadikan IMARTA yang inklusif, integratif dan apresiatif"
-        missions={missions}
-        imgHierarchyUrl="/org-structure-2122.jpg"
-        isDarkenBackground
-      />
-      <OrganizationStructurePeriodDescription
-        period="2019/2020"
-        vision="Menjadikan IMARTA yang inklusif, integratif dan apresiatif"
-        missions={missions}
-        imgHierarchyUrl="/org-structure-2122.jpg"
-        isDarkenBackground
-      />
+      {memoizedOrgStructureData.map((orgStructure, i) => (
+        <OrganizationStructurePeriodDescription
+          key={i}
+          data={orgStructure}
+          index={i}
+        />
+      ))}
     </AppLayout>
   );
-};
+}
 
 export default OrganizationStructure;
