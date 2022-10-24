@@ -84,6 +84,12 @@ function GaleriLawang({
     [data.sections]
   );
 
+  const memoizedContactAttributesData = useMemo(
+    () =>
+      data.sections.find(section => section.name === 'section-6')?.attributes,
+    [data.sections]
+  );
+
   return (
     <AppLayout title="Galeri Lawang">
       <div className="overflow-x-hidden">
@@ -122,7 +128,7 @@ function GaleriLawang({
         </div>
         <PodcastSection data={memoizedPodcastAttributesData} />
         <SayembaraSection data={memoizedSayembaraAttributesData} />
-        <GaleriLawangFooter />
+        <GaleriLawangFooter data={memoizedContactAttributesData} />
       </div>
     </AppLayout>
   );

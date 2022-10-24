@@ -5,6 +5,7 @@
 .swiper-slide {
   transition: all 200ms linear !important;
   transform: scale(1) !important;
+  user-select: none !important;
 }
 
 .swiper-slide.swiper-slide-active {

@@ -58,6 +58,8 @@ function BursaImarta({
     [data.sections]
   );
 
+  console.log(memoizedContactAttributesData);
+
   return (
     <>
       <AppLayout title="Bursa Imarta">
@@ -163,19 +165,36 @@ function BursaImarta({
             }
           </div>
           <div className="font-bold mb-3 text-sm">
-            https://linktr.ee/bursa.imarta
+            {
+              memoizedContactAttributesData?.find(
+                attr => attr.name === 'linktree'
+              )?.data
+            }
           </div>
           <div className="font-bold">INSTAGRAM</div>
-          <div className="font-light mb-3">@bursaimarta</div>
+          <div className="font-light mb-3">
+            {
+              memoizedContactAttributesData?.find(
+                attr => attr.name === 'instagram'
+              )?.data
+            }
+          </div>
           <div className="font-bold">LINE OFFICIAL ACCOUNT</div>
-          <div className="font-light mb-3">@bursaimarta</div>
+          <div className="font-light mb-3">
+            {
+              memoizedContactAttributesData?.find(attr => attr.name === 'line')
+                ?.data
+            }
+          </div>
           <div className="font-bold">LOCATION</div>
-          <div className="font-light">Etalase Bursa Imarta</div>
-          <div className="font-light">Ruang Imarta</div>
-          <div className="font-light">Gedung Teknik Lt.8</div>
-          <div className="font-light">Jurusan Arsitektur</div>
-          <div className="font-light">Universitas Tarumanagara</div>
-          <div className="font-light">Letjen S.Parman No.1, Grogol</div>
+          <div
+            className="font-light"
+            dangerouslySetInnerHTML={{
+              __html: memoizedContactAttributesData?.find(
+                attr => attr.name === 'address'
+              )?.data
+            }}
+          ></div>
         </div>
       </AppLayout>
     </>
