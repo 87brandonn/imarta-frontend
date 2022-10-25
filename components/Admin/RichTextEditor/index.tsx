@@ -5,13 +5,41 @@ import {
   RichUtils,
   ContentState,
   convertToRaw,
-  Modifier
+  Modifier,
+  CompositeDecorator
 } from 'draft-js';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
-import { Bold, Italic, Underline } from 'react-feather';
+import { Bold, Italic, Paperclip, Underline } from 'react-feather';
 import Button from '../Button';
+import TextInput from '../TextInput';
+
+function findLinkEntities(contentBlock, callback, contentState) {
+  contentBlock.findEntityRanges(character => {
+    const entityKey = character.getEntity();
+    return (
+      entityKey !== null &&
+      contentState.getEntity(entityKey).getType() === 'LINK'
+    );
+  }, callback);
+}
+
+const Link = props => {
+  const { url } = props.contentState.getEntity(props.entityKey).getData();
+  return (
+    <a href={url} style={{ color: '#3b5998', textDecoration: 'underline' }}>
+      {props.children}
+    </a>
+  );
+};
+
+const decorator = new CompositeDecorator([
+  {
+    strategy: findLinkEntities,
+    component: Link
+  }
+]);
 
 const INLINE_STYLES = [
   { label: 'Bold', style: 'BOLD', icon: <Bold size={14} /> },
@@ -30,8 +58,83 @@ const RichTextEditor = React.forwardRef<
   BBBRichTextEditorTypes
 >(({ value, onChange }, ref) => {
   const [editorState, setEditorState] = React.useState(() =>
-    EditorState.createEmpty()
+    EditorState.createEmpty(decorator)
   );
+  const [showUrlInput, setShowUrlInput] = useState(false);
+  const [urlValue, setUrlValue] = useState('');
+
+  const onURLChange = e => setUrlValue(e.target.value);
+
+  const promptForLink = () => {
+    const selection = editorState.getSelection();
+    if (!selection.isCollapsed()) {
+      const contentState = editorState.getCurrentContent();
+      const startKey = editorState.getSelection().getStartKey();
+      const startOffset = editorState.getSelection().getStartOffset();
+      const blockWithLinkAtBeginning = contentState.getBlockForKey(startKey);
+      const linkKey = blockWithLinkAtBeginning.getEntityAt(startOffset);
+      let url = '';
+      if (linkKey) {
+        const linkInstance = contentState.getEntity(linkKey);
+        url = linkInstance.getData().url;
+      }
+      setShowUrlInput(true);
+      setUrlValue(url);
+    }
+  };
+
+  const confirmLink = e => {
+    e.preventDefault();
+    const contentState = editorState.getCurrentContent();
+
+    const contentStateWithEntity = contentState.createEntity(
+      'LINK',
+      'MUTABLE',
+      { url: urlValue }
+    );
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+
+    setEditorState(prev => {
+      // Apply entity
+      let nextEditorState = EditorState.set(prev, {
+        currentContent: contentStateWithEntity
+      });
+
+      // Apply selection
+      nextEditorState = RichUtils.toggleLink(
+        nextEditorState,
+        nextEditorState.getSelection(),
+        entityKey
+      );
+      return nextEditorState;
+    });
+    setShowUrlInput(false);
+    setUrlValue('');
+    // this.setState(
+    //   {
+    //     editorState: nextEditorState,
+    //     showURLInput: false,
+    //     urlValue: ''
+    //   },
+    //   () => {
+    //     setTimeout(() => this.refs.editor.focus(), 0);
+    //   }
+    // );
+  };
+
+  const onLinkInputKeyDown = e => {
+    if (e.which === 13) {
+      confirmLink(e);
+    }
+  };
+
+  const removeLink = e => {
+    e.preventDefault();
+    const selection = editorState.getSelection();
+    if (!selection.isCollapsed()) {
+      setEditorState(RichUtils.toggleLink(editorState, selection, null));
+    }
+  };
 
   const handleTab = (e: React.KeyboardEvent) => {
     e.preventDefault();
@@ -83,7 +186,23 @@ const RichTextEditor = React.forwardRef<
             {d.icon || d.label}
           </div>
         ))}
+        <Paperclip size={14} onClick={promptForLink} />
       </div>
+
+      {showUrlInput && (
+        <div className="flex gap-2">
+          <TextInput
+            onChange={onURLChange}
+            placeholder="Enter url"
+            type="text"
+            value={urlValue}
+            className="grow"
+            onKeyDown={onLinkInputKeyDown}
+          />
+
+          <button onMouseDown={confirmLink}>Confirm</button>
+        </div>
+      )}
       <div
         className={`border bg-white rounded px-2 py-1 ${
           document.activeElement === (ref as any)?.current?.editor

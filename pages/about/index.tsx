@@ -20,8 +20,6 @@ export const getServerSideProps: GetServerSideProps<
 function About({
   data
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log(data);
-
   const memoizedBottomHeroData = useMemo(
     () =>
       data.sections
@@ -45,9 +43,9 @@ function About({
   return (
     <AppLayout title="About">
       <div className="m-5">
-        <div className="grid lg:grid-cols-2 gap-4">
+        <div className="grid lg:grid-cols-2 lg:gap-12">
           <div>
-            <div className="text-4xl mb-3">
+            <div className="text-4xl mb-6">
               {
                 memoizedSejarahSectionAttributesData?.find(
                   attr => attr.name === 'title-1'
@@ -100,7 +98,7 @@ function About({
                 }
               </div>
             </div>
-            <div className="mb-3 flex">
+            <div className="mb-3 flex items-center">
               <div className="flex-1">
                 <Image
                   src={
@@ -112,7 +110,7 @@ function About({
                   priority
                   height="0"
                   sizes="100vw"
-                  className="w-full h-24 object-contain"
+                  className="w-full h-36 object-contain"
                   alt="logo-imarta-about"
                 />
               </div>
@@ -127,7 +125,7 @@ function About({
                   priority
                   height="0"
                   sizes="100vw"
-                  className="w-full h-24 object-contain"
+                  className="w-full h-36 object-contain"
                   alt="logo-sketsa-about"
                 />
               </div>
@@ -163,7 +161,7 @@ function About({
             )?.data
           }
         </div>
-        <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col lg:gap-12 lg:flex-row">
           <div
             className="flex-1 flex-col text-white font-light"
             dangerouslySetInnerHTML={{

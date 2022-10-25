@@ -1,7 +1,5 @@
-import Image from 'next/future/image';
 import { Attribute } from '../../../types';
 import { ImageGridType } from '../../Admin/ImageGridInput';
-import AnimatedHero from '../../AnimatedHero';
 import GaleriSwiper from './Swiper';
 
 type ArthurGalleryProps = {
@@ -11,7 +9,7 @@ type ArthurGalleryProps = {
 function ArthurGallery({ data }: ArthurGalleryProps) {
   return (
     <div className="mb-16">
-      <div className="text-3xl font-bold mb-5 mx-4 lg:mx-8">
+      <div className="text-3xl font-bold mb-5">
         {data?.find(attr => attr.name === 'title')?.data}
       </div>
       <div className="mb-5 mx-4 lg:mx-8">

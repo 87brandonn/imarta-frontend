@@ -58,8 +58,6 @@ function BursaImarta({
     [data.sections]
   );
 
-  console.log(memoizedContactAttributesData);
-
   return (
     <>
       <AppLayout title="Bursa Imarta">
@@ -76,7 +74,7 @@ function BursaImarta({
         </AnimatedHero>
         <div className="p-5 mb-8 flex lg:flex-row flex-col gap-4">
           <div className="flex-none lg:w-1/3">
-            <div className="text-xl mb-3 font-bold">
+            <div className="text-3xl mb-3 font-bold">
               {
                 memoizedAboutAttributesData?.find(
                   attr => attr.name === 'title-1'
@@ -110,7 +108,7 @@ function BursaImarta({
         </div>
         <div className="p-5 mb-8 flex lg:flex-row flex-col gap-4">
           <div className="flex-[3_3_0%]">
-            <div className="text-xl font-bold mb-3">
+            <div className="text-3xl font-bold mb-3">
               {
                 memoizedCatalogueAttributesData?.find(
                   attr => attr.name === 'title-1'
@@ -133,7 +131,7 @@ function BursaImarta({
             </AnimatedHero>
           </div>
           <div className="flex-[2_2_0%]">
-            <div className="text-xl font-bold mb-3">
+            <div className="text-3xl font-bold mb-3">
               {
                 memoizedOfficialMerchAttributesData?.find(
                   attr => attr.name === 'title-1'
@@ -157,7 +155,7 @@ function BursaImarta({
           </div>
         </div>
         <div className="p-5 mb-8">
-          <div className="text-xl font-bold mb-5">
+          <div className="text-3xl font-bold mb-5">
             {
               memoizedContactAttributesData?.find(
                 attr => attr.name === 'title-1'

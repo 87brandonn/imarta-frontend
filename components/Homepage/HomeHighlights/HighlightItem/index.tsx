@@ -19,7 +19,7 @@ function HighlightItem({ id, thumbnail }: HighlightItemProps) {
           sizes="100vw"
           width={0}
           height={0}
-          className="rounded-full object-cover h-[400px] w-[100px] lg:w-[200px]"
+          className="rounded-full object-cover h-[400px] w-48 lg:w-[200px]"
           src={thumbnail as string}
           alt="documentation"
         />

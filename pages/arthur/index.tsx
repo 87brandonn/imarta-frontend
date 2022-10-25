@@ -22,7 +22,6 @@ export const getServerSideProps: GetServerSideProps<
 function Arthur({
   data
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log(data);
   const memoizedFirstSectionAttributesData = useMemo(
     () =>
       data.sections.find(section => section.name === 'section-1')?.attributes,
@@ -62,11 +61,15 @@ function Arthur({
     [data.sections]
   );
 
-  console.log(memoizedImageGridData);
-
   const memoizedGaleriFotoAttributesData = useMemo(
     () =>
       data.sections.find(section => section.name === 'section-3')?.attributes,
+    [data.sections]
+  );
+
+  const memoizedArthurInstagramAttributesData = useMemo(
+    () =>
+      data.sections.find(section => section.name === 'section-5')?.attributes,
     [data.sections]
   );
 
@@ -90,19 +93,24 @@ function Arthur({
         {memoizedSubtitleData}
       </div>
       <HeroGrid data={memoizedImageGridData} />
-      <div className="grid lg:grid-cols-2">
+      <div className="mx-4 lg:mx-8 grid lg:grid-cols-2 gap-4">
         <ArthurGallery data={memoizedGaleriFotoAttributesData} />
         <div>
           <div className="text-2xl font-bold mb-3">
-            ARTHUR HADIR DI INSTAGRAM @Galeri_Lawang_Untar
+            {
+              memoizedArthurInstagramAttributesData?.find(
+                attr => attr.name === 'title-1'
+              )?.data
+            }
           </div>
-          <div className="mb-8 font-light">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolores
-            delectus dolore quis necessitatibus nisi cum error dicta? Atque modi
-            tempora iste recusandae quia. Dolore nulla a animi iste repudiandae
-            ab. Culpa quis maxime nobis perferendis voluptatem distinctio! Iste,
-            quidem quibusdam.
-          </div>
+          <div
+            className="mb-8 font-light"
+            dangerouslySetInnerHTML={{
+              __html: memoizedArthurInstagramAttributesData
+                ?.find(attr => attr.name === 'text-1')
+                ?.data?.replace(/\n/g, '<br/>')
+            }}
+          ></div>
           <div className="text-2xl font-bold mb-3">VIEW OUR PERFORMANCES</div>
         </div>
       </div>

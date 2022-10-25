@@ -1,7 +1,8 @@
-import React from 'react';
-import { Menu } from 'react-feather';
+import React, { useRef, useState } from 'react';
+import { ChevronDown, Menu } from 'react-feather';
 import Link from 'next/link';
 import Image from 'next/future/image';
+import useOutsideAlerter from '../../utils/useOutsideAlerter';
 
 type NavbarProps = {
   onExpand: (val: boolean) => void;
@@ -63,7 +64,7 @@ export const navbarData = [
             sizes="100vw"
             width={0}
             height={0}
-            className="w-full h-10 lg:h-12 object-contain"
+            className="w-full h-10 lg:h-12 object-cover"
             priority
           />
         </div>
@@ -82,12 +83,19 @@ export const navbarData = [
 ];
 
 function Navbar({ onExpand }: NavbarProps) {
+  const [expand, setExpand] = useState<Record<string, boolean>>();
+  const boxRef = useRef<HTMLDivElement>(null);
+
+  useOutsideAlerter(boxRef, () => {
+    setExpand(undefined);
+  });
+
   return (
     <>
       <div className="bg-[#282828] py-3 px-2">
-        <div className="hidden max-w-4xl mx-auto lg:flex justify-between items-center">
+        <div className="select-none hidden max-w-4xl mx-auto lg:flex justify-between items-center">
           {navbarData.map((nav, i) => (
-            <div className="flex-1 justify-center flex group relative" key={i}>
+            <div className="flex-1 justify-center flex relative" key={i}>
               {nav.href ? (
                 <Link href={nav.href}>
                   <div className="cursor-pointer">
@@ -107,23 +115,42 @@ function Navbar({ onExpand }: NavbarProps) {
                   )}
                 </div>
               )}
+
               {nav.subMenu?.length && (
-                <div className="transition-opacity group-hover:opacity-100 opacity-0 mt-2 shadow-lg px-2 py-1 absolute z-20 bg-white rounded-xl left-0 right-0 top-full">
-                  {nav.subMenu?.map((subMenu, j) => (
+                <>
+                  <ChevronDown
+                    className={`cursor-pointer text-white transform ${
+                      expand?.[nav.title] ? 'rotate-180' : 'rotate-0'
+                    } transition-transform`}
+                    onClick={() =>
+                      setExpand(prev => ({
+                        ...prev,
+                        [nav.title]: !prev ? true : !prev[nav.title]
+                      }))
+                    }
+                  />
+                  {expand?.[nav.title] && (
                     <div
-                      key={j}
-                      className="cursor-pointer font-light mb-2 last:mb-0"
+                      ref={boxRef}
+                      className="transition-opacity opacity-100 mt-2 shadow-lg px-2 py-1 absolute z-20 bg-white rounded-xl left-0 right-0 top-full"
                     >
-                      {subMenu.isExternal ? (
-                        <a target="__blank" href={subMenu.url}>
-                          {subMenu.title}
-                        </a>
-                      ) : (
-                        <Link href={subMenu.url}>{subMenu.title}</Link>
-                      )}
+                      {nav.subMenu?.map((subMenu, j) => (
+                        <div
+                          key={j}
+                          className="cursor-pointer hover:font-medium font-light mb-2 last:mb-0"
+                        >
+                          {subMenu.isExternal ? (
+                            <a target="__blank" href={subMenu.url}>
+                              {subMenu.title}
+                            </a>
+                          ) : (
+                            <Link href={subMenu.url}>{subMenu.title}</Link>
+                          )}
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  )}
+                </>
               )}
             </div>
           ))}

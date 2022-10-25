@@ -64,11 +64,16 @@ function Admin() {
                   />
                 ) : attribute.type === 'IMAGE_GRID' ||
                   attribute.type === 'SWIPER_CENTERED' ||
-                  attribute.type === 'SWIPER_NORMAL' ? (
+                  attribute.type === 'SWIPER_NORMAL' ||
+                  attribute.type === 'IMAGE_GRID_2' ? (
                   <ImageGridInput
                     data={attribute.data}
+                    withDescription={attribute.type === 'IMAGE_GRID_2'}
                     onChange={val => onChange(val, attribute.id)}
-                    isOriginal={attribute.type === 'IMAGE_GRID'}
+                    isOriginal={
+                      attribute.type === 'IMAGE_GRID' ||
+                      attribute.type === 'IMAGE_GRID_2'
+                    }
                   />
                 ) : attribute.type === 'TITLE' ||
                   attribute.type === 'SUBTITLE' ? (

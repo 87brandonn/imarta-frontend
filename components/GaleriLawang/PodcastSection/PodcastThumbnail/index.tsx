@@ -10,8 +10,8 @@ type PodcastThumbnailProps = {
 
 function PodcastThumbnail({ data }: PodcastThumbnailProps) {
   return (
-    <a href={data.link as string} target="__blank">
-      <AnimatedHero className="self-center cursor-pointer">
+    <a href={data.link as string} target="__blank" className="self-center">
+      <AnimatedHero className="cursor-pointer">
         <Image
           src={data.imgUrl as string}
           width="0"

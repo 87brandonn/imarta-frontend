@@ -24,7 +24,12 @@ function PodcastSection({ data }: PodcastSectionProps) {
           <PodcastThumbnail data={imgGrid} key={i} />
         ))}
       </div>
-      {data?.find(attr => attr.name === 'subtitle-2')?.data}
+      <div
+        className="font-light"
+        dangerouslySetInnerHTML={{
+          __html: data?.find(attr => attr.name === 'subtitle-2')?.data
+        }}
+      ></div>
     </div>
   );
 }

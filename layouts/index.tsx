@@ -6,26 +6,13 @@ import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { Menu } from 'react-feather';
 import FloatingFooter from '../components/FloatingFooter';
 import Navbar, { navbarData } from '../components/Navbar';
+import useOutsideAlerter from '../utils/useOutsideAlerter';
 
 type AppLayoutProps = {
   title: string;
   description?: string;
   children: React.ReactNode;
 };
-
-function useOutsideAlerter(ref: RefObject<HTMLElement>, cb: () => void) {
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        cb();
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [cb, ref]);
-}
 
 const AppLayout: NextPage<AppLayoutProps> = ({
   title,

@@ -93,8 +93,6 @@ function HomeHighlightsInput({ data, onChange }: HomeHighlightsInputProps) {
     name: 'homeHighlights'
   });
 
-  console.log(errors);
-
   const onSubmit = ({ homeHighlights }: HomeHighlightForm) => {
     onChange(
       homeHighlights.map(homeHighlight => ({

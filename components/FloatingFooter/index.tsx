@@ -33,7 +33,7 @@ function FloatingFooter() {
       </a>
       <div className="flex gap-3 items-center px-3">
         <a
-          href={getAttributesByName('line')}
+          href={`https://line.me/R/ti/p/${getAttributesByName('line')}`}
           target="__blank"
           className="bg-white shadow-xl cursor-pointer transform transition-transform hover:scale-125 rounded-full p-2"
         >
@@ -46,28 +46,28 @@ function FloatingFooter() {
           />
         </a>
         <a
-          href={getAttributesByName('instagram')}
+          href={`https://instagram.com/${getAttributesByName('instagram')}`}
           target="__blank"
           className="bg-white shadow-xl cursor-pointer transform transition-transform hover:scale-125 rounded-full p-2"
         >
           <Instagram size={24} />
         </a>
         <a
-          href={getAttributesByName('linkedin')}
+          href={`https://linkedin.com/in/${getAttributesByName('linkedin')}`}
           target="__blank"
           className="bg-white shadow-xl cursor-pointer transform transition-transform hover:scale-125 rounded-full p-2"
         >
           <Linkedin size={24} />
         </a>
         <a
-          href={getAttributesByName('gmail')}
+          href={`mailto:${getAttributesByName('gmail')}`}
           target="__blank"
           className="bg-white shadow-xl cursor-pointer transform transition-transform hover:scale-125 rounded-full p-2"
         >
           <Mail size={24} />
         </a>
         <a
-          href={getAttributesByName('phone')}
+          href={`tel:${getAttributesByName('phone')}`}
           target="__blank"
           className="bg-white shadow-xl cursor-pointer transform transition-transform hover:scale-125 rounded-full p-2"
         >

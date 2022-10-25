@@ -37,7 +37,6 @@ export const getServerSideProps: GetServerSideProps<
 function OrganizationStructure({
   data
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log(data);
   const memoizedHeroData = useMemo(
     () =>
       data.sections

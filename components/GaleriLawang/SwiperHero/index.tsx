@@ -12,17 +12,9 @@ type SwiperHeroProps = {
 };
 
 function SwiperHero({ data }: SwiperHeroProps) {
-  const [domLoaded, setDomLoaded] = useState(false);
-
-  useEffect(() => {
-    setDomLoaded(true);
-  }, []);
-
-  if (!domLoaded) return null;
-
   return (
     <Swiper
-      slidesPerView={1}
+      slidesPerView="auto"
       centeredSlides
       pagination={{
         clickable: true

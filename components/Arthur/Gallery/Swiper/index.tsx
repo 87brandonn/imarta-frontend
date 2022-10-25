@@ -23,7 +23,7 @@ function GaleriSwiper({ data }: GaleriSwiperProps) {
 
   return (
     <Swiper
-      slidesPerView={1}
+      slidesPerView="auto"
       pagination={{
         clickable: true
       }}

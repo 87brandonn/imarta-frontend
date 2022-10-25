@@ -5,6 +5,7 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import Button from '../Button';
 import ImageInput from '../ImageInput';
+import RichTextEditor from '../RichTextEditor';
 import TextAreaInput from '../TextareaInput';
 import TextInput from '../TextInput';
 
@@ -16,12 +17,14 @@ export type ImageGridType = {
   title?: string;
   imgUrl?: string;
   link?: string;
+  description?: string;
 };
 
 type ImageGridInputProps = {
   data: ImageGridType[];
   onChange: (val: ImageGridType[]) => void;
   isOriginal?: boolean;
+  withDescription?: boolean;
 };
 
 const schema = yup
@@ -40,7 +43,12 @@ const schema = yup
   })
   .required();
 
-function ImageGridInput({ data, onChange, isOriginal }: ImageGridInputProps) {
+function ImageGridInput({
+  data,
+  onChange,
+  isOriginal,
+  withDescription
+}: ImageGridInputProps) {
   const {
     control,
     watch,
@@ -101,6 +109,18 @@ function ImageGridInput({ data, onChange, isOriginal }: ImageGridInputProps) {
                 {errors.imageGrid?.[i]?.imgUrl?.message}
               </p>
             </div>
+            {withDescription && (
+              <Controller
+                control={control}
+                name={`imageGrid.${i}.description`}
+                render={({ field }) => (
+                  <RichTextEditor
+                    value={field.value || ''}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            )}
             <TextInput
               {...register(`imageGrid.${i}.link`)}
               className="mt-2"
