@@ -15,7 +15,9 @@ import { Bold, Italic, Paperclip, Underline } from 'react-feather';
 import Button from '../Button';
 import TextInput from '../TextInput';
 
+// @ts-ignore
 function findLinkEntities(contentBlock, callback, contentState) {
+  // @ts-ignore
   contentBlock.findEntityRanges(character => {
     const entityKey = character.getEntity();
     return (
@@ -25,6 +27,7 @@ function findLinkEntities(contentBlock, callback, contentState) {
   }, callback);
 }
 
+// @ts-ignore
 const Link = props => {
   const { url } = props.contentState.getEntity(props.entityKey).getData();
   return (
@@ -63,7 +66,8 @@ const RichTextEditor = React.forwardRef<
   const [showUrlInput, setShowUrlInput] = useState(false);
   const [urlValue, setUrlValue] = useState('');
 
-  const onURLChange = e => setUrlValue(e.target.value);
+  const onURLChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setUrlValue(e.target.value);
 
   const promptForLink = () => {
     const selection = editorState.getSelection();
@@ -83,7 +87,7 @@ const RichTextEditor = React.forwardRef<
     }
   };
 
-  const confirmLink = e => {
+  const confirmLink = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const contentState = editorState.getCurrentContent();
 
@@ -110,17 +114,13 @@ const RichTextEditor = React.forwardRef<
     setUrlValue('');
   };
 
-  const onLinkInputKeyDown = e => {
-    if (e.which === 13) {
-      confirmLink(e);
-    }
-  };
-
-  const removeLink = e => {
-    e.preventDefault();
-    const selection = editorState.getSelection();
-    if (!selection.isCollapsed()) {
-      setEditorState(RichUtils.toggleLink(editorState, selection, null));
+  const onLinkInputKeyDown = (
+    e:
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.MouseEvent<HTMLInputElement>
+  ) => {
+    if ((e as React.KeyboardEvent<HTMLInputElement>).which === 13) {
+      confirmLink(e as React.MouseEvent<HTMLButtonElement>);
     }
   };
 
