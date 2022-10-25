@@ -95,12 +95,10 @@ const RichTextEditor = React.forwardRef<
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
 
     setEditorState(prev => {
-      // Apply entity
       let nextEditorState = EditorState.set(prev, {
         currentContent: contentStateWithEntity
       });
 
-      // Apply selection
       nextEditorState = RichUtils.toggleLink(
         nextEditorState,
         nextEditorState.getSelection(),
@@ -110,16 +108,6 @@ const RichTextEditor = React.forwardRef<
     });
     setShowUrlInput(false);
     setUrlValue('');
-    // this.setState(
-    //   {
-    //     editorState: nextEditorState,
-    //     showURLInput: false,
-    //     urlValue: ''
-    //   },
-    //   () => {
-    //     setTimeout(() => this.refs.editor.focus(), 0);
-    //   }
-    // );
   };
 
   const onLinkInputKeyDown = e => {
