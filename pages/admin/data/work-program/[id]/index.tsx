@@ -233,7 +233,11 @@ function Admin() {
                 control={control}
                 name={`documentations.${i}.imgUrl`}
                 render={({ field: { value, onChange } }) => (
-                  <ImageInput data={value} onChange={onChange} />
+                  <ImageInput
+                    data={value}
+                    onChange={onChange}
+                    onDelete={() => remove(i)}
+                  />
                 )}
               />
             </div>

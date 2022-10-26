@@ -1,6 +1,6 @@
 import Image from 'next/future/image';
 import React, { useRef, useState } from 'react';
-import { Aperture, Camera } from 'react-feather';
+import { Aperture, Camera, Trash } from 'react-feather';
 import uploadImage from '../../../utils/uploadFile';
 import ImageRecommendationsModal from './ImageRecommendationsModal';
 
@@ -8,11 +8,13 @@ type ImageInputProps = {
   data?: string;
   onChange?: (val?: string) => void;
   label?: string;
+  onDelete?: () => void;
 };
 
 function ImageInput({
   data,
   onChange,
+  onDelete,
   label = 'Upload Image'
 }: ImageInputProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -81,6 +83,16 @@ function ImageInput({
                 className="cursor-pointer"
                 size={16}
                 onClick={() => fileInputRef.current?.click()}
+              />
+            </div>
+            <div className="p-2 bg-white rounded-full">
+              <Trash
+                className="cursor-pointer text-red-400"
+                size={16}
+                onClick={() => {
+                  onChange?.('');
+                  onDelete?.();
+                }}
               />
             </div>
           </div>
