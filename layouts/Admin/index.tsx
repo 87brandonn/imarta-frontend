@@ -35,7 +35,7 @@ function AdminLayout({
             <AdminSidebar isDashboardData={isDashboardData} />
           </div>
         )}
-        <div className="grow overflow-auto">{children}</div>
+        <div className="grow overflow-auto !grayscale-0">{children}</div>
       </div>
     </>
   );

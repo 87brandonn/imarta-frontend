@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/future/image';
 import AnimatedHero from '../../AnimatedHero';
 import { ImageGridType } from '../../Admin/ImageGridInput';
+import ImageLandingPage from '../../ImageLandingPage';
 
 type HeroGridProps = {
   data: ImageGridType[] | null;
@@ -25,13 +26,10 @@ function HeroGrid({ data }: HeroGridProps) {
                   }}
                 ></div>
               </div>
-              <Image
-                width="0"
-                height="0"
-                className="w-full opacity-50 h-[50vh] object-cover"
-                sizes="100vw"
+              <ImageLandingPage
+                className="opacity-50 h-[50vh] object-cover"
                 src={imgGrid.imgUrl as string}
-                alt="gl-asset-1"
+                type={imgGrid.type}
                 priority
               />
             </a>

@@ -92,6 +92,7 @@ function AdminMetaDetail() {
           label="Title"
           placeholder="Enter title"
           error={errors.title?.message}
+          {...register('title')}
         />
 
         <TextInput
@@ -161,7 +162,12 @@ function AdminMetaDetail() {
             control={control}
             name="hierarchyImgUrl"
             render={({ field: { value, onChange } }) => (
-              <ImageInput data={value} onChange={onChange} />
+              <ImageInput
+                data={{ imgUrl: value, type: 'image' }}
+                onChange={val => onChange(val?.imgUrl)}
+                accept={['image']}
+                withoutLink
+              />
             )}
           />
           <p className="text-red-500">{errors.hierarchyImgUrl?.message}</p>

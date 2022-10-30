@@ -9,7 +9,9 @@ import HomeHighlightsInput, {
 import ImageGridInput, {
   ImageGridType
 } from '../../../../components/Admin/ImageGridInput';
-import ImageInput from '../../../../components/Admin/ImageInput';
+import ImageInput, {
+  ImageInputType
+} from '../../../../components/Admin/ImageInput';
 import OrganizationStructureInput, {
   OrganizationStructureFromApi
 } from '../../../../components/Admin/OrganizationStructureInput';
@@ -29,6 +31,7 @@ function Admin() {
   const onChange = (
     val:
       | ImageGridType[]
+      | ImageInputType
       | HomeEventTypeFromApi
       | HomeHighlightTypeFromApi
       | OrganizationStructureFromApi[]

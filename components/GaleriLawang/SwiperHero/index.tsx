@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { Navigation, Pagination } from 'swiper';
 import 'swiper/css';
-import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { Pagination, Navigation } from 'swiper';
+import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import Image from 'next/future/image';
 import { ImageGridType } from '../../Admin/ImageGridInput';
+import ImageLandingPage from '../../ImageLandingPage';
 
 type SwiperHeroProps = {
   data: ImageGridType[];
@@ -31,13 +30,12 @@ function SwiperHero({ data }: SwiperHeroProps) {
     >
       {data.map((imgGrid, i) => (
         <SwiperSlide key={i}>
-          <Image
-            sizes="100vw"
-            width="0"
-            height="0"
+          <ImageLandingPage
             src={imgGrid.imgUrl as string}
-            className="object-cover w-full h-96"
-            alt="img-grid-swiper"
+            link={imgGrid.link}
+            type={imgGrid.type}
+            className="h-96 object-cover"
+            showPreviewOnClick
           />
         </SwiperSlide>
       ))}

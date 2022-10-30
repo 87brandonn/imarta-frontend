@@ -57,8 +57,6 @@ function HomeEventsInput({ data, onChange }: HomeEventsInputProps) {
   const [showModal, setShowModal] = useState(false);
   const [workProgramId, setWorkProgramId] = useState<number>();
   const [workProgramIndex, setWorkProgramIndex] = useState<number>();
-  const [selectedDocumentationId, setSelectedDocumentationId] =
-    useState<number>();
 
   const {
     control,

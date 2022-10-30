@@ -1,10 +1,14 @@
 import axios from '../config/axios';
 import { compressImage } from './compressImage';
 
-const uploadImage = (image: File): Promise<string> =>
+const uploadImage = (
+  image: File,
+  type: 'image' | 'video' = 'image'
+): Promise<string> =>
   new Promise(async (resolve, reject) => {
     try {
-      const compressedImage = await compressImage(image);
+      const compressedImage =
+        type === 'image' ? await compressImage(image) : image;
       const formData = new FormData();
       formData.append('image', compressedImage);
       const {

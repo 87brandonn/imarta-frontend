@@ -10,6 +10,7 @@ import AppLayout from '../../../layouts';
 import getWorkProgramById from '../../../services/api/getWorkProgramById';
 import { WorkProgramWithAssociation } from '../../../services/api/getWorkPrograms';
 import { AlertCircle } from 'react-feather';
+import ImageLandingPage from '../../../components/ImageLandingPage';
 
 export const getServerSideProps: GetServerSideProps<
   { data: WorkProgramWithAssociation },
@@ -39,14 +40,18 @@ function RepositoryDetail({
           modules={[Pagination, Navigation]}
         >
           {data.workProgramDocumentations.map((documentation, i) => (
-            <SwiperSlide key={i}>
-              <Image
-                width="0"
-                height="0"
-                className="w-full object-contain h-96"
-                sizes="100vw"
-                src={documentation.imgUrl as string}
-                alt="work-program-banne"
+            <SwiperSlide key={i} className="!h-[50vh]">
+              <ImageLandingPage
+                src={documentation.imgUrl}
+                type={
+                  documentation.fileType === 'IMAGE'
+                    ? 'image'
+                    : documentation.fileType === 'VIDEO'
+                    ? 'video'
+                    : 'embed'
+                }
+                className="h-full object-contain"
+                showYoutubePlayer
               />
             </SwiperSlide>
           ))}

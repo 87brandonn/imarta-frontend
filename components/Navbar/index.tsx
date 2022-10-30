@@ -137,7 +137,7 @@ function Navbar({ onExpand }: NavbarProps) {
                       {nav.subMenu?.map((subMenu, j) => (
                         <div
                           key={j}
-                          className="cursor-pointer hover:font-medium font-light mb-2 last:mb-0"
+                          className="hover:font-medium font-light mb-2 last:mb-0"
                         >
                           {subMenu.isExternal ? (
                             <a target="__blank" href={subMenu.url}>

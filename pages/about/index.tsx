@@ -1,7 +1,9 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Image from 'next/future/image';
 import { useMemo } from 'react';
+import { ImageInputType } from '../../components/Admin/ImageInput';
 import AnimatedHero from '../../components/AnimatedHero';
+import ImageLandingPage from '../../components/ImageLandingPage';
 import AppLayout from '../../layouts';
 import getModuleBySlug, {
   ModuleWithAssociation
@@ -24,7 +26,7 @@ function About({
     () =>
       data.sections
         .find(section => section.name === 'section-3')
-        ?.attributes.find(attr => attr.name === 'Hero')?.data,
+        ?.attributes.find(attr => attr.name === 'Hero')?.data as ImageInputType,
     [data.sections]
   );
 
@@ -100,33 +102,57 @@ function About({
             </div>
             <div className="mb-3 flex items-center">
               <div className="flex-1">
-                <Image
+                <ImageLandingPage
                   src={
-                    memoizedSejarahSectionAttributesData?.find(
-                      attr => attr.name === 'image-2'
-                    )?.data
+                    (
+                      memoizedSejarahSectionAttributesData?.find(
+                        attr => attr.name === 'image-2'
+                      )?.data as ImageInputType
+                    ).imgUrl as string
                   }
-                  width="0"
-                  priority
-                  height="0"
-                  sizes="100vw"
-                  className="w-full h-36 object-contain"
-                  alt="logo-imarta-about"
+                  type={
+                    (
+                      memoizedSejarahSectionAttributesData?.find(
+                        attr => attr.name === 'image-2'
+                      )?.data as ImageInputType
+                    ).type
+                  }
+                  link={
+                    (
+                      memoizedSejarahSectionAttributesData?.find(
+                        attr => attr.name === 'image-2'
+                      )?.data as ImageInputType
+                    ).link
+                  }
+                  className="h-36"
+                  showYoutubePlayer
                 />
               </div>
               <div className="flex-1">
-                <Image
+                <ImageLandingPage
                   src={
-                    memoizedSejarahSectionAttributesData?.find(
-                      attr => attr.name === 'image-3'
-                    )?.data
+                    (
+                      memoizedSejarahSectionAttributesData?.find(
+                        attr => attr.name === 'image-3'
+                      )?.data as ImageInputType
+                    ).imgUrl as string
                   }
-                  width="0"
-                  priority
-                  height="0"
-                  sizes="100vw"
-                  className="w-full h-36 object-contain"
-                  alt="logo-sketsa-about"
+                  type={
+                    (
+                      memoizedSejarahSectionAttributesData?.find(
+                        attr => attr.name === 'image-3'
+                      )?.data as ImageInputType
+                    ).type
+                  }
+                  link={
+                    (
+                      memoizedSejarahSectionAttributesData?.find(
+                        attr => attr.name === 'image-3'
+                      )?.data as ImageInputType
+                    ).link
+                  }
+                  className="h-36"
+                  showYoutubePlayer
                 />
               </div>
             </div>
@@ -138,18 +164,29 @@ function About({
               }
             </div>
           </div>
-          <Image
+          <ImageLandingPage
             src={
-              memoizedSejarahSectionAttributesData?.find(
-                attr => attr.name === 'image-1'
-              )?.data
+              (
+                memoizedSejarahSectionAttributesData?.find(
+                  attr => attr.name === 'image-1'
+                )?.data as ImageInputType
+              ).imgUrl as string
             }
-            priority
-            alt="about-pic"
-            sizes="100vw"
-            width="0"
-            height="0"
-            className="w-full h-auto"
+            type={
+              (
+                memoizedSejarahSectionAttributesData?.find(
+                  attr => attr.name === 'image-1'
+                )?.data as ImageInputType
+              ).type
+            }
+            link={
+              (
+                memoizedSejarahSectionAttributesData?.find(
+                  attr => attr.name === 'image-1'
+                )?.data as ImageInputType
+              ).link
+            }
+            showYoutubePlayer
           />
         </div>
       </div>
@@ -194,16 +231,12 @@ function About({
           </div>
         </div>
       </div>
-      <AnimatedHero>
-        <Image
-          src={memoizedBottomHeroData}
-          alt="logo-imarta-meaning"
-          sizes="100vw"
-          width="0"
-          height="0"
-          className="w-full h-auto"
-        />
-      </AnimatedHero>
+      <ImageLandingPage
+        src={memoizedBottomHeroData.imgUrl as string}
+        type={memoizedBottomHeroData.type}
+        link={memoizedBottomHeroData.link}
+        showYoutubePlayer
+      />
     </AppLayout>
   );
 }

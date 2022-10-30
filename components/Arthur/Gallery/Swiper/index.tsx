@@ -7,20 +7,13 @@ import { Pagination, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { ImageGridType } from '../../../Admin/ImageGridInput';
 import { chunk } from '../../../../utils';
+import ImageLandingPage from '../../../ImageLandingPage';
 
 type GaleriSwiperProps = {
   data: ImageGridType[];
 };
 
 function GaleriSwiper({ data }: GaleriSwiperProps) {
-  const [domLoaded, setDomLoaded] = useState(false);
-
-  useEffect(() => {
-    setDomLoaded(true);
-  }, []);
-
-  if (!domLoaded) return null;
-
   return (
     <Swiper
       slidesPerView="auto"
@@ -36,16 +29,14 @@ function GaleriSwiper({ data }: GaleriSwiperProps) {
           <SwiperSlide key={i}>
             <div className="grid grid-cols-3 gap-3">
               {imgGridChunk.map((imgGrid, i2) => (
-                <Fragment key={i2}>
-                  <Image
-                    width="0"
-                    height="0"
-                    className="w-full object-contain h-36"
-                    sizes="100vw"
-                    src={imgGrid.imgUrl as string}
-                    alt="apresi-gl-1"
-                  />
-                </Fragment>
+                <ImageLandingPage
+                  className="h-36 w-36 object-cover"
+                  src={imgGrid.imgUrl as string}
+                  type={imgGrid.type}
+                  link={imgGrid.link as string}
+                  key={i2}
+                  showPreviewOnClick
+                />
               ))}
             </div>
           </SwiperSlide>

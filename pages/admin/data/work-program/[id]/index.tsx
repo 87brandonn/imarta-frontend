@@ -69,6 +69,8 @@ function Admin() {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors }
   } = useForm<WorkProgramPayload>({
     resolver: yupResolver(schema),
@@ -227,17 +229,38 @@ function Admin() {
 
         <div>Documentation</div>
         <div className="grid grid-cols-4 gap-4 mb-4">
-          {documentationFields.map((documentation, i) => (
+          {watch('documentations').map((documentation, i) => (
             <div key={documentation.id}>
               <Controller
                 control={control}
                 name={`documentations.${i}.imgUrl`}
                 render={({ field: { value, onChange } }) => (
-                  <ImageInput
-                    data={value}
-                    onChange={onChange}
-                    onDelete={() => remove(i)}
-                  />
+                  <>
+                    <ImageInput
+                      data={{
+                        imgUrl: value,
+                        type:
+                          documentation.fileType === 'IMAGE'
+                            ? 'image'
+                            : documentation.fileType === 'VIDEO'
+                            ? 'video'
+                            : 'embed'
+                      }}
+                      onChange={img => {
+                        setValue(
+                          `documentations.${i}.fileType`,
+                          img?.type === 'embed'
+                            ? 'YOUTUBE'
+                            : img?.type === 'video'
+                            ? 'VIDEO'
+                            : 'IMAGE'
+                        );
+                        onChange(img?.imgUrl);
+                      }}
+                      onDelete={() => remove(i)}
+                      withoutLink
+                    />
+                  </>
                 )}
               />
             </div>

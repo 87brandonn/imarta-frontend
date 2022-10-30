@@ -18,11 +18,13 @@ export type HomeHighlightForm = {
 export type HomeHighlightFormType = {
   department?: Department;
   imageUrl?: string;
+  link?: string;
 };
 
 export type HomeHighlightTypeFromApi = {
   departmentId: number;
   imageUrl?: string;
+  link?: string;
 };
 
 type HomeHighlightsInputProps = {
@@ -78,7 +80,8 @@ function HomeHighlightsInput({ data, onChange }: HomeHighlightsInputProps) {
             );
             return {
               department,
-              imageUrl: homeHighlightData.imageUrl
+              imageUrl: homeHighlightData.imageUrl,
+              link: homeHighlightData.link
             };
           })
       );
@@ -97,7 +100,8 @@ function HomeHighlightsInput({ data, onChange }: HomeHighlightsInputProps) {
     onChange(
       homeHighlights.map(homeHighlight => ({
         departmentId: homeHighlight.department?.id,
-        imageUrl: homeHighlight.imageUrl
+        imageUrl: homeHighlight.imageUrl,
+        link: homeHighlight.link
       }))
     );
   };
@@ -138,7 +142,18 @@ function HomeHighlightsInput({ data, onChange }: HomeHighlightsInputProps) {
               name={`homeHighlights.${i}.imageUrl`}
               control={control}
               render={({ field }) => (
-                <ImageInput data={field.value} onChange={field.onChange} />
+                <ImageInput
+                  data={{
+                    imgUrl: field.value,
+                    type: 'image',
+                    link: homeHighlight.link
+                  }}
+                  onChange={val => {
+                    field.onChange(val?.imgUrl);
+                    setValue(`homeHighlights.${i}.link`, val?.link);
+                  }}
+                  accept={['image']}
+                />
               )}
             />
 

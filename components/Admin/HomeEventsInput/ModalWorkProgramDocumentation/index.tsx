@@ -3,6 +3,7 @@ import { Control, Controller } from 'react-hook-form';
 import { HomeEventForm } from '..';
 import useAddWorkProgramDocumentation from '../../../../hooks/useAddWorkProgramDocumentation';
 import useWorkProgamDocumentationByWorkProgramId from '../../../../hooks/useWorkProgamDocumentationByWorkProgramId';
+import ImageLandingPage from '../../../ImageLandingPage';
 import ImageInput from '../../ImageInput';
 import Modal from '../../Modal';
 
@@ -22,8 +23,7 @@ function ModalWorkProgamDocumentation({
   id
 }: ModalWorkProgamDocumentationProps) {
   const { data } = useWorkProgamDocumentationByWorkProgramId(id);
-  const { mutate: addDocumentation, isLoading: isLoadingAddDocumentation } =
-    useAddWorkProgramDocumentation();
+  const { mutate: addDocumentation } = useAddWorkProgramDocumentation();
 
   return (
     <Modal
@@ -31,12 +31,22 @@ function ModalWorkProgamDocumentation({
       isOpen={showModal}
       onChangeOpen={onChangeShow}
     >
-      <div className="mb-3 flex justify-end">
+      <div className="mb-3">
         <ImageInput
           onChange={val => {
-            addDocumentation({ workProgramId: id!, imgUrl: val! });
+            addDocumentation({
+              workProgramId: id!,
+              imgUrl: val?.imgUrl!,
+              type:
+                val?.type === 'image'
+                  ? 'IMAGE'
+                  : val?.type === 'video'
+                  ? 'VIDEO'
+                  : 'YOUTUBE'
+            });
           }}
-          label="Add Documentation"
+          withoutLink
+          // label="Add Documentation"
         />
       </div>
       {!data?.length ? (
@@ -62,11 +72,16 @@ function ModalWorkProgamDocumentation({
                 />
                 <div className="text-sm text-gray-400">Mark as thumbnail</div>
               </div>
-              <img
+              <ImageLandingPage
                 src={documentation.imgUrl}
-                alt="documentation"
-                className=" object-contain rounded-xl"
-                key={documentation.id}
+                className="rounded-xl w-full"
+                type={
+                  documentation.fileType === 'IMAGE'
+                    ? 'image'
+                    : documentation.fileType === 'VIDEO'
+                    ? 'video'
+                    : 'embed'
+                }
               />
             </div>
           ))}

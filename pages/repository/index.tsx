@@ -2,8 +2,10 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Image from 'next/future/image';
 import { useMemo, useState } from 'react';
 import { Menu } from 'react-feather';
+import { ImageInputType } from '../../components/Admin/ImageInput';
 import { RepositoryFromApi } from '../../components/Admin/RepositoryInput';
 import AnimatedHero from '../../components/AnimatedHero';
+import ImageLandingPage from '../../components/ImageLandingPage';
 import PeriodDepartmentProker from '../../components/Repository/PeriodDepartmentProker';
 import AppLayout from '../../layouts';
 import getModuleBySlug, {
@@ -28,7 +30,7 @@ function Repository({
     () =>
       data.sections
         .find(section => section.name === 'section-1')
-        ?.attributes.find(attr => attr.name === 'hero'),
+        ?.attributes.find(attr => attr.name === 'hero')?.data as ImageInputType,
     [data.sections]
   );
 
@@ -43,14 +45,12 @@ function Repository({
     <AppLayout title="Repository">
       <div className="relative">
         <AnimatedHero>
-          <Image
-            alt="repository-banner"
-            src={memoizedHeroData?.data}
+          <ImageLandingPage
+            src={memoizedHeroData.imgUrl as string}
+            type={memoizedHeroData.type}
+            link={memoizedHeroData.link}
             priority
-            width="0"
-            height="0"
-            sizes="100vw"
-            className="w-full h-auto"
+            showYoutubePlayer
           />
         </AnimatedHero>
         <div className="absolute top-2 left-2 flex items-center gap-2">

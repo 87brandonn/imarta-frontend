@@ -4,14 +4,18 @@ import type {
   NextPage
 } from 'next';
 import Image from 'next/future/image';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { ImageGridType } from '../../components/Admin/ImageGridInput';
+import { ImageInputType } from '../../components/Admin/ImageInput';
+import Modal from '../../components/Admin/Modal';
 import AnimatedHero from '../../components/AnimatedHero';
 import GaleriLawangFooter from '../../components/GaleriLawang/Footer';
 import Hero2 from '../../components/GaleriLawang/Hero2';
 import PodcastSection from '../../components/GaleriLawang/PodcastSection';
 import SayembaraSection from '../../components/GaleriLawang/SayembaraSection';
 import SwiperHero from '../../components/GaleriLawang/SwiperHero';
+import ImageLandingPage from '../../components/ImageLandingPage';
+import MediaPreviewer from '../../components/MediaPreviewer';
 import AppLayout from '../../layouts';
 import getModuleBySlug, {
   ModuleWithAssociation
@@ -39,7 +43,7 @@ function GaleriLawang({
   const memoizedTopImageData = useMemo(
     () =>
       memoizedFirstSectionAttributesData?.find(attr => attr.name === 'image-1')
-        ?.data,
+        ?.data as ImageInputType,
     [memoizedFirstSectionAttributesData]
   );
 
@@ -84,6 +88,12 @@ function GaleriLawang({
     [data.sections]
   );
 
+  const memoizedPublicExposeAttributesData = useMemo(
+    () =>
+      data.sections.find(section => section.name === 'section-5')?.attributes,
+    [data.sections]
+  );
+
   const memoizedContactAttributesData = useMemo(
     () =>
       data.sections.find(section => section.name === 'section-6')?.attributes,
@@ -94,14 +104,13 @@ function GaleriLawang({
     <AppLayout title="Galeri Lawang">
       <div className="overflow-x-hidden">
         <div className="flex items-center justify-center my-16">
-          <Image
-            sizes="100vw"
-            width="0"
-            height="0"
-            src={memoizedTopImageData}
+          <ImageLandingPage
+            src={memoizedTopImageData.imgUrl as string}
+            link={memoizedTopImageData.link}
+            type={memoizedTopImageData.type}
             className="w-[300px]"
             priority
-            alt="logo-galeri-lawang-banner"
+            showYoutubePlayer
           />
         </div>
         <SwiperHero data={memoizedSwiperData} />
@@ -110,25 +119,39 @@ function GaleriLawang({
         </div>
         <Hero2 data={memoizedImageGridData} />
         <div className="mx-4 lg:mx-8 mb-8 lg:mb-16">
-          <div className="text-3xl font-bold mb-3">Komik Lawang</div>
           <AnimatedHero>
-            <Image
-              width="0"
-              height="0"
-              className="w-full h-auto"
-              sizes="100vw"
+            <ImageLandingPage
+              className="lg:h-[85vh]"
               src={
-                memoizedKomikLawangAttributesData?.find(
-                  attr => attr.name === 'image-1'
-                )?.data
+                (
+                  memoizedKomikLawangAttributesData?.find(
+                    attr => attr.name === 'image-1'
+                  )?.data as ImageInputType
+                ).imgUrl as string
               }
-              alt="komik-laawng"
+              link={
+                (
+                  memoizedKomikLawangAttributesData?.find(
+                    attr => attr.name === 'image-1'
+                  )?.data as ImageInputType
+                ).link as string
+              }
+              type={
+                (
+                  memoizedKomikLawangAttributesData?.find(
+                    attr => attr.name === 'image-1'
+                  )?.data as ImageInputType
+                ).type
+              }
             />
           </AnimatedHero>
         </div>
         <PodcastSection data={memoizedPodcastAttributesData} />
         <SayembaraSection data={memoizedSayembaraAttributesData} />
-        <GaleriLawangFooter data={memoizedContactAttributesData} />
+        <GaleriLawangFooter
+          contact={memoizedContactAttributesData}
+          publicExpose={memoizedPublicExposeAttributesData}
+        />
       </div>
     </AppLayout>
   );

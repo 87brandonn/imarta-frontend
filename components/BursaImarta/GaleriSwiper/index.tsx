@@ -6,23 +6,16 @@ import 'swiper/css/navigation';
 import { Pagination, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { ImageGridType } from '../../Admin/ImageGridInput';
+import ImageLandingPage from '../../ImageLandingPage';
 
 type GaleriSwiperProps = {
   data: ImageGridType[];
 };
 
 function GaleriSwiper({ data }: GaleriSwiperProps) {
-  const [domLoaded, setDomLoaded] = useState(false);
-
-  useEffect(() => {
-    setDomLoaded(true);
-  }, []);
-
-  if (!domLoaded) return null;
-
   return (
     <Swiper
-      slidesPerView={1}
+      slidesPerView="auto"
       pagination={{
         clickable: true
       }}
@@ -33,13 +26,11 @@ function GaleriSwiper({ data }: GaleriSwiperProps) {
     >
       {data.map((imgGrid, i) => (
         <SwiperSlide key={i}>
-          <Image
-            width="0"
-            height="0"
-            className="w-full object-contain h-80"
-            sizes="100vw"
+          <ImageLandingPage
             src={imgGrid.imgUrl as string}
-            alt="komik-laawng"
+            type={imgGrid.type}
+            link={imgGrid.link}
+            className="h-80"
           />
         </SwiperSlide>
       ))}

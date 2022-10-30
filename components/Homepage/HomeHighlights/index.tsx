@@ -20,6 +20,7 @@ function HomeHighlights({ title, departments }: HomeHighlightsProps) {
             key={department.departmentId}
             id={department.departmentId}
             thumbnail={department.imageUrl}
+            link={department.link}
           />
         ))}
       </div>

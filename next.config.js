@@ -3,18 +3,22 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['storage.googleapis.com']
+    domains: [
+      'storage.googleapis.com',
+      'images.unsplash.com',
+      'img.youtube.com'
+    ]
   },
-  redirects : () => [
+  redirects: () => [
     {
-      source : '/admin/cms',
-      destination : '/admin/cms/home',
-      permanent : true
+      source: '/admin/cms',
+      destination: '/admin/cms/home',
+      permanent: true
     },
     {
-      source : '/admin/data',
-      destination : '/admin/data/work-program',
-      permanent : true
+      source: '/admin/data',
+      destination: '/admin/data/work-program',
+      permanent: true
     }
   ]
 };

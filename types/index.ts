@@ -113,6 +113,7 @@ export type WorkProgramDocumentation = {
   id: number;
   imgUrl: string;
   workProgramId: number;
+  fileType: DocumentationType;
 };
 
 /**
@@ -162,4 +163,12 @@ export const AttributeType: {
   REPOSITORY_1: 'REPOSITORY_1';
 };
 
+export const DocumentationType: {
+  IMAGE: 'IMAGE';
+  VIDEO: 'VIDEO';
+  YOUTUBE: 'YOUTUBE';
+};
+
 export type AttributeType = typeof AttributeType[keyof typeof AttributeType];
+export type DocumentationType =
+  typeof DocumentationType[keyof typeof DocumentationType];

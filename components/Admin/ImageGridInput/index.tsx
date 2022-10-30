@@ -4,7 +4,7 @@ import { X } from 'react-feather';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import Button from '../Button';
-import ImageInput from '../ImageInput';
+import ImageInput, { ImageInputType } from '../ImageInput';
 import RichTextEditor from '../RichTextEditor';
 import TextAreaInput from '../TextareaInput';
 import TextInput from '../TextInput';
@@ -18,6 +18,7 @@ export type ImageGridType = {
   imgUrl?: string;
   link?: string;
   description?: string;
+  type?: ImageInputType['type'];
 };
 
 type ImageGridInputProps = {
@@ -102,7 +103,14 @@ function ImageGridInput({
                 control={control}
                 name={`imageGrid.${i}.imgUrl`}
                 render={({ field }) => (
-                  <ImageInput data={field.value} onChange={field.onChange} />
+                  <ImageInput
+                    data={{ imgUrl: field.value, type: imageGrid.type }}
+                    onChange={val => {
+                      field.onChange(val?.imgUrl);
+                      setValue(`imageGrid.${i}.type`, val?.type);
+                    }}
+                    withoutLink
+                  />
                 )}
               />
               <p className="text-red-500">

@@ -5,24 +5,15 @@ import type {
 } from 'next';
 import Image from 'next/future/image';
 import { useMemo } from 'react';
+import { ImageInputType } from '../../components/Admin/ImageInput';
 import { OrganizationStructureFromApi } from '../../components/Admin/OrganizationStructureInput';
 import AnimatedHero from '../../components/AnimatedHero';
+import ImageLandingPage from '../../components/ImageLandingPage';
 import OrganizationStructurePeriodDescription from '../../components/OrganizationStructure/PeriodDescription';
 import AppLayout from '../../layouts';
 import getModuleBySlug, {
   ModuleWithAssociation
 } from '../../services/api/getModuleBySlug';
-
-const missions = [
-  `Mempertahankan dan membangun kembali hubungan yang baik antar
-mahasiswa, pengurus, dosen, staff, organisasi lebih baik internal
-maupun eksternal`,
-  `Mewujudkan program kerja yang kolaboratif dan inovatif, baik
-secara akademik maupun non-akademik`,
-  `Memaksimalkan quality control dan aspirasi mahasiswa untuk
-mengembangkan program kerja yang lebih terbuka, dinamis, dan tepat
-guna terhadap minat dan bakat mahasiswa`
-];
 
 export const getServerSideProps: GetServerSideProps<
   { data: ModuleWithAssociation },
@@ -41,7 +32,7 @@ function OrganizationStructure({
     () =>
       data.sections
         .find(section => section.name === 'section-1')
-        ?.attributes.find(attr => attr.name === 'hero'),
+        ?.attributes.find(attr => attr.name === 'hero')?.data as ImageInputType,
     [data.sections]
   );
 
@@ -56,18 +47,13 @@ function OrganizationStructure({
 
   return (
     <AppLayout title="Organization Structure">
-      <AnimatedHero>
-        <Image
-          sizes="100vw"
-          height="0"
-          width="0"
-          className="w-full h-auto"
-          src={memoizedHeroData?.data}
-          alt="org-banner"
-          priority
-        />
-      </AnimatedHero>
-
+      <ImageLandingPage
+        src={memoizedHeroData.imgUrl as string}
+        link={memoizedHeroData.link as string}
+        type={memoizedHeroData.type}
+        priority
+        showYoutubePlayer
+      />
       {memoizedOrgStructureData.map((orgStructure, i) => (
         <OrganizationStructurePeriodDescription
           key={i}

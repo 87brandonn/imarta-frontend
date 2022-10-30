@@ -1,9 +1,12 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import dynamic from 'next/dynamic';
 import Image from 'next/future/image';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { ImageGridType } from '../../components/Admin/ImageGridInput';
+import { ImageInputType } from '../../components/Admin/ImageInput';
 import ArthurGallery from '../../components/Arthur/Gallery';
 import HeroGrid from '../../components/Arthur/HeroGrid';
+import ImageLandingPage from '../../components/ImageLandingPage';
 import AppLayout from '../../layouts';
 import getModuleBySlug, {
   ModuleWithAssociation
@@ -32,7 +35,7 @@ function Arthur({
     () =>
       memoizedFirstSectionAttributesData?.find(
         attr => attr.name === 'top-image'
-      )?.data,
+      )?.data as ImageInputType,
     [memoizedFirstSectionAttributesData]
   );
 
@@ -73,56 +76,74 @@ function Arthur({
     [data.sections]
   );
 
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const memoizedPerformanceAttributesData = useMemo(
+    () =>
+      data.sections.find(section => section.name === 'section-4')?.attributes,
+    [data.sections]
+  );
 
   return (
-    mounted && (
-      <AppLayout title="Arthur">
-        <div className="flex items-center justify-center my-16">
-          <Image
-            sizes="100vw"
-            width="0"
-            height="0"
-            src={memoizedTopImageData}
-            className="w-[300px]"
-            priority
-            alt="logo-galeri-lawang-banner"
-          />
-        </div>
-        <div className="text-center px-3 max-w-md mx-auto text-xl font-bold">
-          {memoizedTitleData}
-        </div>
-        <div className="text-center mt-5 mb-16 px-3 max-w-md mx-auto font-light">
-          {memoizedSubtitleData}
-        </div>
-        <HeroGrid data={memoizedImageGridData} />
-        <div className="mx-4 lg:mx-8 grid lg:grid-cols-2 gap-4">
-          <ArthurGallery data={memoizedGaleriFotoAttributesData} />
-          <div>
-            <div className="text-2xl font-bold mb-3">
-              {
-                memoizedArthurInstagramAttributesData?.find(
-                  attr => attr.name === 'title-1'
-                )?.data
-              }
-            </div>
-            <div
-              className="mb-8 font-light"
-              dangerouslySetInnerHTML={{
-                __html: memoizedArthurInstagramAttributesData
-                  ?.find(attr => attr.name === 'text-1')
-                  ?.data?.replace(/\n/g, '<br/>')
-              }}
-            ></div>
-            <div className="text-2xl font-bold mb-3">VIEW OUR PERFORMANCES</div>
+    <AppLayout title="Arthur">
+      <div className="flex items-center justify-center my-16">
+        <ImageLandingPage
+          src={memoizedTopImageData.imgUrl as string}
+          type={memoizedTopImageData.type}
+          className="w-[300px]"
+          priority
+          showYoutubePlayer
+        />
+      </div>
+      <div className="text-center px-3 max-w-md mx-auto text-xl font-bold">
+        {memoizedTitleData}
+      </div>
+      <div className="text-center mt-5 mb-16 px-3 max-w-lg mx-auto font-light">
+        {memoizedSubtitleData}
+      </div>
+      <HeroGrid data={memoizedImageGridData} />
+      <div className="mx-4 lg:mx-8 grid lg:grid-cols-2 gap-4">
+        <ArthurGallery data={memoizedGaleriFotoAttributesData} />
+        <div className="mb-12">
+          <div
+            className="text-2xl font-bold mb-3"
+            dangerouslySetInnerHTML={{
+              __html: memoizedArthurInstagramAttributesData?.find(
+                attr => attr.name === 'title-1'
+              )?.data
+            }}
+          ></div>
+          <div
+            className="mb-8 font-light"
+            dangerouslySetInnerHTML={{
+              __html: memoizedArthurInstagramAttributesData
+                ?.find(attr => attr.name === 'text-1')
+                ?.data?.replace(/\n/g, '<br/>')
+            }}
+          ></div>
+          <div className="text-2xl font-bold mb-3">
+            {
+              memoizedPerformanceAttributesData?.find(
+                attr => attr.name === 'title'
+              )?.data
+            }
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            {(
+              memoizedPerformanceAttributesData?.find(
+                attr => attr.name === 'img-grid-1'
+              )?.data as ImageGridType[]
+            ).map((imgGrid, i) => (
+              <ImageLandingPage
+                key={i}
+                src={imgGrid.imgUrl as string}
+                type={imgGrid.type}
+                link={imgGrid.link}
+                showPreviewOnClick
+              />
+            ))}
           </div>
         </div>
-      </AppLayout>
-    )
+      </div>
+    </AppLayout>
   );
 }
 

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import useWorkProgramById from '../../../hooks/useWorkProgramById';
 import useDocumentationById from '../../../hooks/useDocumentationById';
 import Image from 'next/future/image';
+import ImageLandingPage from '../../ImageLandingPage';
 
 type HomeBannerProps = {
   workProgramId: number;
@@ -38,13 +39,17 @@ function HomeBanner({
       >
         <div className="flex-1 lg:flex-[2_2_0%] relative">
           {documentationData?.imgUrl && (
-            <Image
-              alt="home-event"
-              className="w-full h-24 lg:h-full object-cover"
-              sizes="100vw"
-              width={0}
-              height={0}
+            <ImageLandingPage
+              className="h-36 lg:h-full object-cover"
               src={documentationData.imgUrl}
+              type={
+                documentationData.fileType === 'IMAGE'
+                  ? 'image'
+                  : documentationData.fileType === 'VIDEO'
+                  ? 'video'
+                  : 'embed'
+              }
+              showYoutubePlayer
             />
           )}
         </div>

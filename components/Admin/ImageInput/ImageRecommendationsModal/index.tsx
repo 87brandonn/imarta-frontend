@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'react-feather';
 import ReactPaginate from 'react-paginate';
 import { AsyncPaginate } from 'react-select-async-paginate';
+import { ImageInputType } from '..';
 import useLoadDepartments from '../../../../hooks/options/useLoadDepartments';
 import useLoadFields from '../../../../hooks/options/useLoadFields';
 import useLoadWorkPrograms from '../../../../hooks/options/useLoadWorkPrograms';
@@ -15,14 +16,16 @@ import Modal from '../../Modal';
 
 type ImageRecommendationsModalProps = {
   show: boolean;
+  accept?: NonNullable<ImageInputType['type']>[];
   onChangeShow: (val: boolean) => void;
-  onSave: (value?: string) => void;
+  onSave: (value?: ImageInputType) => void;
 };
 
 function ImageRecommendationsModal({
   show,
   onChangeShow,
-  onSave
+  onSave,
+  accept
 }: ImageRecommendationsModalProps) {
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(6);
@@ -38,7 +41,8 @@ function ImageRecommendationsModal({
     limit,
     departments: departments.map(dep => dep.id),
     fields: fields.map(field => field.id),
-    workPrograms: workPrograms.map(wp => wp.id)
+    workPrograms: workPrograms.map(wp => wp.id),
+    accept
   });
 
   const loadWorkPrograms = useLoadWorkPrograms();
@@ -51,7 +55,17 @@ function ImageRecommendationsModal({
       onChangeOpen={onChangeShow}
       title="Select documentation"
       isActionable
-      onSave={() => onSave(selected?.imgUrl)}
+      onSave={() =>
+        onSave({
+          ...selected,
+          type:
+            selected?.fileType === 'IMAGE'
+              ? 'image'
+              : selected?.fileType === 'VIDEO'
+              ? 'video'
+              : 'embed'
+        })
+      }
     >
       <div className="mb-4 grid gap-4 grid-cols-2">
         <div>
@@ -113,11 +127,20 @@ function ImageRecommendationsModal({
               />
               <div className="text-gray-400">Select</div>
             </div>
-            <img
-              src={documentation.imgUrl}
-              className="object-contain w-48 h-48 rounded-xl"
-              alt="img-recommendation"
-            ></img>
+            {documentation.fileType === 'IMAGE' ? (
+              <img
+                src={documentation.imgUrl}
+                className="object-contain w-48 h-48 rounded-xl"
+                alt="img-recommendation"
+              ></img>
+            ) : documentation.fileType === 'VIDEO' ? (
+              <video src={documentation.imgUrl} className="w-full" />
+            ) : (
+              <iframe
+                src={`https://www.youtube.com/embed/${documentation.imgUrl}`}
+                className="w-full"
+              />
+            )}
           </div>
         ))}
       </div>

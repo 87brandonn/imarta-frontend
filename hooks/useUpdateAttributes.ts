@@ -13,6 +13,32 @@ const useUpdateAttributes = () => {
       return data;
     },
     {
+      // onMutate: async ({ slug, id }) => {
+      //   await client.cancelQueries(['module', slug]);
+
+      //   // Snapshot the previous value
+      //   const previousTodos = client.getQueryData(['todos']);
+
+      //   // Optimistically update to the new value
+      //   client.setQueryData<ModuleWithAssociation[]>(['module', slug], old => {
+      //     const previousData = Array.from(old || []);
+      //     previousData.forEach(module => {
+      //       if(module.slug === slug) {
+
+      //       }
+      //     })
+      //     // const adjustedModule = previousData.find(
+      //     //   module => module.slug === slug
+      //     // );
+      //     // const modifiedSection = adjustedModule?.sections.find(section =>
+      //     //   section.attributes.some(attr => attr.id === id)
+      //     // );
+      //     // const modifiedAttributes = modifiedSection
+      //   });
+
+      //   // Return a context object with the snapshotted value
+      //   return { previousTodos };
+      // },
       onSuccess: (data, { slug }) => {
         toast.success('Succesfully update attribute');
         client.invalidateQueries(['module', slug]);

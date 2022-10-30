@@ -1,4 +1,5 @@
 import { QueryKey, useQuery, UseQueryOptions } from 'react-query';
+import { ImageInputType } from '../components/Admin/ImageInput';
 import axios from '../config/axios';
 import { WorkProgramDocumentation } from '../types';
 import { PaginatedApiResponseType } from '../types/api';
@@ -9,6 +10,7 @@ export type DocumentationParams = {
   departments?: number[];
   fields?: number[];
   workPrograms?: number[];
+  accept?: NonNullable<ImageInputType['type']>[];
 };
 
 const useDocumentations = (

@@ -1,29 +1,21 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import Image from 'next/future/image';
+import { Fragment } from 'react';
+import { Navigation, Pagination } from 'swiper';
 import 'swiper/css';
-import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { Pagination, Navigation } from 'swiper';
+import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { ImageGridType } from '../../../Admin/ImageGridInput';
 import { chunk } from '../../../../utils';
+import { ImageGridType } from '../../../Admin/ImageGridInput';
+import ImageLandingPage from '../../../ImageLandingPage';
 
 type SayembaraSwiperProps = {
   data: ImageGridType[];
 };
 
 function SayembaraSwiper({ data }: SayembaraSwiperProps) {
-  const [domLoaded, setDomLoaded] = useState(false);
-
-  useEffect(() => {
-    setDomLoaded(true);
-  }, []);
-
-  if (!domLoaded) return null;
-
   return (
     <Swiper
-      slidesPerView={1}
+      slidesPerView="auto"
       pagination={{
         clickable: true
       }}
@@ -36,13 +28,11 @@ function SayembaraSwiper({ data }: SayembaraSwiperProps) {
           <div className="grid grid-cols-5 gap-3">
             {imgGridChunk.map((imgGrid, i2) => (
               <Fragment key={i2}>
-                <Image
-                  width="0"
-                  height="0"
-                  className="w-full object-contain h-36"
-                  sizes="100vw"
+                <ImageLandingPage
+                  className=" h-36"
                   src={imgGrid.imgUrl as string}
-                  alt="apresi-gl-1"
+                  link={imgGrid.link}
+                  type={imgGrid.type}
                 />
               </Fragment>
             ))}

@@ -1,17 +1,14 @@
-import type {
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-  NextPage
-} from 'next';
-import Image from 'next/future/image';
-import { useMemo } from 'react';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { ImageGridType } from '../../components/Admin/ImageGridInput';
+import { ImageInputType } from '../../components/Admin/ImageInput';
 import AnimatedHero from '../../components/AnimatedHero';
 import GaleriSwiper from '../../components/BursaImarta/GaleriSwiper';
+import ImageLandingPage from '../../components/ImageLandingPage';
 import AppLayout from '../../layouts';
 import getModuleBySlug, {
   ModuleWithAssociation
 } from '../../services/api/getModuleBySlug';
+import getAttribute from '../../utils/getAttribute';
 
 export const getServerSideProps: GetServerSideProps<
   { data: ModuleWithAssociation },
@@ -26,171 +23,111 @@ export const getServerSideProps: GetServerSideProps<
 function BursaImarta({
   data
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const memoizedHeroData = useMemo(
-    () =>
-      data.sections
-        .find(section => section.name === 'section-1')
-        ?.attributes.find(attr => attr.name === 'hero'),
-    [data.sections]
-  );
-
-  const memoizedAboutAttributesData = useMemo(
-    () =>
-      data.sections.find(section => section.name === 'section-2')?.attributes,
-    [data.sections]
-  );
-
-  const memoizedCatalogueAttributesData = useMemo(
-    () =>
-      data.sections.find(section => section.name === 'section-3')?.attributes,
-    [data.sections]
-  );
-
-  const memoizedOfficialMerchAttributesData = useMemo(
-    () =>
-      data.sections.find(section => section.name === 'section-4')?.attributes,
-    [data.sections]
-  );
-
-  const memoizedContactAttributesData = useMemo(
-    () =>
-      data.sections.find(section => section.name === 'section-5')?.attributes,
-    [data.sections]
-  );
-
   return (
     <>
       <AppLayout title="Bursa Imarta">
         <AnimatedHero>
-          <Image
-            width="0"
-            height="0"
-            sizes="100vw"
-            className="w-full h-auto"
-            src={memoizedHeroData?.data}
-            alt="org-banner"
-            priority
+          <ImageLandingPage
+            src={
+              getAttribute<ImageInputType>(data, 'section-1', 'hero')
+                .imgUrl as string
+            }
+            link={
+              getAttribute<ImageInputType>(data, 'section-1', 'hero')
+                .link as string
+            }
+            type={getAttribute<ImageInputType>(data, 'section-1', 'hero').type}
           />
         </AnimatedHero>
         <div className="p-5 mb-8 flex lg:flex-row flex-col gap-4">
           <div className="flex-none lg:w-1/3">
             <div className="text-3xl mb-3 font-bold">
-              {
-                memoizedAboutAttributesData?.find(
-                  attr => attr.name === 'title-1'
-                )?.data
-              }
+              {getAttribute<string>(data, 'section-2', 'title-1')}
             </div>
-            <p className="mb-5 font-light">
-              {
-                memoizedAboutAttributesData?.find(
-                  attr => attr.name === 'text-1'
-                )?.data
-              }
-            </p>
-            <p className="font-light">
-              {
-                memoizedAboutAttributesData?.find(
-                  attr => attr.name === 'text-2'
-                )?.data
-              }
-            </p>
+            <div
+              className="mb-5 font-light"
+              dangerouslySetInnerHTML={{
+                __html: getAttribute<string>(data, 'section-2', 'text-1')
+              }}
+            ></div>
           </div>
           <div className="flex-none lg:w-2/3">
             <GaleriSwiper
-              data={
-                memoizedAboutAttributesData?.find(
-                  attr => attr.name === 'swiper-1'
-                )?.data as ImageGridType[]
-              }
+              data={getAttribute<ImageGridType[]>(
+                data,
+                'section-2',
+                'swiper-1'
+              )}
             />
           </div>
         </div>
         <div className="p-5 mb-8 flex lg:flex-row flex-col gap-4">
           <div className="flex-[3_3_0%]">
             <div className="text-3xl font-bold mb-3">
-              {
-                memoizedCatalogueAttributesData?.find(
-                  attr => attr.name === 'title-1'
-                )?.data
-              }
+              {getAttribute<string>(data, 'section-3', 'title-1')}
             </div>
-            <AnimatedHero>
-              <Image
-                sizes="100vw"
-                width="0"
-                height="0"
-                src={
-                  memoizedCatalogueAttributesData?.find(
-                    attr => attr.name === 'image-1'
-                  )?.data
-                }
-                alt="catalog-imarta"
-                className="object-contain w-full h-auto"
-              />
-            </AnimatedHero>
+            <ImageLandingPage
+              src={
+                getAttribute<ImageInputType>(data, 'section-3', 'image-1')
+                  .imgUrl as string
+              }
+              link={
+                getAttribute<ImageInputType>(data, 'section-3', 'image-1')
+                  .link as string
+              }
+              type={
+                getAttribute<ImageInputType>(data, 'section-3', 'image-1').type
+              }
+            />
           </div>
           <div className="flex-[2_2_0%]">
             <div className="text-3xl font-bold mb-3">
-              {
-                memoizedOfficialMerchAttributesData?.find(
-                  attr => attr.name === 'title-1'
-                )?.data
-              }
+              {getAttribute<string>(data, 'section-4', 'title-1')}
             </div>
-            <AnimatedHero>
-              <Image
-                sizes="100vw"
-                width="0"
-                height="0"
-                src={
-                  memoizedOfficialMerchAttributesData?.find(
-                    attr => attr.name === 'image-1'
-                  )?.data
-                }
-                alt="catalog-imarta"
-                className="object-contain w-full h-auto"
-              />
-            </AnimatedHero>
+            <ImageLandingPage
+              src={
+                getAttribute<ImageInputType>(data, 'section-4', 'image-1')
+                  .imgUrl as string
+              }
+              link={
+                getAttribute<ImageInputType>(data, 'section-4', 'image-1')
+                  .link as string
+              }
+              type={
+                getAttribute<ImageInputType>(data, 'section-4', 'image-1').type
+              }
+            />
           </div>
         </div>
         <div className="p-5 mb-8">
           <div className="text-3xl font-bold mb-5">
-            {
-              memoizedContactAttributesData?.find(
-                attr => attr.name === 'title-1'
-              )?.data
-            }
+            {getAttribute<string>(data, 'section-5', 'title-1')}
           </div>
-          <div className="font-bold mb-3 text-sm">
-            {
-              memoizedContactAttributesData?.find(
-                attr => attr.name === 'linktree'
-              )?.data
-            }
-          </div>
+          <div
+            className="font-bold mb-3 text-sm"
+            dangerouslySetInnerHTML={{
+              __html: getAttribute<string>(data, 'section-5', 'linktree')
+            }}
+          ></div>
           <div className="font-bold">INSTAGRAM</div>
-          <div className="font-light mb-3">
-            {
-              memoizedContactAttributesData?.find(
-                attr => attr.name === 'instagram'
-              )?.data
-            }
-          </div>
+          <div
+            className="font-light mb-3"
+            dangerouslySetInnerHTML={{
+              __html: getAttribute<string>(data, 'section-5', 'instagram')
+            }}
+          ></div>
           <div className="font-bold">LINE OFFICIAL ACCOUNT</div>
-          <div className="font-light mb-3">
-            {
-              memoizedContactAttributesData?.find(attr => attr.name === 'line')
-                ?.data
-            }
-          </div>
+          <div
+            className="font-light mb-3"
+            dangerouslySetInnerHTML={{
+              __html: getAttribute<string>(data, 'section-5', 'line')
+            }}
+          ></div>
           <div className="font-bold">LOCATION</div>
           <div
             className="font-light"
             dangerouslySetInnerHTML={{
-              __html: memoizedContactAttributesData?.find(
-                attr => attr.name === 'address'
-              )?.data
+              __html: getAttribute<string>(data, 'section-5', 'address')
             }}
           ></div>
         </div>

@@ -78,7 +78,7 @@ export default function Modal({
                   >
                     {title}
                   </Dialog.Title>
-                  <div className="mt-5">{children}</div>
+                  <div className={`${title ? 'mt-5' : ''}`}>{children}</div>
 
                   {isActionable && (
                     <div className="flex gap-3 mt-5">
