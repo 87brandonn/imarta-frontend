@@ -37,6 +37,7 @@
     "react-select-async-paginate": "^0.7.0",
     "sharp": "^0.31.1",
     "swiper": "^8.4.4",
+    "tailwind-merge": "^1.7.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

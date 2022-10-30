@@ -1,5 +1,5 @@
-import cx from 'classnames';
 import type { NextPage } from 'next';
+import { twMerge as cx } from 'tailwind-merge';
 import Head from 'next/head';
 import Link from 'next/link';
 import React, { RefObject, useEffect, useRef, useState } from 'react';

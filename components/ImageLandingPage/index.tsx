@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import Image from 'next/future/image';
-import cx from 'classnames';
+import { twMerge as cx } from 'tailwind-merge';
 import AnimatedHero from '../AnimatedHero';
 import MediaPreviewer from '../MediaPreviewer';
 import { ImageInputType } from '../Admin/ImageInput';

@@ -119,32 +119,30 @@ function GaleriLawang({
         </div>
         <Hero2 data={memoizedImageGridData} />
         <div className="mx-4 lg:mx-8 mb-8 lg:mb-16">
-          <AnimatedHero>
-            <ImageLandingPage
-              className="lg:h-[85vh]"
-              src={
-                (
-                  memoizedKomikLawangAttributesData?.find(
-                    attr => attr.name === 'image-1'
-                  )?.data as ImageInputType
-                ).imgUrl as string
-              }
-              link={
-                (
-                  memoizedKomikLawangAttributesData?.find(
-                    attr => attr.name === 'image-1'
-                  )?.data as ImageInputType
-                ).link as string
-              }
-              type={
-                (
-                  memoizedKomikLawangAttributesData?.find(
-                    attr => attr.name === 'image-1'
-                  )?.data as ImageInputType
-                ).type
-              }
-            />
-          </AnimatedHero>
+          <ImageLandingPage
+            className="lg:h-[85vh]"
+            src={
+              (
+                memoizedKomikLawangAttributesData?.find(
+                  attr => attr.name === 'image-1'
+                )?.data as ImageInputType
+              ).imgUrl as string
+            }
+            link={
+              (
+                memoizedKomikLawangAttributesData?.find(
+                  attr => attr.name === 'image-1'
+                )?.data as ImageInputType
+              ).link as string
+            }
+            type={
+              (
+                memoizedKomikLawangAttributesData?.find(
+                  attr => attr.name === 'image-1'
+                )?.data as ImageInputType
+              ).type
+            }
+          />
         </div>
         <PodcastSection data={memoizedPodcastAttributesData} />
         <SayembaraSection data={memoizedSayembaraAttributesData} />

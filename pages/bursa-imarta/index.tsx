@@ -26,19 +26,17 @@ function BursaImarta({
   return (
     <>
       <AppLayout title="Bursa Imarta">
-        <AnimatedHero>
-          <ImageLandingPage
-            src={
-              getAttribute<ImageInputType>(data, 'section-1', 'hero')
-                .imgUrl as string
-            }
-            link={
-              getAttribute<ImageInputType>(data, 'section-1', 'hero')
-                .link as string
-            }
-            type={getAttribute<ImageInputType>(data, 'section-1', 'hero').type}
-          />
-        </AnimatedHero>
+        <ImageLandingPage
+          src={
+            getAttribute<ImageInputType>(data, 'section-1', 'hero')
+              .imgUrl as string
+          }
+          link={
+            getAttribute<ImageInputType>(data, 'section-1', 'hero')
+              .link as string
+          }
+          type={getAttribute<ImageInputType>(data, 'section-1', 'hero').type}
+        />
         <div className="p-5 mb-8 flex lg:flex-row flex-col gap-4">
           <div className="flex-none lg:w-1/3">
             <div className="text-3xl mb-3 font-bold">
