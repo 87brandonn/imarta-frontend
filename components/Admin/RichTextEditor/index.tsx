@@ -8,7 +8,7 @@ import {
   Modifier,
   CompositeDecorator
 } from 'draft-js';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { Bold, Italic, Paperclip, Underline } from 'react-feather';
@@ -31,7 +31,11 @@ function findLinkEntities(contentBlock, callback, contentState) {
 const Link = props => {
   const { url } = props.contentState.getEntity(props.entityKey).getData();
   return (
-    <a href={url} style={{ color: '#3b5998', textDecoration: 'underline' }}>
+    <a
+      href={url}
+      target="__blank"
+      style={{ color: '#3b5998', textDecoration: 'underline' }}
+    >
       {props.children}
     </a>
   );
@@ -61,7 +65,16 @@ const RichTextEditor = React.forwardRef<
   BBBRichTextEditorTypes
 >(({ value, onChange }, ref) => {
   const [editorState, setEditorState] = React.useState(() =>
-    EditorState.createEmpty(decorator)
+    value
+      ? EditorState.createWithContent(
+          ContentState.createFromBlockArray(
+            htmlToDraft(value || '').contentBlocks,
+            htmlToDraft(value || '').entityMap
+          ),
+          // add the decorator after the state
+          decorator
+        )
+      : EditorState.createEmpty()
   );
   const [showUrlInput, setShowUrlInput] = useState(false);
   const [urlValue, setUrlValue] = useState('');
@@ -143,18 +156,6 @@ const RichTextEditor = React.forwardRef<
 
   const inlineStyle = editorState.getCurrentInlineStyle();
 
-  useEffect(() => {
-    const blocksFromHTML = htmlToDraft(value || '');
-    setEditorState(
-      EditorState.createWithContent(
-        ContentState.createFromBlockArray(
-          blocksFromHTML.contentBlocks,
-          blocksFromHTML.entityMap
-        )
-      )
-    );
-  }, [value]);
-
   const onInlineClick = (style: string) => {
     const nextState = RichUtils.toggleInlineStyle(editorState, style);
     setEditorState(nextState);
@@ -174,7 +175,15 @@ const RichTextEditor = React.forwardRef<
             {d.icon || d.label}
           </div>
         ))}
-        <Paperclip size={14} onClick={promptForLink} />
+        <Paperclip
+          size={14}
+          onClick={promptForLink}
+          className={`cursor-pointer ${
+            editorState.getSelection().isCollapsed()
+              ? 'pointer-events-none opacity-40'
+              : ''
+          }`}
+        />
       </div>
 
       {showUrlInput && (
@@ -187,8 +196,15 @@ const RichTextEditor = React.forwardRef<
             className="grow"
             onKeyDown={onLinkInputKeyDown}
           />
-
           <button onMouseDown={confirmLink}>Confirm</button>
+          <button
+            onMouseDown={() => {
+              setShowUrlInput(false);
+              setUrlValue('');
+            }}
+          >
+            Cancel
+          </button>
         </div>
       )}
       <div
