@@ -114,9 +114,12 @@ function RepositoryDetail({
             <div className="font-light">{data.description}</div>
           </div>
           <div>
-            {data.staffs?.split(', ').map((staff, i) => (
-              <div className={i === 0 ? 'font-medium' : 'font-light'} key={i}>
-                {staff}
+            {data.workProgramStaffs?.map((staff, i) => (
+              <div
+                className={staff.isLead ? 'font-medium' : 'font-light'}
+                key={i}
+              >
+                {staff.name}
               </div>
             ))}
           </div>

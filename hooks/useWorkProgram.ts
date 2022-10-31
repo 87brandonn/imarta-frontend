@@ -8,6 +8,7 @@ export type WorkProgramFilter = Nullable<
   WorkProgram & {
     departments: number[];
     fields: number[];
+    staffs: string;
   }
 >;
 

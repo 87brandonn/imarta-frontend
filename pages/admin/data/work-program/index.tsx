@@ -51,6 +51,7 @@ type WorkProgramForm = Omit<WorkProgram, 'participationCount'> & {
   departments: Department[];
   fields: Field[];
   participationCount: string;
+  staffs: string;
 };
 
 function Admin() {
@@ -255,7 +256,11 @@ function Admin() {
                 <td>{workProgram.period?.label}</td>
                 <td>{workProgram.participationCount}</td>
                 <td>{workProgram.collaborators}</td>
-                <td>{workProgram.staffs}</td>
+                <td>
+                  {workProgram.workProgramStaffs
+                    ?.map(staff => staff.name)
+                    .join(',')}
+                </td>
                 <td>
                   {workProgram.workProgramDepartments
                     ?.map(data => data.department.name)

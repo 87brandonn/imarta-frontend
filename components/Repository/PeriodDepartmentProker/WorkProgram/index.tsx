@@ -24,7 +24,11 @@ function RepositoryWorkProgram({ id, search }: RepositoryWorkProgramProps) {
       workProgram?.collaborators
         ?.toLowerCase()
         .includes(search.toLowerCase()) ||
-      workProgram?.staffs?.toLowerCase().includes(search.toLowerCase())
+      workProgram?.workProgramStaffs
+        ?.map(staff => staff.name)
+        .join(',')
+        ?.toLowerCase()
+        .includes(search.toLowerCase())
     )
   ) {
     return null;
