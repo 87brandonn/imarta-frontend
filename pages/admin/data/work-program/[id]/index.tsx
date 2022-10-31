@@ -17,7 +17,8 @@ import {
   Field,
   Period,
   WorkProgram,
-  WorkProgramDocumentation
+  WorkProgramDocumentation,
+  WorkProgramStaff
 } from '../../../../../types';
 import TextInput from '../../../../../components/Admin/TextInput';
 import TextareaInput from '../../../../../components/Admin/TextareaInput';
@@ -30,7 +31,7 @@ const schema = yup
     collaborators: yup.string().label('Collaborators'),
     startDate: yup.string().required().label('Start date'),
     endDate: yup.string().required().label('End date'),
-    staffs: yup.string().label('Staff'),
+    staffs: yup.mixed<WorkProgramStaff[]>().label('Staff'),
     departments: yup.mixed<Department[]>().label('Departments'),
     fields: yup.mixed<Field[]>().label('Fields'),
     period: yup.mixed<Period>().label('Period').required()
@@ -44,7 +45,7 @@ const defaultValues = {
   description: '',
   participationCount: '',
   collaborators: '',
-  staffs: '',
+  staffs: [],
   departments: [],
   fields: [],
   startDate: defaultDate,
@@ -55,6 +56,7 @@ const defaultValues = {
 
 export type WorkProgramPayload = Omit<WorkProgram, 'participationCount'> & {
   departments: Department[];
+  staffs: Partial<WorkProgramStaff>[];
   fields: Field[];
   period: Period;
   documentations: Partial<WorkProgramDocumentation>[];
@@ -86,6 +88,15 @@ function Admin() {
     name: 'documentations'
   });
 
+  const {
+    fields: staffFields,
+    append: appendStaffs,
+    remove: removeStaffs
+  } = useFieldArray({
+    control,
+    name: 'staffs'
+  });
+
   const { mutate } = useCreateOrEditWorkProgram();
 
   const onSubmit = (data: WorkProgramPayload) => {
@@ -108,7 +119,7 @@ function Admin() {
         ? data?.participationCount?.toString()
         : '',
       collaborators: data?.collaborators || '',
-      staffs: data?.staffs || '',
+      staffs: data?.workProgramStaffs || [],
       startDate: dayjs(data?.startDate).format('YYYY-MM-DD') || defaultDate,
       endDate: dayjs(data?.endDate).format('YYYY-MM-DD') || defaultDate,
       departments:
@@ -171,11 +182,58 @@ function Admin() {
           <p className="text-red-400">{errors.endDate?.message}</p>
         </div>
 
-        <TextareaInput
-          label="Staffs"
-          error={errors.staffs?.message}
-          {...register('staffs')}
-        />
+        <div className="mb-3">
+          <div>Staff</div>
+          <div className="grid grid-cols-4 gap-4 mb-4">
+            {watch('staffs').map((staff, i) => (
+              <div key={staff.id}>
+                <div className="flex gap-2">
+                  <Controller
+                    control={control}
+                    name={`staffs.${i}.name`}
+                    render={({ field }) => (
+                      <>
+                        <TextInput {...field} />
+                      </>
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name={`staffs.${i}.isLead`}
+                    render={({ field }) => (
+                      <div>
+                        <input
+                          type="checkbox"
+                          checked={field.value}
+                          onChange={field.onChange}
+                        />
+                        <div className="text-sm text-gray-400">Lead</div>
+                      </div>
+                    )}
+                  />
+                </div>
+                <Button
+                  onClick={() => {
+                    removeStaffs(i);
+                  }}
+                >
+                  Remove
+                </Button>
+              </div>
+            ))}
+          </div>
+          <Button
+            onClick={() => {
+              appendStaffs({
+                name: '',
+                isLead: false
+              });
+            }}
+            className="mb-3"
+          >
+            Add staffs
+          </Button>
+        </div>
 
         <div>Department</div>
 

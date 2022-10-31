@@ -19,6 +19,17 @@ export type Module = {
 };
 
 /**
+ * Model WorkProgramStaff
+ *
+ */
+export type WorkProgramStaff = {
+  id: number;
+  workProgramId: number;
+  name: string;
+  isLead: boolean;
+};
+
+/**
  * Model Section
  *
  */
@@ -84,7 +95,6 @@ export type WorkProgram = {
   endDate: string | null;
   participationCount: number | null;
   collaborators: string | null;
-  staffs: string | null;
 };
 
 /**

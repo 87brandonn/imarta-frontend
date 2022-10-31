@@ -7,7 +7,8 @@ import {
   WorkProgram,
   WorkProgramDepartment,
   WorkProgramDocumentation,
-  WorkProgramField
+  WorkProgramField,
+  WorkProgramStaff
 } from '../../types';
 import { PaginatedApiResponseType } from '../../types/api';
 
@@ -19,6 +20,7 @@ export type WorkProgramWithAssociation = WorkProgram & {
     field: Field;
   })[];
   workProgramDocumentations?: WorkProgramDocumentation[];
+  workProgramStaffs?: WorkProgramStaff[];
   period: Period;
 };
 
