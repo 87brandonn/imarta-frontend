@@ -35,6 +35,8 @@ function RepositoryDetail({
           pagination={{
             clickable: true
           }}
+          preloadImages={false}
+          lazy
           loop
           navigation={true}
           modules={[Pagination, Navigation]}

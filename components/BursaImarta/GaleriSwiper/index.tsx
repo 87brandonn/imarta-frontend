@@ -19,6 +19,8 @@ function GaleriSwiper({ data }: GaleriSwiperProps) {
       pagination={{
         clickable: true
       }}
+      preloadImages={false}
+      lazy
       loop
       navigation={true}
       modules={[Pagination, Navigation]}

@@ -19,6 +19,8 @@ function SayembaraSwiper({ data }: SayembaraSwiperProps) {
       pagination={{
         clickable: true
       }}
+      preloadImages={false}
+      lazy
       loop
       navigation={true}
       modules={[Pagination, Navigation]}
