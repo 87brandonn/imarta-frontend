@@ -93,7 +93,7 @@ export type WorkProgram = {
   description: string | null;
   startDate: string | null;
   endDate: string | null;
-  participationCount: number | null;
+  participationCount: string | null;
   collaborators: string | null;
 };
 

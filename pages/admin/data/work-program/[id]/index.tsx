@@ -115,9 +115,7 @@ function Admin() {
       id: data?.id || undefined,
       name: data?.name || '',
       description: data?.description || '',
-      participationCount: data?.participationCount
-        ? data?.participationCount?.toString()
-        : '',
+      participationCount: data?.participationCount || '',
       collaborators: data?.collaborators || '',
       staffs: data?.workProgramStaffs || [],
       startDate: dayjs(data?.startDate).format('YYYY-MM-DD') || defaultDate,

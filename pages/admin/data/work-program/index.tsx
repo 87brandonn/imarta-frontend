@@ -101,9 +101,7 @@ function Admin() {
     setFilterFields({
       name: data.name?.length ? data.name : undefined,
       description: data.description?.length ? data.description : undefined,
-      participationCount: data.participationCount
-        ? parseInt(data.participationCount, 10)
-        : undefined,
+      participationCount: data.participationCount,
       collaborators: data.collaborators?.length
         ? data.collaborators
         : undefined,

@@ -83,7 +83,7 @@ function RepositoryDetail({
             </div>
             <div className="text-lg font-light flex">
               <div className="flex-1">Peserta</div>
-              <div className="flex-1">: {data.participationCount} orang</div>
+              <div className="flex-1">: {data.participationCount}</div>
             </div>
             <div className="text-lg font-light flex">
               <div className="flex-1">Kolaborator</div>

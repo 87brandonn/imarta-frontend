@@ -12,7 +12,7 @@ const useCreateOrEditWorkProgram = () => {
     async ({ period, ...payload }: WorkProgramPayload) => {
       const { data } = await axios.post(`/data/work-program`, {
         ...payload,
-        participationCount: parseInt(payload.participationCount, 10),
+        participationCount: payload.participationCount,
         startDate: dayjs(payload.startDate).toDate(),
         endDate: dayjs(payload.endDate).toDate(),
         departments: payload.departments.map(dep => dep.id),
