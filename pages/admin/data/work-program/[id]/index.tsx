@@ -313,9 +313,11 @@ function Admin() {
                         );
                         onChange(img?.imgUrl);
                       }}
-                      onDelete={() => remove(i)}
                       withoutLink
                     />
+                    <Button className="mt-3" onClick={() => remove(i)}>
+                      Remove
+                    </Button>
                   </>
                 )}
               />
