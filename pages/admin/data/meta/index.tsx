@@ -26,8 +26,6 @@ function AdminMeta() {
       ]
     });
 
-  if (isLoading) return 'Loading..';
-
   return (
     <AdminLayout isDashboardData>
       <div className="max-w-4xl mx-auto mt-12">
@@ -38,36 +36,40 @@ function AdminMeta() {
         </div>
         <table className="bg-white max-h-[85vh] overflow-y-auto rounded-xl shadow-lg overflow-x-auto block">
           <thead className="border-b">
-            <th>ID</th>
-            <th>Title</th>
-            <th>Vision</th>
-            <th>Mission</th>
-            <th>Period</th>
-            <th>Action</th>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Vision</th>
+              <th>Mission</th>
+              <th>Period</th>
+              <th>Action</th>
+            </tr>
           </thead>
           <tbody>
-            {data?.map((meta, i) => (
-              <tr key={meta.id}>
-                <td>{meta.id}</td>
-                <td>{meta.title}</td>
-                <td>{meta.vision}</td>
-                <td>
-                  {meta.organizationMetaMissions
-                    .map(mission => mission.value)
-                    .join(',')}
-                </td>
-                <td>{meta.period.label}</td>
-                <td>
-                  <Link href={`/admin/data/meta/${meta.id}`}>
-                    <Edit />
-                  </Link>
-                  <Trash
-                    className="text-red-400"
-                    onClick={() => handleDelete(meta.id)}
-                  />
-                </td>
-              </tr>
-            ))}
+            {isLoading
+              ? 'Loading'
+              : data?.map((meta, i) => (
+                  <tr key={meta.id}>
+                    <td>{meta.id}</td>
+                    <td>{meta.title}</td>
+                    <td>{meta.vision}</td>
+                    <td>
+                      {meta.organizationMetaMissions
+                        .map(mission => mission.value)
+                        .join(',')}
+                    </td>
+                    <td>{meta.period.label}</td>
+                    <td>
+                      <Link href={`/admin/data/meta/${meta.id}`}>
+                        <Edit />
+                      </Link>
+                      <Trash
+                        className="text-red-400"
+                        onClick={() => handleDelete(meta.id)}
+                      />
+                    </td>
+                  </tr>
+                ))}
           </tbody>
         </table>
       </div>

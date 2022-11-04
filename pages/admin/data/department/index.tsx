@@ -15,8 +15,6 @@ function AdminDepartment() {
     limit
   });
 
-  if (isLoading) return 'Loading..';
-
   return (
     <AdminLayout isDashboardData>
       <div className="max-w-4xl mx-auto mt-12">
@@ -35,19 +33,21 @@ function AdminDepartment() {
             </tr>
           </thead>
           <tbody>
-            {data?.data.map((workProgram, i) => (
-              <tr key={workProgram.id}>
-                <td>{workProgram.id}</td>
-                <td>{workProgram.name}</td>
-                <td>{workProgram.leader}</td>
-                <td>
-                  <Link href={`/admin/data/department/${workProgram.id}`}>
-                    <Edit />
-                  </Link>
-                  <Trash className="text-red-400" />
-                </td>
-              </tr>
-            ))}
+            {isLoading
+              ? 'Loading'
+              : data?.data.map((workProgram, i) => (
+                  <tr key={workProgram.id}>
+                    <td>{workProgram.id}</td>
+                    <td>{workProgram.name}</td>
+                    <td>{workProgram.leader}</td>
+                    <td>
+                      <Link href={`/admin/data/department/${workProgram.id}`}>
+                        <Edit />
+                      </Link>
+                      <Trash className="text-red-400" />
+                    </td>
+                  </tr>
+                ))}
           </tbody>
         </table>
         <ReactPaginate

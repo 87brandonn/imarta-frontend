@@ -27,8 +27,6 @@ function Admin() {
       ]
     });
 
-  if (isLoading) return 'Loading..';
-
   return (
     <AdminLayout isDashboardData>
       <div className="max-w-4xl mx-auto my-12">
@@ -40,23 +38,27 @@ function Admin() {
 
         <table className="bg-white max-h-[85vh] overflow-y-auto rounded-xl shadow-lg overflow-x-auto block">
           <thead className="border-b">
-            <th>ID</th>
-            <th>Period</th>
-            <th></th>
+            <tr>
+              <th>ID</th>
+              <th>Period</th>
+              <th></th>
+            </tr>
           </thead>
           <tbody>
-            {data?.map((period, i) => (
-              <tr key={period.id}>
-                <td>{period.id}</td>
-                <td>{period.label}</td>
-                <td className="flex">
-                  <Trash
-                    className="text-red-400"
-                    onClick={() => handleDelete(period.id)}
-                  />
-                </td>
-              </tr>
-            ))}
+            {isLoading
+              ? 'Loading'
+              : data?.map((period, i) => (
+                  <tr key={period.id}>
+                    <td>{period.id}</td>
+                    <td>{period.label}</td>
+                    <td className="flex">
+                      <Trash
+                        className="text-red-400"
+                        onClick={() => handleDelete(period.id)}
+                      />
+                    </td>
+                  </tr>
+                ))}
           </tbody>
         </table>
       </div>
