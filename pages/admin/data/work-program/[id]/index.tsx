@@ -311,7 +311,7 @@ function Admin() {
                             ? 'VIDEO'
                             : 'IMAGE'
                         );
-                        onChange(img?.imgUrl);
+                        onChange(img?.imgUrl || '');
                       }}
                       withoutLink
                     />
