@@ -10,7 +10,7 @@ type HeroGridProps = {
 
 function HeroGrid({ data }: HeroGridProps) {
   return (
-    <div className="grid grid-cols-2 mb-8 lg:mb-16">
+    <div className="grid lg:grid-cols-2 mb-8 lg:mb-16">
       {data?.map((imgGrid, i) => (
         <div className="flex-1" key={i}>
           <AnimatedHero className="relative">

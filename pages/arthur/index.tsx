@@ -126,7 +126,7 @@ function Arthur({
               )?.data
             }
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid lg:grid-cols-2 gap-4">
             {(
               memoizedPerformanceAttributesData?.find(
                 attr => attr.name === 'img-grid-1'

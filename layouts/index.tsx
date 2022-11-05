@@ -33,6 +33,7 @@ const AppLayout: NextPage<AppLayoutProps> = ({
       document.body.style.overflow = 'unset';
     }
   }, [isActive]);
+
   return (
     <>
       <Head>
@@ -52,6 +53,19 @@ const AppLayout: NextPage<AppLayoutProps> = ({
           {navbarData.map((nav, i) => (
             <div className="mb-4" key={i}>
               {nav.href ? <Link href={nav.href}>{nav.title}</Link> : nav.title}
+              <div className="ml-3 mt-2">
+                {nav.subMenu?.map(sub => (
+                  <div key={sub.title} className="mb-2 text-gray-500">
+                    {sub.isExternal ? (
+                      <a href={sub.url} target="__blank">
+                        {sub.title}
+                      </a>
+                    ) : (
+                      <Link href={sub.url}>{sub.title}</Link>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>

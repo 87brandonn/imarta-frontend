@@ -97,7 +97,8 @@ function Admin() {
     name: 'staffs'
   });
 
-  const { mutate } = useCreateOrEditWorkProgram();
+  const { mutate, isLoading: isLoadingCreateOrUpdate } =
+    useCreateOrEditWorkProgram();
 
   const onSubmit = (data: WorkProgramPayload) => {
     mutate(data);
@@ -338,7 +339,12 @@ function Admin() {
         </Button>
 
         <div>
-          <Button onClick={() => handleSubmit(onSubmit)()}>Submit</Button>
+          <Button
+            onClick={() => handleSubmit(onSubmit)()}
+            disabled={isLoadingCreateOrUpdate}
+          >
+            Submit
+          </Button>
         </div>
       </form>
     </div>
