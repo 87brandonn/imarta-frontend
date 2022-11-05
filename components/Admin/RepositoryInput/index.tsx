@@ -7,13 +7,13 @@ import * as yup from 'yup';
 import usePeriod from '../../../hooks/usePeriod';
 import getDepartmentById from '../../../services/api/getDepartmentById';
 import getPeriodById from '../../../services/api/getPeriodById';
-import getWorkProgramById from '../../../services/api/getWorkProgramById';
 import { Department, Period, WorkProgram } from '../../../types';
 import Button from '../Button';
 import PeriodDepartmentOptions from './PeriodDepartmentOptions';
 
 export type RepositoryFromApi = {
   periodId: number;
+  isComingSoon: boolean;
   departments: {
     id: number;
   }[];
@@ -26,6 +26,7 @@ export type RepositoryDepartment = {
 export type RepositoryForm = {
   repository: {
     period?: Period;
+    isComingSoon?: boolean;
     departments?: RepositoryDepartment[];
   }[];
 };
@@ -57,6 +58,7 @@ function RepositoryInput({ data, onChange }: RepositoryInputProps) {
     control,
     handleSubmit,
     reset,
+    register,
     formState: { errors },
     setValue
   } = useForm<RepositoryForm>({
@@ -83,7 +85,8 @@ function RepositoryInput({ data, onChange }: RepositoryInputProps) {
           ]);
           return {
             period,
-            departments
+            departments,
+            isComingSoon: repositoryData.isComingSoon
           };
         }) || []
       );
@@ -115,7 +118,8 @@ function RepositoryInput({ data, onChange }: RepositoryInputProps) {
               ?.filter(deps => !!deps.department)
               .map(dep => ({
                 id: dep.department!.id
-              })) || []
+              })) || [],
+          isComingSoon: repository.isComingSoon || false
         }))
     );
   };
@@ -131,6 +135,14 @@ function RepositoryInput({ data, onChange }: RepositoryInputProps) {
             <div className="flex items-center gap-3">
               <div className="grow">
                 <div>Section {i + 1}</div>
+                <div className="flex  items-center gap-2 mb-3">
+                  <input
+                    type="checkbox"
+                    {...register(`repository.${i}.isComingSoon`)}
+                  />
+                  <div className="text-gray-400">Coming soon</div>
+                </div>
+
                 <Controller
                   control={control}
                   name={`repository.${i}.period`}
@@ -172,7 +184,13 @@ function RepositoryInput({ data, onChange }: RepositoryInputProps) {
         ))}
       </div>
       <Button
-        onClick={() => append({ period: undefined, departments: undefined })}
+        onClick={() =>
+          append({
+            period: undefined,
+            departments: undefined,
+            isComingSoon: undefined
+          })
+        }
       >
         Add section
       </Button>

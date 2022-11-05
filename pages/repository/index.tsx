@@ -41,18 +41,18 @@ function Repository({
       ?.data as RepositoryFromApi[];
   }, [data.sections]);
 
+  console.log(memoizedRepositoryListData);
+
   return (
     <AppLayout title="Repository">
       <div className="relative">
-        <AnimatedHero>
-          <ImageLandingPage
-            src={memoizedHeroData.imgUrl as string}
-            type={memoizedHeroData.type}
-            link={memoizedHeroData.link}
-            priority
-            showYoutubePlayer
-          />
-        </AnimatedHero>
+        <ImageLandingPage
+          src={memoizedHeroData.imgUrl as string}
+          type={memoizedHeroData.type}
+          link={memoizedHeroData.link}
+          priority
+          showYoutubePlayer
+        />
         <div className="absolute top-2 left-2 flex items-center gap-2">
           <Menu size={36} />
           <input
