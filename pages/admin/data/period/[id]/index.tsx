@@ -5,46 +5,43 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import Button from '../../../../../components/Admin/Button';
 import TextInput from '../../../../../components/Admin/TextInput';
-import useCreateOrEditField from '../../../../../hooks/useCreateOrEditField';
-import useFieldById from '../../../../../hooks/useFieldById';
-import { Department } from '../../../../../types';
+import useCreateOrEditPeriod from '../../../../../hooks/useCreateOrEditPeriod';
+import usePeriodById from '../../../../../hooks/usePeriodById';
+import { Period } from '../../../../../types';
 
 const schema = yup
   .object({
     id: yup.number(),
-    name: yup.string().required(),
-    leader: yup.string().required()
+    label: yup.string().required().label('Period name')
   })
   .required();
 
-function AdminFieldDetail() {
+function AdminPeriodDetail() {
   const { query } = useRouter();
 
   const {
-    control,
     handleSubmit,
     reset,
     formState: { errors },
     register
-  } = useForm<Department>({
+  } = useForm<Period>({
     resolver: yupResolver(schema),
     defaultValues: {
-      name: '',
-      leader: ''
+      label: ''
     }
   });
 
-  const { mutate } = useCreateOrEditField();
+  const { mutate } = useCreateOrEditPeriod();
 
-  const onSubmit = (data: Department) => mutate(data);
+  const onSubmit = (data: Period) => mutate(data);
 
-  const { data, isLoading, error } = useFieldById(query.id as string);
+  const { data, isLoading, error } = usePeriodById(
+    parseInt(query.id as string, 10)
+  );
 
   useEffect(() => {
     reset({
-      name: data?.name || '',
-      leader: data?.leader || '',
-      id: data?.id || undefined
+      label: data?.label || ''
     });
   }, [data, reset]);
 
@@ -57,14 +54,9 @@ function AdminFieldDetail() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextInput
           label="Name"
-          error={errors.name?.message}
-          {...register('name')}
-        />
-
-        <TextInput
-          label="Leader"
-          error={errors.leader?.message}
-          {...register('leader')}
+          error={errors.label?.message}
+          placeholder="Enter period name"
+          {...register('label')}
         />
 
         <Button type="submit" className="mt-4">
@@ -75,4 +67,4 @@ function AdminFieldDetail() {
   );
 }
 
-export default AdminFieldDetail;
+export default AdminPeriodDetail;

@@ -16,13 +16,11 @@ export type RepositoryFromApi = {
   periodId: number;
   departments: {
     id: number;
-    workProgramIds: number[];
   }[];
 };
 
 export type RepositoryDepartment = {
   department?: Department;
-  workPrograms?: WorkProgram[];
 };
 
 export type RepositoryForm = {
@@ -74,14 +72,12 @@ function RepositoryInput({ data, onChange }: RepositoryInputProps) {
         data?.map(async repositoryData => {
           const [period, ...departments] = await Promise.all([
             getPeriodById(repositoryData.periodId),
-            ...(repositoryData.departments || [])?.map(async dep => {
-              const [department, ...workPrograms] = await Promise.all([
-                getDepartmentById(dep.id),
-                ...dep.workProgramIds.map(getWorkProgramById)
+            ...(repositoryData.departments || []).map(async dep => {
+              const [department] = await Promise.all([
+                getDepartmentById(dep.id)
               ]);
               return {
-                department,
-                workPrograms
+                department
               };
             })
           ]);
@@ -118,8 +114,7 @@ function RepositoryInput({ data, onChange }: RepositoryInputProps) {
             repository.departments
               ?.filter(deps => !!deps.department)
               .map(dep => ({
-                id: dep.department!.id,
-                workProgramIds: dep.workPrograms?.map(wp => wp.id) || []
+                id: dep.department!.id
               })) || []
         }))
     );

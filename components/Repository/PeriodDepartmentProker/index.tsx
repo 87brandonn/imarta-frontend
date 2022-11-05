@@ -26,12 +26,7 @@ function PeriodDepartmentProker({ data, search }: PeriodDepartmentProkerProps) {
           {i !== data.departments.length - 1 && (
             <div className="absolute top-0 right-0 transform -translate-y-1/2 z-10 translate-x-1/2 bg-black w-2 h-2 rounded-full" />
           )}
-          <RepositoryDepartment id={departmentProkerData.id} />
-          <div className="grid grid-cols-2 gap-6">
-            {departmentProkerData.workProgramIds.map((workProgram, i) => (
-              <RepositoryWorkProgram search={search} id={workProgram} key={i} />
-            ))}
-          </div>
+          <RepositoryDepartment search={search} id={departmentProkerData.id} />
         </div>
       ))}
     </div>

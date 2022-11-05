@@ -70,7 +70,7 @@ function AdminMetaDetail() {
     mutate(data);
   };
 
-  const { data, isLoading } = useMetaById(query.id as string);
+  const { data, isLoading, error } = useMetaById(query.id as string);
 
   useEffect(() => {
     reset({
@@ -84,6 +84,8 @@ function AdminMetaDetail() {
   }, [data, reset]);
 
   if (isLoading) return 'Loading..';
+
+  if (error) return 'Something went wrong. Please refresh the page';
 
   return (
     <div className="max-w-4xl mx-auto mt-12">

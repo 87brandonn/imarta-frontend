@@ -103,7 +103,7 @@ function Admin() {
     mutate(data);
   };
 
-  const { data, isLoading } = useWorkProgramById(query.id as string);
+  const { data, isLoading, error } = useWorkProgramById(query.id as string);
 
   const { data: departments } = useDepartments();
   const { data: periods } = usePeriod();
@@ -132,6 +132,8 @@ function Admin() {
   }, [data, reset]);
 
   if (isLoading) return 'Loading..';
+
+  if (error) return 'Something went wrong. Please refresh the page';
 
   return (
     <div className="max-w-4xl mx-auto my-12">

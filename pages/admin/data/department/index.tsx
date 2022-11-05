@@ -33,21 +33,25 @@ function AdminDepartment() {
             </tr>
           </thead>
           <tbody>
-            {isLoading
-              ? 'Loading'
-              : data?.data.map((workProgram, i) => (
-                  <tr key={workProgram.id}>
-                    <td>{workProgram.id}</td>
-                    <td>{workProgram.name}</td>
-                    <td>{workProgram.leader}</td>
-                    <td>
-                      <Link href={`/admin/data/department/${workProgram.id}`}>
-                        <Edit />
-                      </Link>
-                      <Trash className="text-red-400" />
-                    </td>
-                  </tr>
-                ))}
+            {isLoading ? (
+              <tr>
+                <td>Loading</td>
+              </tr>
+            ) : (
+              data?.data.map((workProgram, i) => (
+                <tr key={workProgram.id}>
+                  <td>{workProgram.id}</td>
+                  <td>{workProgram.name}</td>
+                  <td>{workProgram.leader}</td>
+                  <td>
+                    <Link href={`/admin/data/department/${workProgram.id}`}>
+                      <Edit />
+                    </Link>
+                    <Trash className="text-red-400" />
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
         <ReactPaginate

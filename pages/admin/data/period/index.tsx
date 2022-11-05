@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { confirmAlert } from 'react-confirm-alert';
-import { Trash } from 'react-feather';
+import { Edit, Trash } from 'react-feather';
 import Button from '../../../../components/Admin/Button';
 import useDeletePeriod from '../../../../hooks/useDeletePeriod';
 import usePeriod from '../../../../hooks/usePeriod';
@@ -45,20 +45,27 @@ function Admin() {
             </tr>
           </thead>
           <tbody>
-            {isLoading
-              ? 'Loading'
-              : data?.map((period, i) => (
-                  <tr key={period.id}>
-                    <td>{period.id}</td>
-                    <td>{period.label}</td>
-                    <td className="flex">
-                      <Trash
-                        className="text-red-400"
-                        onClick={() => handleDelete(period.id)}
-                      />
-                    </td>
-                  </tr>
-                ))}
+            {isLoading ? (
+              <tr>
+                <td>Loading</td>
+              </tr>
+            ) : (
+              data?.map((period, i) => (
+                <tr key={period.id}>
+                  <td>{period.id}</td>
+                  <td>{period.label}</td>
+                  <td className="flex">
+                    <Link href={`/admin/data/period/${period.id}`}>
+                      <Edit />
+                    </Link>
+                    <Trash
+                      className="text-red-400"
+                      onClick={() => handleDelete(period.id)}
+                    />
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

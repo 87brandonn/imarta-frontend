@@ -2,29 +2,32 @@ import Image from 'next/future/image';
 import Link from 'next/link';
 import { AlertCircle, Circle } from 'react-feather';
 import useWorkProgramById from '../../../../hooks/useWorkProgramById';
+import { WorkProgramWithAssociation } from '../../../../services/api/getWorkPrograms';
+import { WorkProgram, WorkProgramDocumentation } from '../../../../types';
 import ImageLandingPage from '../../../ImageLandingPage';
 import Loader from '../../../Loader';
 
 type RepositoryWorkProgramProps = {
-  id: number;
   search?: string;
+  data: Partial<WorkProgramWithAssociation>;
 };
 
-function RepositoryWorkProgram({ id, search }: RepositoryWorkProgramProps) {
-  const { data: workProgram, isLoading } = useWorkProgramById(id.toString());
-
-  if (isLoading) {
-    return <Loader />;
+function RepositoryWorkProgram({
+  search,
+  data: {
+    name,
+    collaborators,
+    workProgramStaffs,
+    workProgramDocumentations,
+    id
   }
-
+}: RepositoryWorkProgramProps) {
   if (
     search &&
     !(
-      workProgram?.name.toLowerCase().includes(search.toLowerCase()) ||
-      workProgram?.collaborators
-        ?.toLowerCase()
-        .includes(search.toLowerCase()) ||
-      workProgram?.workProgramStaffs
+      name?.toLowerCase().includes(search.toLowerCase()) ||
+      collaborators?.toLowerCase().includes(search.toLowerCase()) ||
+      workProgramStaffs
         ?.map(staff => staff.name)
         .join(',')
         ?.toLowerCase()
@@ -37,14 +40,13 @@ function RepositoryWorkProgram({ id, search }: RepositoryWorkProgramProps) {
   return (
     <div className="cursor-pointer self-center">
       <a href={`/repository/${id}`}>
-        {workProgram?.workProgramDocumentations?.length ? (
+        {workProgramDocumentations?.length ? (
           <ImageLandingPage
-            src={workProgram?.workProgramDocumentations[0]?.imgUrl}
+            src={workProgramDocumentations[0]?.imgUrl}
             type={
-              workProgram?.workProgramDocumentations[0]?.fileType === 'IMAGE'
+              workProgramDocumentations[0]?.fileType === 'IMAGE'
                 ? 'image'
-                : workProgram?.workProgramDocumentations[0]?.fileType ===
-                  'VIDEO'
+                : workProgramDocumentations[0]?.fileType === 'VIDEO'
                 ? 'video'
                 : 'embed'
             }
@@ -64,7 +66,7 @@ function RepositoryWorkProgram({ id, search }: RepositoryWorkProgramProps) {
                 WebkitBoxOrient: 'vertical'
               }}
             >
-              No thumbnail available for {workProgram?.name}
+              No thumbnail available for {name}
             </div>
           </div>
         )}

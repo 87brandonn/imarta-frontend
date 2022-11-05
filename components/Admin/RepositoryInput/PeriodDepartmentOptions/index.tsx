@@ -8,7 +8,6 @@ import {
 import Select from 'react-select';
 import { RepositoryForm } from '..';
 import useDepartmentsByPeriod from '../../../../hooks/useDepartmentsByPeriod';
-import PeriodDepartmentWorkProgramOptions from './PeriodDepartmentWorkProgramOptions';
 
 type PeriodDepartmentOptionsProps = {
   id?: number;
@@ -53,17 +52,7 @@ function PeriodDepartmentOptions({
                     {...field}
                     onChange={val => {
                       field.onChange(val);
-                      setValue(
-                        `repository.${index}.departments.${i}.workPrograms`,
-                        []
-                      );
                     }}
-                  />
-                  <PeriodDepartmentWorkProgramOptions
-                    control={control}
-                    index={i}
-                    periodIndex={index}
-                    id={field.value?.id}
                   />
                 </>
               )}
@@ -80,8 +69,7 @@ function PeriodDepartmentOptions({
           className="text-violet-400 text-sm cursor-pointer"
           onClick={() =>
             append({
-              department: undefined,
-              workPrograms: undefined
+              department: undefined
             })
           }
         >

@@ -46,30 +46,34 @@ function AdminMeta() {
             </tr>
           </thead>
           <tbody>
-            {isLoading
-              ? 'Loading'
-              : data?.map((meta, i) => (
-                  <tr key={meta.id}>
-                    <td>{meta.id}</td>
-                    <td>{meta.title}</td>
-                    <td>{meta.vision}</td>
-                    <td>
-                      {meta.organizationMetaMissions
-                        .map(mission => mission.value)
-                        .join(',')}
-                    </td>
-                    <td>{meta.period.label}</td>
-                    <td>
-                      <Link href={`/admin/data/meta/${meta.id}`}>
-                        <Edit />
-                      </Link>
-                      <Trash
-                        className="text-red-400"
-                        onClick={() => handleDelete(meta.id)}
-                      />
-                    </td>
-                  </tr>
-                ))}
+            {isLoading ? (
+              <tr>
+                <td>Loading</td>
+              </tr>
+            ) : (
+              data?.map((meta, i) => (
+                <tr key={meta.id}>
+                  <td>{meta.id}</td>
+                  <td>{meta.title}</td>
+                  <td>{meta.vision}</td>
+                  <td>
+                    {meta.organizationMetaMissions
+                      .map(mission => mission.value)
+                      .join(',')}
+                  </td>
+                  <td>{meta.period.label}</td>
+                  <td>
+                    <Link href={`/admin/data/meta/${meta.id}`}>
+                      <Edit />
+                    </Link>
+                    <Trash
+                      className="text-red-400"
+                      onClick={() => handleDelete(meta.id)}
+                    />
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

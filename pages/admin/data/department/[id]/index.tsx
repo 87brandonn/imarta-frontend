@@ -40,7 +40,7 @@ function AdminDepartmentDetail() {
     mutate(data);
   };
 
-  const { data, isLoading } = useDepartmentById(query.id as string);
+  const { data, isLoading, error } = useDepartmentById(query.id as string);
 
   useEffect(() => {
     reset({
@@ -51,6 +51,8 @@ function AdminDepartmentDetail() {
   }, [data, reset]);
 
   if (isLoading) return 'Loading..';
+
+  if (error) return 'Something went wrong. Please refresh the page';
 
   return (
     <div className="max-w-4xl mx-auto mt-12">
