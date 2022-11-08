@@ -68,7 +68,8 @@ function Admin() {
                 ) : attribute.type === 'IMAGE_GRID' ||
                   attribute.type === 'SWIPER_CENTERED' ||
                   attribute.type === 'SWIPER_NORMAL' ||
-                  attribute.type === 'IMAGE_GRID_2' ? (
+                  attribute.type === 'IMAGE_GRID_2' ||
+                  attribute.type === 'IMAGE_GRID_NESTED' ? (
                   <ImageGridInput
                     data={attribute.data}
                     withDescription={attribute.type === 'IMAGE_GRID_2'}
@@ -77,6 +78,7 @@ function Admin() {
                       attribute.type === 'IMAGE_GRID' ||
                       attribute.type === 'IMAGE_GRID_2'
                     }
+                    nested={attribute.type === 'IMAGE_GRID_NESTED'}
                   />
                 ) : attribute.type === 'TITLE' ||
                   attribute.type === 'SUBTITLE' ? (

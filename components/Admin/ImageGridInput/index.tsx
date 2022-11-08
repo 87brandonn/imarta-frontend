@@ -6,8 +6,8 @@ import * as yup from 'yup';
 import Button from '../Button';
 import ImageInput, { ImageInputType } from '../ImageInput';
 import RichTextEditor from '../RichTextEditor';
-import TextAreaInput from '../TextareaInput';
 import TextInput from '../TextInput';
+import NestedInput from './NestedInput';
 
 export type ImageGridFormType = {
   imageGrid: ImageGridType[];
@@ -19,10 +19,12 @@ export type ImageGridType = {
   link?: string;
   description?: string;
   type?: ImageInputType['type'];
+  nestedGrids?: { image: { url?: string; type: ImageInputType['type'] } }[];
 };
 
 type ImageGridInputProps = {
   data: ImageGridType[];
+  nested?: boolean;
   onChange: (val: ImageGridType[]) => void;
   isOriginal?: boolean;
   withDescription?: boolean;
@@ -35,7 +37,18 @@ const schema = yup
         yup.object({
           title: yup.string().label('Title'),
           imgUrl: yup.string().required().label('Image'),
-          link: yup.string().label('Link')
+          link: yup.string().label('Link'),
+          nestedGrids: yup.array(
+            yup.object({
+              image: yup.object({
+                url: yup.string().required().label('Associated image'),
+                type: yup
+                  .mixed<ImageInputType['type']>()
+                  .required()
+                  .label('Type')
+              })
+            })
+          )
         })
       )
       .min(1)
@@ -48,6 +61,7 @@ function ImageGridInput({
   data,
   onChange,
   isOriginal,
+  nested,
   withDescription
 }: ImageGridInputProps) {
   const {
@@ -134,6 +148,13 @@ function ImageGridInput({
               className="mt-2"
               placeholder="Enter url link"
             />
+            {nested && (
+              <NestedInput
+                errors={errors.imageGrid?.[i]?.nestedGrids}
+                control={control}
+                index={i}
+              />
+            )}
           </div>
         ))}
         <div>

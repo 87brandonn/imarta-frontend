@@ -41,8 +41,6 @@ function Repository({
       ?.data as RepositoryFromApi[];
   }, [data.sections]);
 
-  console.log(memoizedRepositoryListData);
-
   return (
     <AppLayout title="Repository">
       <div className="relative">

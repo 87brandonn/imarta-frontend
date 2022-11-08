@@ -28,7 +28,7 @@ function SayembaraSwiper({ data }: SayembaraSwiperProps) {
     >
       {chunk(data, 10).map((imgGridChunk, i) => (
         <SwiperSlide key={i}>
-          <div className="grid grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
             {imgGridChunk.map((imgGrid, i2) => (
               <div className="flex items-center justify-center" key={i2}>
                 <ImageLandingPage
@@ -36,6 +36,8 @@ function SayembaraSwiper({ data }: SayembaraSwiperProps) {
                   src={imgGrid.imgUrl as string}
                   link={imgGrid.link}
                   type={imgGrid.type}
+                  nestedGrids={imgGrid.nestedGrids}
+                  showPreviewOnClick
                 />
               </div>
             ))}

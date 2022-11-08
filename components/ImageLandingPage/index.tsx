@@ -4,6 +4,7 @@ import { twMerge as cx } from 'tailwind-merge';
 import AnimatedHero from '../AnimatedHero';
 import MediaPreviewer from '../MediaPreviewer';
 import { ImageInputType } from '../Admin/ImageInput';
+import { ImageGridType } from '../Admin/ImageGridInput';
 
 type ImageLandingPageProps = {
   src: string;
@@ -13,6 +14,7 @@ type ImageLandingPageProps = {
   priority?: boolean;
   showPreviewOnClick?: boolean;
   showYoutubePlayer?: boolean;
+  nestedGrids?: ImageGridType['nestedGrids'];
 };
 
 function ImageLandingPage({
@@ -22,7 +24,8 @@ function ImageLandingPage({
   priority,
   type = 'image',
   showPreviewOnClick,
-  showYoutubePlayer
+  showYoutubePlayer,
+  nestedGrids
 }: ImageLandingPageProps) {
   const [show, setShow] = useState(false);
 
@@ -79,10 +82,16 @@ function ImageLandingPage({
     <>
       {show && showPreviewOnClick && (
         <MediaPreviewer
-          type={type}
           isOpen={show}
           onChangeOpen={setShow}
-          src={src}
+          data={
+            nestedGrids?.length
+              ? [{ url: src, type }, ...nestedGrids.map(grid => grid.image)]
+              : {
+                  type,
+                  url: src
+                }
+          }
         />
       )}
       <AnimatedHero className="h-full">

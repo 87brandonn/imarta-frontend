@@ -1,6 +1,7 @@
 import Image from 'next/future/image';
 import React, { useMemo, useRef, useState } from 'react';
 import { Aperture, Camera, Link, Trash, X } from 'react-feather';
+import { twMerge as cx } from 'tailwind-merge';
 import toast from 'react-hot-toast';
 import uploadImage from '../../../utils/uploadFile';
 import Button from '../Button';
@@ -27,6 +28,7 @@ type ImageInputProps = {
   label?: string;
   onDelete?: () => void;
   withoutLink?: boolean;
+  imageClassName?: string;
 };
 
 function ImageInput({
@@ -35,7 +37,8 @@ function ImageInput({
   onDelete,
   label = 'Upload media',
   accept = ['embed', 'image', 'video'],
-  withoutLink
+  withoutLink,
+  imageClassName
 }: ImageInputProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -200,7 +203,10 @@ function ImageInput({
                     width="0"
                     height="0"
                     sizes="100vw"
-                    className="w-full h-auto group-hover:opacity-40 rounded-xl"
+                    className={cx(
+                      'w-full h-auto group-hover:opacity-40 rounded-xl',
+                      imageClassName
+                    )}
                     alt="hero"
                   />
                 ) : data.type === 'video' ? (
