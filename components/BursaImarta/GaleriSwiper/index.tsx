@@ -3,6 +3,7 @@ import Image from 'next/future/image';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import 'swiper/css/lazy';
 import { Pagination, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { ImageGridType } from '../../Admin/ImageGridInput';

@@ -8,11 +8,11 @@ type ArthurGalleryProps = {
 
 function ArthurGallery({ data }: ArthurGalleryProps) {
   return (
-    <div className="mb-16">
+    <div className="flex flex-col">
       <div className="text-3xl font-bold mb-5">
         {data?.find(attr => attr.name === 'title')?.data}
       </div>
-      <div className="mb-5 mx-4 lg:mx-8">
+      <div className="grow mx-4 lg:mx-8">
         <GaleriSwiper
           data={
             data?.find(attr => attr.name === 'grid')?.data as ImageGridType[]

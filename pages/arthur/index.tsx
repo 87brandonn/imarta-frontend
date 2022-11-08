@@ -6,6 +6,7 @@ import { ImageGridType } from '../../components/Admin/ImageGridInput';
 import { ImageInputType } from '../../components/Admin/ImageInput';
 import ArthurGallery from '../../components/Arthur/Gallery';
 import HeroGrid from '../../components/Arthur/HeroGrid';
+import PerformanceSwiper from '../../components/Arthur/Performances/Swiper';
 import ImageLandingPage from '../../components/ImageLandingPage';
 import AppLayout from '../../layouts';
 import getModuleBySlug, {
@@ -100,9 +101,9 @@ function Arthur({
         {memoizedSubtitleData}
       </div>
       <HeroGrid data={memoizedImageGridData} />
-      <div className="mx-4 lg:mx-8 grid lg:grid-cols-2 gap-4">
+      <div className="mx-4 lg:mx-8 grid lg:grid-cols-2 gap-4 mb-12">
         <ArthurGallery data={memoizedGaleriFotoAttributesData} />
-        <div className="mb-12">
+        <div className="flex flex-col">
           <div
             className="text-2xl font-bold mb-3"
             dangerouslySetInnerHTML={{
@@ -112,7 +113,7 @@ function Arthur({
             }}
           ></div>
           <div
-            className="mb-8 font-light"
+            className="grow mb-8 font-light"
             dangerouslySetInnerHTML={{
               __html: memoizedArthurInstagramAttributesData
                 ?.find(attr => attr.name === 'text-1')
@@ -126,21 +127,13 @@ function Arthur({
               )?.data
             }
           </div>
-          <div className="grid lg:grid-cols-2 gap-4">
-            {(
+          <PerformanceSwiper
+            data={
               memoizedPerformanceAttributesData?.find(
                 attr => attr.name === 'img-grid-1'
               )?.data as ImageGridType[]
-            ).map((imgGrid, i) => (
-              <ImageLandingPage
-                key={i}
-                src={imgGrid.imgUrl as string}
-                type={imgGrid.type}
-                link={imgGrid.link}
-                showPreviewOnClick
-              />
-            ))}
-          </div>
+            }
+          />
         </div>
       </div>
     </AppLayout>

@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import Image from 'next/future/image';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -10,11 +9,11 @@ import { ImageGridType } from '../../../Admin/ImageGridInput';
 import { chunk } from '../../../../utils';
 import ImageLandingPage from '../../../ImageLandingPage';
 
-type GaleriSwiperProps = {
+type PerformanceSwiperProps = {
   data: ImageGridType[];
 };
 
-function GaleriSwiper({ data }: GaleriSwiperProps) {
+function PerformanceSwiper({ data }: PerformanceSwiperProps) {
   return (
     <Swiper
       slidesPerView="auto"
@@ -29,12 +28,12 @@ function GaleriSwiper({ data }: GaleriSwiperProps) {
       modules={[Autoplay, Pagination, Navigation]}
     >
       {data &&
-        chunk(data, 9).map((imgGridChunk, i) => (
+        chunk(data, 3).map((imgGridChunk, i) => (
           <SwiperSlide key={i}>
             <div className="grid grid-cols-3 gap-3">
               {imgGridChunk.map((imgGrid, i2) => (
                 <ImageLandingPage
-                  className="h-36 w-36 object-cover"
+                  className="object-contain"
                   src={imgGrid.imgUrl as string}
                   type={imgGrid.type}
                   link={imgGrid.link as string}
@@ -49,4 +48,4 @@ function GaleriSwiper({ data }: GaleriSwiperProps) {
   );
 }
 
-export default GaleriSwiper;
+export default PerformanceSwiper;

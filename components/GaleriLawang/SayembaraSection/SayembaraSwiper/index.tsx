@@ -3,6 +3,7 @@ import { Navigation, Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import 'swiper/css/lazy';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { chunk } from '../../../../utils';
 import { ImageGridType } from '../../../Admin/ImageGridInput';
@@ -29,14 +30,14 @@ function SayembaraSwiper({ data }: SayembaraSwiperProps) {
         <SwiperSlide key={i}>
           <div className="grid grid-cols-5 gap-3">
             {imgGridChunk.map((imgGrid, i2) => (
-              <Fragment key={i2}>
+              <div className="flex items-center justify-center" key={i2}>
                 <ImageLandingPage
-                  className=" h-36"
+                  className="w-36 h-36"
                   src={imgGrid.imgUrl as string}
                   link={imgGrid.link}
                   type={imgGrid.type}
                 />
-              </Fragment>
+              </div>
             ))}
           </div>
         </SwiperSlide>
