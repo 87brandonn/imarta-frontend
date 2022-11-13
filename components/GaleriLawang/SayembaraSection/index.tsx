@@ -17,7 +17,7 @@ function SayembaraSection({ data }: SayembaraSectionProps) {
       <div className="text-3xl font-bold mb-5 mx-4 lg:mx-8">
         {data?.find(attr => attr.name === 'title-1')?.data}
       </div>
-      <AnimatedHero className="mb-16">
+      <div className="mb-16">
         <ImageLandingPage
           src={
             (
@@ -38,7 +38,7 @@ function SayembaraSection({ data }: SayembaraSectionProps) {
             ).type
           }
         />
-      </AnimatedHero>
+      </div>
       <div className="mb-5 mx-4 lg:mx-8">
         <SayembaraSwiper
           data={

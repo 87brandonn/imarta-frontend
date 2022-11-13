@@ -1,4 +1,4 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { ImageGridType } from '../../components/Admin/ImageGridInput';
 import { ImageInputType } from '../../components/Admin/ImageInput';
 import AnimatedHero from '../../components/AnimatedHero';
@@ -10,19 +10,18 @@ import getModuleBySlug, {
 } from '../../services/api/getModuleBySlug';
 import getAttribute from '../../utils/getAttribute';
 
-export const getServerSideProps: GetServerSideProps<
+export const getStaticProps: GetStaticProps<
   { data: ModuleWithAssociation },
   { id: string }
 > = async () => {
   const data = await getModuleBySlug('bursa-imarta');
   return {
-    props: { data }
+    props: { data },
+    revalidate: 10
   };
 };
 
-function BursaImarta({
-  data
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function BursaImarta({ data }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
       <AppLayout title="Bursa Imarta">

@@ -1,4 +1,4 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import Image from 'next/future/image';
 import { useMemo } from 'react';
 import { ImageInputType } from '../../components/Admin/ImageInput';
@@ -9,19 +9,18 @@ import getModuleBySlug, {
   ModuleWithAssociation
 } from '../../services/api/getModuleBySlug';
 
-export const getServerSideProps: GetServerSideProps<
+export const getStaticProps: GetStaticProps<
   { data: ModuleWithAssociation },
   { id: string }
 > = async () => {
   const data = await getModuleBySlug('about');
   return {
-    props: { data }
+    props: { data },
+    revalidate: 10
   };
 };
 
-function About({
-  data
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function About({ data }: InferGetStaticPropsType<typeof getStaticProps>) {
   const memoizedBottomHeroData = useMemo(
     () =>
       data.sections

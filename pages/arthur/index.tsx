@@ -1,4 +1,4 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import dynamic from 'next/dynamic';
 import Image from 'next/future/image';
 import { useMemo } from 'react';
@@ -13,19 +13,18 @@ import getModuleBySlug, {
   ModuleWithAssociation
 } from '../../services/api/getModuleBySlug';
 
-export const getServerSideProps: GetServerSideProps<
+export const getStaticProps: GetStaticProps<
   { data: ModuleWithAssociation },
   { id: string }
 > = async () => {
   const data = await getModuleBySlug('arthur');
   return {
-    props: { data }
+    props: { data },
+    revalidate: 10
   };
 };
 
-function Arthur({
-  data
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function Arthur({ data }: InferGetStaticPropsType<typeof getStaticProps>) {
   const memoizedFirstSectionAttributesData = useMemo(
     () =>
       data.sections.find(section => section.name === 'section-1')?.attributes,

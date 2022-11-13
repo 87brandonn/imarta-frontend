@@ -1,5 +1,9 @@
 import dayjs from 'dayjs';
-import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import type {
+  GetStaticPaths,
+  GetStaticProps,
+  InferGetStaticPropsType
+} from 'next';
 import Image from 'next/future/image';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -12,8 +16,17 @@ import getWorkProgramById from '../../../services/api/getWorkProgramById';
 import { WorkProgramWithAssociation } from '../../../services/api/getWorkPrograms';
 import { AlertCircle } from 'react-feather';
 import ImageLandingPage from '../../../components/ImageLandingPage';
+import getAllWorkProgram from '../../../services/api/getAllWorkProgram';
 
-export const getServerSideProps: GetServerSideProps<
+export const getStaticPaths: GetStaticPaths<{ id: string }> = async () => {
+  const data = await getAllWorkProgram();
+  return {
+    paths: data.map(wp => ({ params: { id: wp.id.toString() } })), //indicates that no page needs be created at build time
+    fallback: 'blocking' //indicates the type of fallback
+  };
+};
+
+export const getStaticProps: GetStaticProps<
   { data: WorkProgramWithAssociation },
   { id: string }
 > = async context => {
@@ -21,13 +34,14 @@ export const getServerSideProps: GetServerSideProps<
     context.params ? parseInt(context.params.id, 10) : undefined
   );
   return {
-    props: { data }
+    props: { data },
+    revalidate: 10
   };
 };
 
 function RepositoryDetail({
   data
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <AppLayout title="Repository Detail">
       {data.workProgramDocumentations?.length ? (
