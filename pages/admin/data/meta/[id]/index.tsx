@@ -7,6 +7,7 @@ import Select from 'react-select';
 import * as yup from 'yup';
 import Button from '../../../../../components/Admin/Button';
 import ImageInput from '../../../../../components/Admin/ImageInput';
+import TextAreaInput from '../../../../../components/Admin/TextareaInput';
 import TextInput from '../../../../../components/Admin/TextInput';
 import useCreateOrEditMeta, {
   CreateOrUpdateMetaPayload
@@ -124,13 +125,16 @@ function AdminMetaDetail() {
         <div className="mb-3">
           <div>Missions</div>
           {missionsFields.map((documentation, i) => (
-            <div key={documentation.id} className="flex gap-2">
-              <div>
+            <div
+              key={documentation.id}
+              className="mb-3 last:mb-0 flex items-center gap-2"
+            >
+              <div className="grow">
                 <Controller
                   control={control}
                   name={`missions.${i}.value`}
                   render={({ field: { value, onChange } }) => (
-                    <TextInput
+                    <TextAreaInput
                       value={value}
                       onChange={onChange}
                       placeholder="Enter missions"

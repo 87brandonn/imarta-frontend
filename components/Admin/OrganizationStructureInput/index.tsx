@@ -96,7 +96,7 @@ function OrganizationStructureInput({
     <>
       <div className="mb-3">
         {watch('meta')?.map((orgMeta, i) => (
-          <div className="mb-2" key={orgMeta.meta?.id}>
+          <div className="mb-2" key={i}>
             <div className="flex items-center gap-3">
               <div className="grow">
                 <div>Section {i + 1}</div>
