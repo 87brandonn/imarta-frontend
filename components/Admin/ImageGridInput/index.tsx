@@ -118,7 +118,10 @@ function ImageGridInput({
                 name={`imageGrid.${i}.imgUrl`}
                 render={({ field }) => (
                   <ImageInput
-                    data={{ imgUrl: field.value, type: imageGrid.type }}
+                    data={{
+                      imgUrl: field.value,
+                      type: imageGrid.type || 'image'
+                    }}
                     onChange={val => {
                       field.onChange(val?.imgUrl);
                       setValue(`imageGrid.${i}.type`, val?.type);

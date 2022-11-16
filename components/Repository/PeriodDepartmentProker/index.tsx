@@ -13,16 +13,25 @@ import RepositoryWorkProgram from './WorkProgram';
 type PeriodDepartmentProkerProps = {
   data: RepositoryFromApi;
   search?: string;
+  isLast: boolean;
 };
 
-function PeriodDepartmentProker({ data, search }: PeriodDepartmentProkerProps) {
+function PeriodDepartmentProker({
+  data,
+  search,
+  isLast
+}: PeriodDepartmentProkerProps) {
   return (
     <div
       className={cx('relative', data.isComingSoon ? '' : 'grid lg:grid-cols-4')}
     >
-      <RepositoryPeriod id={data.periodId} />
+      <RepositoryPeriod id={data.periodId} isComingSoon={data.isComingSoon} />
       {data.isComingSoon ? (
-        <div className="text-center text-2xl font-light my-12">Coming soon</div>
+        <div
+          className={
+            (cx(`text-center text-2xl font-light`), !isLast ? 'h-12' : '')
+          }
+        />
       ) : (
         data?.departments.map((departmentProkerData, i) => (
           <div

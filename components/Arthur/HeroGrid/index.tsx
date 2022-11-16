@@ -14,25 +14,47 @@ function HeroGrid({ data }: HeroGridProps) {
       {data?.map((imgGrid, i) => (
         <div className="flex-1" key={i}>
           <AnimatedHero className="relative">
-            <a href={imgGrid.link} target="__blank">
-              <div className="z-10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <div className="font-bold text-center text-2xl mb-8">
-                  {imgGrid.title}
+            {imgGrid.link ? (
+              <a href={imgGrid.link} target="__blank">
+                <div className="z-10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  <div className="font-bold text-center text-2xl mb-8">
+                    {imgGrid.title}
+                  </div>
+                  <div
+                    className="text-center"
+                    dangerouslySetInnerHTML={{
+                      __html: imgGrid.description?.replace(/\n/g, '<br/>') || ''
+                    }}
+                  ></div>
                 </div>
-                <div
-                  className="text-center"
-                  dangerouslySetInnerHTML={{
-                    __html: imgGrid.description?.replace(/\n/g, '<br/>') || ''
-                  }}
-                ></div>
-              </div>
-              <ImageLandingPage
-                className="opacity-50 h-[50vh] object-cover"
-                src={imgGrid.imgUrl as string}
-                type={imgGrid.type}
-                priority
-              />
-            </a>
+                <ImageLandingPage
+                  className="opacity-50 h-[50vh] object-cover"
+                  src={imgGrid.imgUrl as string}
+                  type={imgGrid.type}
+                  priority
+                />
+              </a>
+            ) : (
+              <>
+                <div className="z-10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  <div className="font-bold text-center text-2xl mb-8">
+                    {imgGrid.title}
+                  </div>
+                  <div
+                    className="text-center"
+                    dangerouslySetInnerHTML={{
+                      __html: imgGrid.description?.replace(/\n/g, '<br/>') || ''
+                    }}
+                  ></div>
+                </div>
+                <ImageLandingPage
+                  className="opacity-50 h-[50vh] object-cover"
+                  src={imgGrid.imgUrl as string}
+                  type={imgGrid.type}
+                  priority
+                />
+              </>
+            )}
           </AnimatedHero>
         </div>
       ))}

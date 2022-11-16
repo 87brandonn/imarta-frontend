@@ -42,7 +42,7 @@ function Repository({ data }: InferGetStaticPropsType<typeof getStaticProps>) {
 
   return (
     <AppLayout title="Repository">
-      <div className="relative">
+      <div className="relative mb-5">
         <ImageLandingPage
           src={memoizedHeroData.imgUrl as string}
           type={memoizedHeroData.type}
@@ -62,7 +62,12 @@ function Repository({ data }: InferGetStaticPropsType<typeof getStaticProps>) {
         </div>
         <div className="my-10 ml-1 lg:ml-4">
           {memoizedRepositoryListData.map((repository, i) => (
-            <PeriodDepartmentProker search={search} data={repository} key={i} />
+            <PeriodDepartmentProker
+              search={search}
+              isLast={i === memoizedRepositoryListData.length - 1}
+              data={repository}
+              key={i}
+            />
           ))}
         </div>
       </div>

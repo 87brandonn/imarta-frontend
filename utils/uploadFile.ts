@@ -7,10 +7,8 @@ const uploadImage = (
 ): Promise<string> =>
   new Promise(async (resolve, reject) => {
     try {
-      const compressedImage =
-        type === 'image' ? await compressImage(image) : image;
       const formData = new FormData();
-      formData.append('image', compressedImage);
+      formData.append('image', image);
       const {
         data: { url }
       } = await axios.post<{ message: string; url: string }>(

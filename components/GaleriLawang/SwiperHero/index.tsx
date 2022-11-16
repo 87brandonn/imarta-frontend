@@ -50,7 +50,7 @@ function SwiperHero({ data }: SwiperHeroProps) {
             src={imgGrid.imgUrl as string}
             link={imgGrid.link}
             type={imgGrid.type}
-            className={cx('h-96 object-cover')}
+            className={cx('h-96 rounded-xl object-cover')}
             showPreviewOnClick
           />
         </SwiperSlide>

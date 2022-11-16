@@ -58,6 +58,7 @@ function OrganizationStructure({
           index={i}
         />
       ))}
+      <div className="mb-5" />
     </AppLayout>
   );
 }

@@ -35,7 +35,7 @@ export const navbarData = [
       {
         title: 'Riset IMARTA',
         isExternal: true,
-        url: 'https://google.com'
+        url: 'https://issuu.com/imartasketsa'
       },
       {
         title: 'ARTHUR',
@@ -45,12 +45,12 @@ export const navbarData = [
       {
         title: 'Majalah SKETSA',
         isExternal: true,
-        url: 'https://google.com'
+        url: 'https://majalahsketsa.com'
       },
       {
         title: 'ADW',
         isExternal: true,
-        url: 'https://google.com'
+        url: 'https://www.instagram.com/architecturaldesignweek.id/?hl=en'
       }
     ]
   },
@@ -77,7 +77,7 @@ export const navbarData = [
     href: '/galeri-lawang'
   },
   {
-    title: 'Bursa',
+    title: 'Bursa IMARTA',
     href: '/bursa-imarta'
   }
 ];

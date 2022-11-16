@@ -19,7 +19,7 @@ function HomeWelcome({
   link
 }: HomeWelcomeProps) {
   return (
-    <div className="flex flex-col px-2 lg:px-0 max-w-4xl mx-auto justify-center items-center my-[2em]">
+    <div className="flex flex-col px-2 lg:px-0 max-w-3xl mx-auto justify-center items-center mt-[2em] mb-[4em]">
       <ImageLandingPage
         link={link}
         type={type}
@@ -27,9 +27,7 @@ function HomeWelcome({
         className="h-32 lg:h-48"
       />
       <div className="text-xl text-center font-medium mt-4 mb-1">{title}</div>
-      <div className="text-sm font-light text-center text-gray-400">
-        {description}
-      </div>
+      <div className="text-sm font-light text-center">{description}</div>
     </div>
   );
 }

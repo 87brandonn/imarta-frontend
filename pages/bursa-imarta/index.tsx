@@ -36,8 +36,8 @@ function BursaImarta({ data }: InferGetStaticPropsType<typeof getStaticProps>) {
           }
           type={getAttribute<ImageInputType>(data, 'section-1', 'hero').type}
         />
-        <div className="p-5 mb-8 flex lg:flex-row flex-col gap-4">
-          <div className="flex-none lg:w-1/3">
+        <div className="p-5 mb-8 mt-3 flex lg:flex-row flex-col gap-4">
+          <div className="flex-none lg:flex-1">
             <div className="text-3xl mb-3 font-bold">
               {getAttribute<string>(data, 'section-2', 'title-1')}
             </div>
@@ -48,7 +48,7 @@ function BursaImarta({ data }: InferGetStaticPropsType<typeof getStaticProps>) {
               }}
             ></div>
           </div>
-          <div className="flex-none lg:w-2/3">
+          <div className="flex-none lg:flex-1">
             <GaleriSwiper
               data={getAttribute<ImageGridType[]>(
                 data,
@@ -58,7 +58,7 @@ function BursaImarta({ data }: InferGetStaticPropsType<typeof getStaticProps>) {
             />
           </div>
         </div>
-        <div className="p-5 mb-8 flex lg:flex-row flex-col gap-4">
+        <div className="p-5 mb-8 flex lg:flex-row flex-col gap-12">
           <div className="flex-[3_3_0%]">
             <div className="text-3xl font-bold mb-3">
               {getAttribute<string>(data, 'section-3', 'title-1')}
@@ -75,6 +75,7 @@ function BursaImarta({ data }: InferGetStaticPropsType<typeof getStaticProps>) {
               type={
                 getAttribute<ImageInputType>(data, 'section-3', 'image-1').type
               }
+              className="h-full object-cover"
             />
           </div>
           <div className="flex-[2_2_0%]">
@@ -93,6 +94,7 @@ function BursaImarta({ data }: InferGetStaticPropsType<typeof getStaticProps>) {
               type={
                 getAttribute<ImageInputType>(data, 'section-4', 'image-1').type
               }
+              className="h-full object-cover"
             />
           </div>
         </div>

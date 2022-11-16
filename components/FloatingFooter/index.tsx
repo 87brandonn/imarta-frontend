@@ -53,7 +53,7 @@ function FloatingFooter() {
           <Instagram size={24} />
         </a>
         <a
-          href={`https://linkedin.com/in/${getAttributesByName('linkedin')}`}
+          href={`${getAttributesByName('linkedin')}`}
           target="__blank"
           className="bg-white shadow-xl cursor-pointer transform transition-transform hover:scale-125 rounded-full p-2"
         >

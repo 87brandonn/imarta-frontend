@@ -150,7 +150,7 @@ function About({ data }: InferGetStaticPropsType<typeof getStaticProps>) {
                       )?.data as ImageInputType
                     ).link
                   }
-                  className="h-36"
+                  className="h-20"
                   showYoutubePlayer
                 />
               </div>
