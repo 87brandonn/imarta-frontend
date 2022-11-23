@@ -3,7 +3,7 @@ import getDepartmentById from '../services/api/getDepartmentById';
 
 const useDepartmentById = (id: string, search?: string) =>
   useQuery(
-    ['department', id],
+    ['department', id, { search }],
     () => getDepartmentById(parseInt(id, 10), search),
     {
       enabled: !!id && id !== 'new'
