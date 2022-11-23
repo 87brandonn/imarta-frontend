@@ -285,8 +285,6 @@ function Admin() {
                 page: 0
               }}
               className="w-48"
-              menuPortalTarget={document.body}
-              styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
               isMulti
               getOptionLabel={opt => opt.name}
               getOptionValue={opt => opt.id.toString()}
