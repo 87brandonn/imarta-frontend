@@ -4,7 +4,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/lazy';
-import { Pagination, Navigation } from 'swiper';
+import { Pagination, Navigation, Autoplay } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { ImageGridType } from '../../Admin/ImageGridInput';
 import ImageLandingPage from '../../ImageLandingPage';
@@ -24,8 +24,9 @@ function GaleriSwiper({ data }: GaleriSwiperProps) {
       lazy
       loop
       navigation={true}
-      modules={[Pagination, Navigation]}
+      modules={[Pagination, Navigation, Autoplay]}
       className="h-full"
+      autoplay
     >
       {data.map((imgGrid, i) => (
         <SwiperSlide key={i}>

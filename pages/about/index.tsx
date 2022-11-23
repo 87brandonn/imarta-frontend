@@ -60,13 +60,14 @@ function About({ data }: InferGetStaticPropsType<typeof getStaticProps>) {
                 )?.data
               }
             </div>
-            <div className="text-gray-400 font-light mb-3">
-              {
-                memoizedSejarahSectionAttributesData?.find(
+            <div
+              className="text-gray-400 font-light mb-3"
+              dangerouslySetInnerHTML={{
+                __html: memoizedSejarahSectionAttributesData?.find(
                   attr => attr.name === 'text-1'
                 )?.data
-              }
-            </div>
+              }}
+            ></div>
             <div className="ml-10 mb-2">
               <div className="text-lg">
                 {
@@ -75,29 +76,32 @@ function About({ data }: InferGetStaticPropsType<typeof getStaticProps>) {
                   )?.data
                 }
               </div>
-              <div className="text-gray-400 font-light mb-2">
-                {
-                  memoizedSejarahSectionAttributesData?.find(
+              <div
+                className="text-gray-400 font-light mb-2"
+                dangerouslySetInnerHTML={{
+                  __html: memoizedSejarahSectionAttributesData?.find(
                     attr => attr.name === 'text-2'
                   )?.data
-                }
-              </div>
+                }}
+              ></div>
             </div>
             <div className="ml-10 mb-3">
-              <div className="text-lg">
-                {
-                  memoizedSejarahSectionAttributesData?.find(
+              <div
+                className="text-lg"
+                dangerouslySetInnerHTML={{
+                  __html: memoizedSejarahSectionAttributesData?.find(
                     attr => attr.name === 'subtitle-3'
                   )?.data
-                }
-              </div>
-              <div className="text-gray-400 font-light mb-2">
-                {
-                  memoizedSejarahSectionAttributesData?.find(
+                }}
+              />
+              <div
+                className="text-gray-400 font-light mb-2"
+                dangerouslySetInnerHTML={{
+                  __html: memoizedSejarahSectionAttributesData?.find(
                     attr => attr.name === 'text-3'
                   )?.data
-                }
-              </div>
+                }}
+              ></div>
             </div>
             <div className="mb-3 flex items-center">
               <div className="flex-1">
@@ -155,13 +159,14 @@ function About({ data }: InferGetStaticPropsType<typeof getStaticProps>) {
                 />
               </div>
             </div>
-            <div className="text-gray-400 font-light mb-3">
-              {
-                memoizedSejarahSectionAttributesData?.find(
+            <div
+              className="text-gray-400 font-light mb-3"
+              dangerouslySetInnerHTML={{
+                __html: memoizedSejarahSectionAttributesData?.find(
                   attr => attr.name === 'text-4'
                 )?.data
-              }
-            </div>
+              }}
+            ></div>
           </div>
           <ImageLandingPage
             src={
