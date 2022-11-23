@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -22,6 +22,8 @@ import {
 } from '../../../../../types';
 import TextInput from '../../../../../components/Admin/TextInput';
 import TextareaInput from '../../../../../components/Admin/TextareaInput';
+import useLoadFields from '../../../../../hooks/options/useLoadFields';
+import { AsyncPaginate } from 'react-select-async-paginate';
 
 const schema = yup
   .object({
@@ -66,6 +68,8 @@ export type WorkProgramPayload = Omit<WorkProgram, 'participationCount'> & {
 function Admin() {
   const { query } = useRouter();
 
+  const [limit, setLimit] = useState(10);
+
   const {
     control,
     register,
@@ -109,7 +113,7 @@ function Admin() {
   const { data: departments } = useDepartments();
   const { data: periods } = usePeriod();
 
-  const { data: fields } = useFields();
+  const loadFields = useLoadFields(limit);
 
   useEffect(() => {
     reset({
@@ -275,17 +279,22 @@ function Admin() {
           name="fields"
           control={control}
           render={({ field }) => (
-            <Select
+            <AsyncPaginate
+              loadOptions={loadFields}
+              additional={{
+                page: 0
+              }}
+              className="w-48"
+              menuPortalTarget={document.body}
+              styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
               isMulti
-              options={fields?.data}
               getOptionLabel={opt => opt.name}
               getOptionValue={opt => opt.id.toString()}
-              className="mb-3"
+              loadingMessage={({ inputValue }) => `Searching ${inputValue}...`}
               {...field}
             />
           )}
         />
-
         <div>Documentation</div>
         <div className="grid grid-cols-4 gap-4 mb-4">
           {watch('documentations').map((documentation, i) => (

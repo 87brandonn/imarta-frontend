@@ -9,21 +9,22 @@ type RepositoryDepartmentProps = {
 };
 
 function RepositoryDepartment({ id, search }: RepositoryDepartmentProps) {
-  const { data, isLoading } = useDepartmentById(id.toString());
+  const { data, isLoading } = useDepartmentById(id.toString(), search);
 
   if (isLoading) {
     return <Loader />;
   }
+
   return (
     <>
       <div className="text-xl text-center font-medium mb-5">{data?.name}</div>
-
       <div className="grid grid-cols-2 gap-6">
         {data?.workProgramDepartments.map((wpDepartment, i) => (
           <RepositoryWorkProgram
             search={search}
             data={wpDepartment.workProgram}
             key={i}
+            index={i}
           />
         ))}
       </div>

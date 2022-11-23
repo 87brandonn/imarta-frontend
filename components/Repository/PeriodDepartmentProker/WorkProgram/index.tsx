@@ -10,6 +10,7 @@ import Loader from '../../../Loader';
 type RepositoryWorkProgramProps = {
   search?: string;
   data: Partial<WorkProgramWithAssociation>;
+  index: number;
 };
 
 function RepositoryWorkProgram({
@@ -19,23 +20,49 @@ function RepositoryWorkProgram({
     collaborators,
     workProgramStaffs,
     workProgramDocumentations,
+    workProgramDepartments,
+    workProgramFields,
+    period,
     id
-  }
+  },
+  index
 }: RepositoryWorkProgramProps) {
-  if (
-    search &&
-    !(
-      name?.toLowerCase().includes(search.toLowerCase()) ||
-      collaborators?.toLowerCase().includes(search.toLowerCase()) ||
-      workProgramStaffs
+  // if (
+  //   search &&
+  //   !(
+  //     name?.toLowerCase().includes(search.toLowerCase()) ||
+  //     collaborators?.toLowerCase().includes(search.toLowerCase()) ||
+  //     workProgramStaffs
+  //       ?.map(staff => staff.name)
+  //       .join(',')
+  //       ?.toLowerCase()
+  //       .includes(search.toLowerCase()) ||
+  //     workProgramDepartments
+  //       ?.filter(wpDepartment => wpDepartment.department)
+  //       ?.map(wpDepartment => wpDepartment.department.leader)
+  //       .join(',')
+  //       ?.toLowerCase()
+  //       .includes(search.toLowerCase()) ||
+  //     workProgramFields
+  //       ?.map(wpField => wpField.field.leader)
+  //       .join(',')
+  //       ?.toLowerCase()
+  //       .includes(search.toLowerCase()) ||
+  //     period?.label?.toLowerCase().includes(search.toLowerCase())
+  //   )
+  // ) {
+  //   return null;
+  // }
+
+  if (index === 1)
+    console.log(
+      `NAME:: ${name?.toLowerCase()} `,
+      `COLLABORATORS:: ${collaborators?.toLowerCase()}`,
+      `STAFFS:: ${workProgramStaffs
         ?.map(staff => staff.name)
         .join(',')
-        ?.toLowerCase()
-        .includes(search.toLowerCase())
-    )
-  ) {
-    return null;
-  }
+        ?.toLowerCase()}`
+    );
 
   return (
     <div className="cursor-pointer self-center">

@@ -6,7 +6,7 @@ import {
   WorkProgramDocumentation
 } from '../../types';
 
-const getDepartmentById = async (id: number) => {
+const getDepartmentById = async (id: number, search?: string) => {
   const { data } = await axios.get<
     Department & {
       workProgramDepartments: (WorkProgramDepartment & {
@@ -15,7 +15,11 @@ const getDepartmentById = async (id: number) => {
         };
       })[];
     }
-  >(`/data/department/${id}`);
+  >(`/data/department/${id}`, {
+    params: {
+      search
+    }
+  });
   return data;
 };
 
