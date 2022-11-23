@@ -25,9 +25,7 @@ function OrganizationStructurePeriodDescription({
 
   return (
     <>
-      <div
-        className={`py-8 ${index % 2 === 1 ? 'bg-[#282828] text-white' : ''}`}
-      >
+      <div className={`py-8 ${index > 0 ? 'bg-[#282828] text-white' : ''}`}>
         <div className="text-3xl lg:text-5xl mb-4 text-center">
           {metaData?.title}
         </div>
