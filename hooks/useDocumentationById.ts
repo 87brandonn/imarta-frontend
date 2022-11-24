@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import axios from '../config/axios';
 import { WorkProgramDocumentation } from './../types/index';
 
-const useDocumentationById = (id?: number) =>
+const useDocumentationById = (id?: number | null) =>
   useQuery(
     ['documentation', id],
     async () => {

@@ -7,7 +7,7 @@ import ImageLandingPage from '../../ImageLandingPage';
 
 type HomeBannerProps = {
   workProgramId: number;
-  documentationId?: number;
+  documentationId?: number | null;
   title: string;
   index: number;
 };
