@@ -19,14 +19,14 @@ export type HomeEventForm = {
 
 export type HomeEventFormType = {
   workProgram?: WorkProgram;
-  documentationId?: number;
+  documentationId?: number | null;
   title: string;
 };
 
 export type HomeEventTypeFromApi = {
   title: string;
   workProgramId: number;
-  documentationId?: number;
+  documentationId?: number | null;
 };
 
 type HomeEventsInputProps = {
@@ -43,7 +43,7 @@ const schema = yup
             .mixed<WorkProgramWithAssociation>()
             .required()
             .label('Work program'),
-          documentationId: yup.number(),
+          documentationId: yup.number().label('Documentation'),
           title: yup.string().label('Title')
         })
       )
@@ -112,7 +112,7 @@ function HomeEventsInput({ data, onChange }: HomeEventsInputProps) {
     onChange(
       homeEvents.map(homeEvent => ({
         workProgramId: homeEvent.workProgram?.id,
-        documentationId: homeEvent.documentationId,
+        documentationId: homeEvent.documentationId ?? null,
         title: homeEvent.title
       }))
     );
@@ -143,7 +143,7 @@ function HomeEventsInput({ data, onChange }: HomeEventsInputProps) {
                   control={control}
                   name={`homeEvents.${i}.workProgram`}
                   defaultValue={homeEvent.workProgram}
-                  render={({ field }) => (
+                  render={({ field: { onChange, ...rest } }) => (
                     <>
                       <AsyncPaginate
                         loadOptions={loadWorkPrograms}
@@ -153,13 +153,17 @@ function HomeEventsInput({ data, onChange }: HomeEventsInputProps) {
                         className="w-48"
                         getOptionLabel={opt => opt.name}
                         getOptionValue={opt => opt.id.toString()}
-                        {...field}
+                        onChange={val => {
+                          onChange(val);
+                          setValue(`homeEvents.${i}.documentationId`, 0);
+                        }}
+                        {...rest}
                       />
-                      {field.value && (
+                      {rest.value && (
                         <div
                           className="text-violet-400 text-sm cursor-pointer underline"
                           onClick={() => {
-                            setWorkProgramId(field.value?.id);
+                            setWorkProgramId(rest.value?.id);
                             setWorkProgramIndex(i);
                             setShowModal(true);
                           }}
@@ -181,6 +185,9 @@ function HomeEventsInput({ data, onChange }: HomeEventsInputProps) {
 
             <p className="text-red-500 text-sm">
               {errors.homeEvents?.[i]?.workProgram?.message}
+            </p>
+            <p className="text-red-500 text-sm">
+              {errors.homeEvents?.[i]?.documentationId?.message}
             </p>
           </div>
         ))}

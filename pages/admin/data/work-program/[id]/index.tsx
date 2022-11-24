@@ -286,6 +286,10 @@ function Admin() {
               }}
               className="w-48"
               isMulti
+              menuPortalTarget={
+                typeof document !== 'undefined' ? document.body : undefined
+              }
+              styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
               getOptionLabel={opt => opt.name}
               getOptionValue={opt => opt.id.toString()}
               loadingMessage={({ inputValue }) => `Searching ${inputValue}...`}
